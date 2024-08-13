@@ -25,7 +25,7 @@
 1. **Clonar el repositorio:**
 
    ```bash
-   git clone https://github.com/tu-usuario/tu-repositorio.git
+   git clone https://github.com/alanmoex/Turnos.git
 2. **Configurar el entorno de desarrollo:**
 
     Asegúrate de tener las siguientes herramientas instaladas:
