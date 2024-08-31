@@ -15,7 +15,7 @@ namespace Infrastructure.Data
         {
             _dbContext = dbContext;
         }
-
+         
         public List<T> GetAll()
         {
             return _dbContext.Set<T>().ToList();
