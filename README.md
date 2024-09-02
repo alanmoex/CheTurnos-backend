@@ -1,8 +1,8 @@
-# Nombre del Proyecto
+# CheTurnos
 
 ## Descripción
 
-**Nombre del Proyecto** es una aplicación web diseñada para facilitar la gestión de turnos para negocios como peluquerías. Los negocios pueden crear cuentas de usuario, gestionar su calendario de turnos, y permitir a sus clientes reservar turnos disponibles, elegir servicios, y pagar por ellos directamente desde la aplicación.
+**CheTurnos** es una aplicación web diseñada para facilitar la gestión de turnos para negocios como peluquerías. Los negocios pueden crear cuentas de usuario, gestionar su calendario de turnos, y permitir a sus clientes reservar turnos disponibles, elegir servicios, y pagar por ellos directamente desde la aplicación.
 
 ## Características
 
