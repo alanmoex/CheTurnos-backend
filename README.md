@@ -14,7 +14,6 @@
 
 ## Tecnologías Utilizadas
 
-- **Frontend:** React, HTML, CSS
 - **Backend:** .NET Core, ASP.NET
 - **Base de Datos:** MySQL
 - **Control de Versiones:** GitHub
@@ -29,32 +28,18 @@
 2. **Configurar el entorno de desarrollo:**
 
     Asegúrate de tener las siguientes herramientas instaladas:
-    * Node.js
     * .NET Core SDK
     * MySQL
 
 3. **Instalar dependencias:**
 
-   * Para el frontend:
-
-       ```bash
-       cd frontend
-       npm install
-   * Para el backend:
-
-       ```bash
-       cd backend
-       dotnet restore
+    ```bash
+    cd backend
+    dotnet restore
 4. **Ejecutar la aplicación:**
-
-   * Para el frontend:
    
-       ```bash
-       npm start
-   * Para el backend:
-   
-       ```bash
-       dotnet run
+    ```bash
+    dotnet run
 ## Resumen del Workflow
 * Rama `main`: Contiene el código en producción. Solo se fusionan aquí los cambios aprobados y testeados.
 * Rama `development`: Base para la integración de nuevas características. Todas las nuevas funcionalidades y correcciones se desarrollan en ramas separadas creadas desde aquí.

@@ -15,19 +15,19 @@
 ### Ramas de Características (`feature`)
 - Se utilizan para desarrollar nuevas funcionalidades.
 - Deben crearse a partir de la rama `development`.
-- Nomenclatura: `feature/nombre-descriptivo`.
+- Nomenclatura: `feature/(nº ticket)nombre-descriptivo`.
 - Una vez completadas, se debe crear un Pull Request (PR) para fusionar en `development`.
 
 ### Ramas de Corrección (`bugfix`)
 - Se utilizan para corregir errores detectados en `development`.
 - Deben crearse a partir de la rama `development`.
-- Nomenclatura: `bugfix/descripcion-del-bug`.
+- Nomenclatura: `bugfix/(nº ticket)descripcion-del-bug`.
 - Una vez solucionado el bug, se debe crear un PR para fusionar en `development`.
 
 ### Ramas de Hotfix (`hotfix`)
 - Se utilizan para solucionar problemas críticos en producción.
 - Deben crearse a partir de la rama `main`.
-- Nomenclatura: `hotfix/descripcion-del-hotfix`.
+- Nomenclatura: `hotfix/(nº ticket)descripcion-del-hotfix`.
 - Una vez solucionado el problema, se debe crear un PR para fusionar tanto en `main` como en `development`.
 
 ![Flujo de Ramas](diagrams/workflow-git.png)
