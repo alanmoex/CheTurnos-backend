@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Infrastructure.Data
+namespace Domain.Enums
 {
-    internal class Class1
+    public enum StatusType
     {
+        Active,
+        Inactive,
     }
 }

@@ -5,10 +5,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Domain.Enums;
 
 namespace Domain.Entities
 {
-    public class Shops
+    public class Shop
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -16,10 +17,14 @@ namespace Domain.Entities
         [Required]
         public User Owner { get; set; }
         [Required]
-        public int IdOwner { get; set; }
-        public ICollection<ShopsReviews> Reviews { get; set; } = null;
-        public ICollection<Appointments> Appointments { get; set; } = null;
+        [ForeignKey(nameof(OwnerId))]
+        public int OwnerId { get; set; }
 
+        public ICollection<ShopsReview> Reviews { get; set; } = null;
+
+        public ICollection<Appointment> Appointments { get; set; } = null;
+
+        public ShopTypes Type { get; set; }
         public StatusType State {  get; set; } = StatusType.Active;
     }
 }

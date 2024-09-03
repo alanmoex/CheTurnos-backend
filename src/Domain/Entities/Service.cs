@@ -5,10 +5,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Domain.Enums;
 
 namespace Domain.Entities
 {
-    public class Services
+    public class Service
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -25,12 +26,19 @@ namespace Domain.Entities
         public float Price { get; set; }
 
         [Required]
-        public User ProvidedBy { get; set; }
-        [Required]
-        [ForeignKey(nameof(IdProvidedBy))]
-        public int IdProvidedBy { get; set; }
+        public ICollection<User> Staff { get; set; }
 
         [Required]
         public StatusType Status { get; set; } = StatusType.Active;
+        [Required]
+        public ServiceType ServiceType { get; set; }
+
+        [Required]
+        public Shop shop { get; set; }
+        [Required]
+        [ForeignKey (nameof(ShopId))]
+        public int ShopId { get; set; }
+
+
     }
 }

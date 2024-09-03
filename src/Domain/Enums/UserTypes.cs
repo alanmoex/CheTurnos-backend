@@ -4,11 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Entities
+namespace Domain.Enums
 {
-    public enum StatusType
+    public enum UserType
     {
-        Active,
-        Inactive,
+        Client,
+        Staff,
+        Owner,
+        SisAdmin,
+    
     }
 }

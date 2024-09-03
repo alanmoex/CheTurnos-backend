@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Domain.Enums;
 
 namespace Domain.Entities
 {
@@ -24,16 +25,10 @@ namespace Domain.Entities
         [Required]
         public UserType Type { get; set; }
         
-        public Shops Shop { get; set; }
+        public Shop Shop { get; set; }
         
         public StatusType Status { get; set; } = StatusType.Active;
 
-        public enum UserType
-        {
-            Client,
-            Staff,
-            Owner,
-            SisAdmin,
-        }
+        
     }
 }

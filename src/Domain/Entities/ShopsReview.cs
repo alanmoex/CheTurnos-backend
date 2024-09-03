@@ -5,10 +5,11 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Domain.Enums;
 
 namespace Domain.Entities
 {
-    public class ShopsReviews
+    public class ShopsReview
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -21,14 +22,14 @@ namespace Domain.Entities
         public int Stars { get; set; }
 
         [Required]
-        [ForeignKey(nameof(IdClient))]
-        public int IdClient { get; set;}
+        [ForeignKey(nameof(ClientId))]
+        public int ClientId { get; set;}
         public User Client { get; set; }
 
         [Required]
-        [ForeignKey(nameof(IdShop))]
-        public int IdShop { get; set; }
-        public Shops Shop { get; set; }
+        [ForeignKey(nameof(ShopId))]
+        public int ShopId { get; set; }
+        public Shop Shop { get; set; }
 
         [Required]
         public StatusType Status { get; set; } = StatusType.Active;

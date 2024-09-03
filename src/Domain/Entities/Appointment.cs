@@ -5,10 +5,11 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Domain.Enums;
 
 namespace Domain.Entities
 {
-    public class Appointments
+    public class Appointment
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -17,23 +18,23 @@ namespace Domain.Entities
         public StatusType Status { get; set; } = StatusType.Active;
 
         [Required]
-        [ForeignKey(nameof(IdService))]
-        public int IdService { get; set; }
-        public Services Service { get; set; }
+        [ForeignKey(nameof(ServiceId))]
+        public int ServiceId { get; set; }
+        public Service Service { get; set; }
 
         [Required]
-        [ForeignKey(nameof(IdStaff))]
-        public int IdStaff { get; set; }
-        public User User { get; set; }
+        [ForeignKey(nameof(ProvidedById))]
+        public int ProvidedById { get; set; }
+        public User ProvidedBy { get; set; }
 
         [Required]
-        [ForeignKey(nameof(IdShop))]
-        public int IdShop { get; set; }
-        public Shops Shop { get; set; }
+        [ForeignKey(nameof(ShopId))]
+        public int ShopId { get; set; }
+        public Shop Shop { get; set; }
 
         [Required]
-        [ForeignKey(nameof(IdClient))]
-        public int IdClient { get; set; }
+        [ForeignKey(nameof(ClientId))]
+        public int ClientId { get; set; }
         public User Client {  get; set; }
 
         [Required]
