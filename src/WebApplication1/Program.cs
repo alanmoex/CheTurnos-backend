@@ -1,3 +1,8 @@
+using Infrastructure.Data;
+using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -7,7 +12,16 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+string connectionString = builder.Configuration["ConnectionStrings:DBConnectionString"]!;
 
+var connection = new SqliteConnection(connectionString);
+connection.Open();
+
+builder.Services.AddDbContext<AppDbContext>(options =>
+{
+    options.UseSqlite(connection, b => b.MigrationsAssembly("Infrastructure"));
+    options.ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.AmbientTransactionWarning));
+});
 
 var app = builder.Build();
 
