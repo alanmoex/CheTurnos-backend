@@ -3,9 +3,9 @@
     public enum UserType
     {
         Client,
-        employee,
+        Employee,
         Owner,
-        SisAdmin,
+        SysAdmin,
     
     }
 }

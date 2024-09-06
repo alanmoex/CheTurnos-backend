@@ -21,15 +21,24 @@ namespace Domain.Entities
         public decimal Price { get; set; }
 
         [Required]
-        public ICollection<User> Staff { get; set; }
+        public TimeSpan Duration { get; set; }
 
         [Required]
-        public StatusType Status { get; set; } = StatusType.Active;
+        public Status Status { get; set; } = Status.Active;
 
         [Required]
         public ServiceType ServiceType { get; set; }
 
-        public Shop Shop { get; set; }    
+        public Service() { }
 
+        public Service(string name, string description, decimal price, TimeSpan duration, ServiceType serviceType)
+        {
+            Name = name;
+            Description = description;
+            Price = price;
+            Duration = duration;
+            ServiceType = serviceType;
+        }
+        
     }
 }

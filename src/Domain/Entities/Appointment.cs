@@ -11,7 +11,7 @@ namespace Domain.Entities
         public int Id { get; set; }
 
         [Required]
-        public StatusType Status { get; set; } = StatusType.Active;
+        public Status Status { get; set; } = Status.Active;
 
         public Service Service { get; set; }
         public User Employee { get; set; }
@@ -24,5 +24,17 @@ namespace Domain.Entities
         [Required]
         public TimeSpan Duration { get; set; }
 
+        public Appointment() { }
+
+        public Appointment(Service service, User employee, User client, Shop shop, DateTime dateAndHour) 
+        {
+            Service = service;
+            Employee = employee;
+            Client = client;
+            Shop = shop;
+            DateAndHour = dateAndHour;
+        }
+
+        
     }
 }
