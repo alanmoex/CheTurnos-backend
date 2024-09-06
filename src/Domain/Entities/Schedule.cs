@@ -14,14 +14,14 @@ public class Schedule
     public TimeSpan StartTime { get; set; }
     public TimeSpan EndTime { get; set; }
 
-    public Schedule()
-    {
-    }
+    public Schedule() { }
 
-    public Schedule(DayOfWeek day, TimeSpan startTime, TimeSpan endTime)
+    public Schedule(DayOfWeek day, TimeSpan startTime, TimeSpan endTime, User? employee, Shop? shop)
     {
         Day = day;
         StartTime = startTime;
         EndTime = endTime;
+        Employee = employee;
+        Shop = shop;
     }
 }

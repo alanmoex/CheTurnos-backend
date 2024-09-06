@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240904232820_initial")]
-    partial class initial
+    [Migration("20240906184926_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -58,6 +58,19 @@ namespace Infrastructure.Migrations
                     b.HasIndex("ShopId");
 
                     b.ToTable("Appointments");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            ClientId = 3,
+                            DateAndHour = new DateTime(2024, 9, 7, 15, 49, 25, 831, DateTimeKind.Local).AddTicks(8524),
+                            Duration = new TimeSpan(0, 0, 30, 0, 0),
+                            EmployeeId = 2,
+                            ServiceId = 1,
+                            ShopId = 1,
+                            Status = 0
+                        });
                 });
 
             modelBuilder.Entity("Domain.Entities.Schedule", b =>
@@ -88,6 +101,88 @@ namespace Infrastructure.Migrations
                     b.HasIndex("ShopId");
 
                     b.ToTable("Schedules");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Day = 1,
+                            EndTime = new TimeSpan(0, 17, 0, 0, 0),
+                            ShopId = 1,
+                            StartTime = new TimeSpan(0, 9, 0, 0, 0)
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Day = 2,
+                            EndTime = new TimeSpan(0, 17, 0, 0, 0),
+                            ShopId = 1,
+                            StartTime = new TimeSpan(0, 9, 0, 0, 0)
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Day = 3,
+                            EndTime = new TimeSpan(0, 17, 0, 0, 0),
+                            ShopId = 1,
+                            StartTime = new TimeSpan(0, 9, 0, 0, 0)
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Day = 4,
+                            EndTime = new TimeSpan(0, 17, 0, 0, 0),
+                            ShopId = 1,
+                            StartTime = new TimeSpan(0, 9, 0, 0, 0)
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Day = 5,
+                            EndTime = new TimeSpan(0, 17, 0, 0, 0),
+                            ShopId = 1,
+                            StartTime = new TimeSpan(0, 9, 0, 0, 0)
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Day = 1,
+                            EmployeeId = 2,
+                            EndTime = new TimeSpan(0, 17, 0, 0, 0),
+                            StartTime = new TimeSpan(0, 9, 0, 0, 0)
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Day = 2,
+                            EmployeeId = 2,
+                            EndTime = new TimeSpan(0, 17, 0, 0, 0),
+                            StartTime = new TimeSpan(0, 9, 0, 0, 0)
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Day = 3,
+                            EmployeeId = 2,
+                            EndTime = new TimeSpan(0, 17, 0, 0, 0),
+                            StartTime = new TimeSpan(0, 9, 0, 0, 0)
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Day = 4,
+                            EmployeeId = 2,
+                            EndTime = new TimeSpan(0, 17, 0, 0, 0),
+                            StartTime = new TimeSpan(0, 9, 0, 0, 0)
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Day = 5,
+                            EmployeeId = 2,
+                            EndTime = new TimeSpan(0, 17, 0, 0, 0),
+                            StartTime = new TimeSpan(0, 9, 0, 0, 0)
+                        });
                 });
 
             modelBuilder.Entity("Domain.Entities.Service", b =>
@@ -100,6 +195,9 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<TimeSpan>("Duration")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -110,17 +208,41 @@ namespace Infrastructure.Migrations
                     b.Property<int>("ServiceType")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("ShopId")
+                    b.Property<int>("Status")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("Status")
+                    b.Property<int?>("UserId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ShopId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Services");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Description = "A standard haircut service.",
+                            Duration = new TimeSpan(0, 0, 30, 0, 0),
+                            Name = "Haircut",
+                            Price = 20.00m,
+                            ServiceType = 0,
+                            Status = 0,
+                            UserId = 2
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Description = "Full hair coloring service.",
+                            Duration = new TimeSpan(0, 1, 0, 0, 0),
+                            Name = "Hair Color",
+                            Price = 60.00m,
+                            ServiceType = 4,
+                            Status = 0,
+                            UserId = 2
+                        });
                 });
 
             modelBuilder.Entity("Domain.Entities.Shop", b =>
@@ -129,10 +251,11 @@ namespace Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("OwnerId")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
-                    b.Property<int>("State")
+                    b.Property<int>("Status")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("Type")
@@ -140,9 +263,16 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OwnerId");
-
                     b.ToTable("Shops");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Beauty Salon",
+                            Status = 0,
+                            Type = 3
+                        });
                 });
 
             modelBuilder.Entity("Domain.Entities.User", b =>
@@ -164,10 +294,7 @@ namespace Infrastructure.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("ServiceId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("ShopId")
+                    b.Property<int?>("ShopId")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("Status")
@@ -178,11 +305,48 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ServiceId");
-
                     b.HasIndex("ShopId");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Email = "john@example.com",
+                            Name = "John Doe",
+                            Password = "password123",
+                            ShopId = 1,
+                            Status = 0,
+                            Type = 2
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Email = "employee@example.com",
+                            Name = "Employee User",
+                            Password = "password123",
+                            Status = 0,
+                            Type = 1
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Email = "client@example.com",
+                            Name = "Client User",
+                            Password = "password123",
+                            Status = 0,
+                            Type = 0
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Email = "sysadmin@example.com",
+                            Name = "SysAdmin User",
+                            Password = "password123",
+                            Status = 0,
+                            Type = 3
+                        });
                 });
 
             modelBuilder.Entity("Domain.Entities.Appointment", b =>
@@ -237,55 +401,33 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.Service", b =>
                 {
-                    b.HasOne("Domain.Entities.Shop", "Shop")
-                        .WithMany()
-                        .HasForeignKey("ShopId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Shop");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Shop", b =>
-                {
-                    b.HasOne("Domain.Entities.User", "Owner")
-                        .WithMany()
-                        .HasForeignKey("OwnerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Owner");
+                    b.HasOne("Domain.Entities.User", null)
+                        .WithMany("Services")
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Domain.Entities.User", b =>
                 {
-                    b.HasOne("Domain.Entities.Service", null)
-                        .WithMany("Staff")
-                        .HasForeignKey("ServiceId");
-
                     b.HasOne("Domain.Entities.Shop", "Shop")
-                        .WithMany()
-                        .HasForeignKey("ShopId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("Employees")
+                        .HasForeignKey("ShopId");
 
                     b.Navigation("Shop");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Service", b =>
-                {
-                    b.Navigation("Staff");
                 });
 
             modelBuilder.Entity("Domain.Entities.Shop", b =>
                 {
                     b.Navigation("Appointments");
 
+                    b.Navigation("Employees");
+
                     b.Navigation("Schedules");
                 });
 
             modelBuilder.Entity("Domain.Entities.User", b =>
                 {
+                    b.Navigation("Services");
+
                     b.Navigation("WorkSchedules");
                 });
 #pragma warning restore 612, 618
