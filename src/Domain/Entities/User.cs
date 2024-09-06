@@ -23,12 +23,21 @@ namespace Domain.Entities
         [Required]
         public UserType Type { get; set; }
         
-        public Shop Shop { get; set; }
+        public Shop? Shop { get; set; }
         
-        public StatusType Status { get; set; } = StatusType.Active;
+        public Status Status { get; set; } = Status.Active;
 
-        public ICollection<Schedule> WorkSchedules { get; set; }
+        public ICollection<Schedule>? WorkSchedules { get; set; }
+        public ICollection<Service>? Services { get; set; }
 
+        public User() { }
 
+        public User(string name, string email, string password, UserType type)
+        {
+            Name = name;
+            Email = email;
+            Password = password;
+            Type = type;
+        }
     }
 }
