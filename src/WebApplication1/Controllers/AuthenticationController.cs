@@ -19,7 +19,7 @@ namespace API.Controllers
             _config = config;
         }
 
-        [HttpPost("/authenticate")]
+        [HttpPost]
         public ActionResult<string> Authenticate([FromBody] AuthenticationRequest authenticationRequest)
         {
             //Llama a un metodo que devuelve un string-Token

@@ -13,6 +13,25 @@ using static Infrastructure.Services.AuthenticationService;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddControllers();
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddEndpointsApiExplorer();
+
+//Habilita el cors para que se pueda usar en el front.
+builder.Services.AddCors(options =>
+{ 
+    options.AddPolicy("AllowLocalhost",
+        builder =>
+        {
+            builder.WithOrigins("http://localhost:5173", "http://localhost:5174", "http://localhost:5175")
+                   .AllowAnyHeader()
+                   .AllowAnyMethod();
+        });
+});
+
+
+
+
 builder.Services.AddSwaggerGen(setupAction =>
 {
     //Esto va a permitir usar swagger con el token.
@@ -39,9 +58,6 @@ builder.Services.AddSwaggerGen(setupAction =>
 
 // Add services to the container.
 
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
 
 string connectionString = builder.Configuration["ConnectionStrings:DBConnectionString"]!;
 
@@ -89,6 +105,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+//para poder usar el cors
+app.UseCors("AllowLocalhost");
 
 app.UseHttpsRedirection();
 
