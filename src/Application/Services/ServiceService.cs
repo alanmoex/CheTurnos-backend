@@ -15,11 +15,13 @@ public class ServiceService : IServiceService
 
     public ServiceDTO Create(ServiceCreateRequest request)
     {
+        var duration = TimeSpan.Parse(request.Duration);
+
         var newService = new Service(
             request.Name, 
             request.Description, 
             request.Price, 
-            request.Duration, 
+            duration, 
             request.ServiceType);
 
         var obj = _serviceRepository.Add(newService);
@@ -54,6 +56,8 @@ public class ServiceService : IServiceService
         var service = _serviceRepository.GetById(id)
             ?? throw new NotFoundException(typeof(Service).ToString(), id);
 
+        
+
         if (!string.IsNullOrEmpty(request.Name))
             service.Name = request.Name;
 
@@ -63,8 +67,12 @@ public class ServiceService : IServiceService
         if (request.Price.HasValue)
             service.Price = request.Price.Value;
 
-        if (request.Duration.HasValue)
-            service.Duration = request.Duration.Value;
+        if (!string.IsNullOrEmpty(request.Duration))
+        {
+            var duration = TimeSpan.Parse(request.Duration);
+            service.Duration = duration;
+        }
+            
 
         if (request.ServiceType.HasValue)
             service.ServiceType = request.ServiceType.Value;

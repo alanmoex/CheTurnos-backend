@@ -16,7 +16,9 @@ public class ServiceCreateRequest
     public decimal Price { get; set; }
 
     [Required]
-    public TimeSpan Duration { get; set; }
+    [RegularExpression(@"^([0-1]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$",
+            ErrorMessage = "The time must be in the format HH:mm:ss")]
+    public string Duration { get; set; }
 
     [Required]
     public ServiceType ServiceType { get; set; }

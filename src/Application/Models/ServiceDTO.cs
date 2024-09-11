@@ -17,6 +17,10 @@ public class ServiceDTO
         var dto = new ServiceDTO();
         dto.Id = service.Id;
         dto.Name = service.Name;
+        dto.Description = service.Description;
+        dto.Price = service.Price;
+        dto.Duration = service.Duration;
+        dto.Status = service.Status;
         return dto;
     }
 
