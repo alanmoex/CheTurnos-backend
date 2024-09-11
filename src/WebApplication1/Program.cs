@@ -11,9 +11,7 @@ using System.Text;
 using static Infrastructure.Services.AuthenticationService;
 //API-CheTurnosBearerAuth
 
-//se traba aca.
 var builder = WebApplication.CreateBuilder(args);
-
 
 builder.Services.AddSwaggerGen(setupAction =>
 {
