@@ -1,3 +1,4 @@
+using Application;
 using Domain.Interfaces;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Authentication;
@@ -26,7 +27,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 });
 
 #region Services
-
+builder.Services.AddScoped<IServiceService, ServiceService>();
 #endregion
 
 #region Repositories
