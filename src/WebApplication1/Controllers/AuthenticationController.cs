@@ -25,19 +25,13 @@ namespace API.Controllers
         {
             try
             {
-            //Llama a un metodo que devuelve un string-Token
-            string token = _authenticationService.Authenticate(authenticationRequest);
-            return Ok(token);
-            }
-            catch (NotAllowedException ex)
-            {
-                // problemas del lado del cliente
-                return BadRequest(new { Message = ex.Message });
+                //Llama a un metodo que devuelve un string-Token
+                string token = _authenticationService.Authenticate(authenticationRequest);
+                return Ok(token);
             }
             catch (Exception ex)
             {
-                // problema de conectividad, etc.
-                return StatusCode(500, "An unexpected error occurred.");
+                return BadRequest(ex.Message);
             }
         }
     }
