@@ -17,7 +17,7 @@ namespace Domain.Entities
         [EmailAddress(ErrorMessage = "invalid Email Address")]
         public string Email { get; set; }
 
-        [StringLength(100, MinimumLength = 8, ErrorMessage = "Password should be at least 6 characters.")]
+        [StringLength(100, MinimumLength = 8, ErrorMessage = "Password should be at least 8 characters.")]
         public string Password { get; set; }
 
         [Required]
