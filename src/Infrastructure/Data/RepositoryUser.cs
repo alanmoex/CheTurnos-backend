@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Domain.Exceptions;
 using Domain.Interface;
 using Domain.Interfaces;
 using System;
@@ -20,7 +21,7 @@ namespace Infrastructure.Data
         public User GetByEmail(string email)
         {
             var user = _context.Users.FirstOrDefault(u => u.Email == email)
-                ?? throw new Exception("User not found");
+                ?? throw new NotFoundException("User not found");
             return user;
         }
 

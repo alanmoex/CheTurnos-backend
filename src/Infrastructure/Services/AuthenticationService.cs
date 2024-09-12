@@ -13,6 +13,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using static Domain.Entities.User;
+using Domain.Exceptions;
 
 namespace Infrastructure.Services
 {
@@ -44,15 +45,16 @@ namespace Infrastructure.Services
             if (user.Type == UserType.Owner || user.Type == UserType.Employee || user.Type == UserType.Client || user.Type == UserType.SysAdmin)
             {
                 if (user.Password == authenticationRequest.Password) return user;
+
             }
             return null;
         }
 
-        //retonra eljwt
-        public string Authenticate (AuthenticationRequest authentucatuinRequest)
+        //retonra el jwt
+        public string Authenticate (AuthenticationRequest authenticationRequest)
         {
-            var user = ValidateUser(authentucatuinRequest)
-                ?? throw new Exception("not found");
+            var user = ValidateUser(authenticationRequest)
+                ?? throw new NotFoundException("not found");
 
             //Se secreto se guarda en una variable
             var securityPassword = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_options.SecretForKey));
@@ -63,7 +65,7 @@ namespace Infrastructure.Services
             //Se crean los Claims
             var claimsForToken = new List<Claim>();
             claimsForToken.Add(new Claim("sub", user.Id.ToString()));
-            claimsForToken.Add(new Claim("sub", user.Type.ToString()));
+            claimsForToken.Add(new Claim("role", user.Type.ToString()));
             claimsForToken.Add(new Claim("given_name", user.Name));
 
             //Se crea el jwt
