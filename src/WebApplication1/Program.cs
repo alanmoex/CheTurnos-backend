@@ -1,4 +1,10 @@
+using Application.Interfaces;
+using Application.Services;
+using Domain.Entities;
+using Domain.Interface;
+using Domain.Interfaces;
 using Infrastructure.Data;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
@@ -22,6 +28,14 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(connection, b => b.MigrationsAssembly("Infrastructure"));
     options.ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.AmbientTransactionWarning));
 });
+
+#region Repositories
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+#endregion
+
+#region Services
+builder.Services.AddScoped<IUserService, UserService>();
+#endregion
 
 var app = builder.Build();
 

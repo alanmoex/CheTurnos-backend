@@ -10,7 +10,7 @@ namespace Infrastructure.Data
 {
     public class RepositoryBase <T>: IRepositoryBase<T> where T : class
     {
-        private readonly DbContext _dbContext;
+        protected readonly DbContext _dbContext;
         public RepositoryBase(DbContext dbContext)
         {
             _dbContext = dbContext;
