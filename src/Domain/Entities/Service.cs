@@ -27,17 +27,17 @@ namespace Domain.Entities
         public Status Status { get; set; } = Status.Active;
 
         [Required]
-        public ServiceType ServiceType { get; set; }
+        public ServiceType Type { get; set; }
 
         public Service() { }
 
-        public Service(string name, string description, decimal price, TimeSpan duration, ServiceType serviceType)
+        public Service(string name, string description, decimal price, TimeSpan duration, ServiceType type)
         {
             Name = name;
             Description = description;
             Price = price;
             Duration = duration;
-            ServiceType = serviceType;
+            Type = type;
         }
         
     }

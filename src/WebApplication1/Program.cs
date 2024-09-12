@@ -1,9 +1,9 @@
+using Application;
 using Application.Interfaces;
 using Application.Services;
 using Domain.Entities;
 using Domain.Interfaces;
 using Infrastructure.Data;
-using Microsoft.AspNetCore.Authentication;
 using Infrastructure.Services;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
-//using static Infrastructure.Services.AuthenticationService;
+using static Infrastructure.Services.AuthenticationService;
 //API-CheTurnosBearerAuth
 
 var builder = WebApplication.CreateBuilder(args);
@@ -92,6 +92,7 @@ builder.Services.AddAuthentication("Bearer")
 #region Repositories
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IRepositoryUser, RepositoryUser>();
+builder.Services.AddScoped<IServiceRepository, ServiceRepository>();
 #endregion
 
 #region Services
@@ -99,6 +100,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.Configure<AuthenticationServiceOptions>(
     builder.Configuration.GetSection(AuthenticationServiceOptions.AuthenticationService));
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+builder.Services.AddScoped<IServiceService, ServiceService>();
 #endregion
 
 var app = builder.Build();

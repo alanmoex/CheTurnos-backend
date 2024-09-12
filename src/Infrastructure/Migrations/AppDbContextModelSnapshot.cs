@@ -41,8 +41,9 @@ namespace Infrastructure.Migrations
                     b.Property<int>("ShopId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -61,12 +62,12 @@ namespace Infrastructure.Migrations
                         {
                             Id = 1,
                             ClientId = 3,
-                            DateAndHour = new DateTime(2024, 9, 7, 15, 49, 25, 831, DateTimeKind.Local).AddTicks(8524),
+                            DateAndHour = new DateTime(2024, 9, 12, 21, 10, 22, 831, DateTimeKind.Local).AddTicks(5240),
                             Duration = new TimeSpan(0, 0, 30, 0, 0),
                             EmployeeId = 2,
                             ServiceId = 1,
                             ShopId = 1,
-                            Status = 0
+                            Status = "Active"
                         });
                 });
 
@@ -202,11 +203,13 @@ namespace Infrastructure.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("ServiceType")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.Property<int?>("UserId")
                         .HasColumnType("INTEGER");
@@ -225,8 +228,8 @@ namespace Infrastructure.Migrations
                             Duration = new TimeSpan(0, 0, 30, 0, 0),
                             Name = "Haircut",
                             Price = 20.00m,
-                            ServiceType = 0,
-                            Status = 0,
+                            Status = "Active",
+                            Type = "Haircut",
                             UserId = 2
                         },
                         new
@@ -236,8 +239,8 @@ namespace Infrastructure.Migrations
                             Duration = new TimeSpan(0, 1, 0, 0, 0),
                             Name = "Hair Color",
                             Price = 60.00m,
-                            ServiceType = 4,
-                            Status = 0,
+                            Status = "Active",
+                            Type = "Others",
                             UserId = 2
                         });
                 });
@@ -252,11 +255,13 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
-                    b.Property<int>("Type")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -267,8 +272,8 @@ namespace Infrastructure.Migrations
                         {
                             Id = 1,
                             Name = "Beauty Salon",
-                            Status = 0,
-                            Type = 3
+                            Status = "Active",
+                            Type = "BeautyShop"
                         });
                 });
 
@@ -294,11 +299,13 @@ namespace Infrastructure.Migrations
                     b.Property<int?>("ShopId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
-                    b.Property<int>("Type")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -314,8 +321,8 @@ namespace Infrastructure.Migrations
                             Name = "John Doe",
                             Password = "password123",
                             ShopId = 1,
-                            Status = 0,
-                            Type = 2
+                            Status = "Active",
+                            Type = "Owner"
                         },
                         new
                         {
@@ -323,8 +330,8 @@ namespace Infrastructure.Migrations
                             Email = "employee@example.com",
                             Name = "Employee User",
                             Password = "password123",
-                            Status = 0,
-                            Type = 1
+                            Status = "Active",
+                            Type = "Employee"
                         },
                         new
                         {
@@ -332,8 +339,8 @@ namespace Infrastructure.Migrations
                             Email = "client@example.com",
                             Name = "Client User",
                             Password = "password123",
-                            Status = 0,
-                            Type = 0
+                            Status = "Active",
+                            Type = "Client"
                         },
                         new
                         {
@@ -341,8 +348,8 @@ namespace Infrastructure.Migrations
                             Email = "sysadmin@example.com",
                             Name = "SysAdmin User",
                             Password = "password123",
-                            Status = 0,
-                            Type = 3
+                            Status = "Active",
+                            Type = "SysAdmin"
                         });
                 });
 
