@@ -1,3 +1,5 @@
+using Application;
+using Domain.Interfaces;
 using Infrastructure.Data;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
@@ -22,6 +24,14 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(connection, b => b.MigrationsAssembly("Infrastructure"));
     options.ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.AmbientTransactionWarning));
 });
+
+#region Services
+builder.Services.AddScoped<IShopService, ShopService>();
+#endregion
+
+#region Repositories
+builder.Services.AddScoped<IShopRepository, ShopRepository>();
+#endregion
 
 var app = builder.Build();
 

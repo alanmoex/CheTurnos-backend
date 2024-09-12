@@ -157,7 +157,10 @@ namespace Infrastructure.Data
                 Id = 1,
                 Name = "Beauty Salon",
                 Type = ShopType.BeautyShop,
-                Status = Status.Active
+                Status = Status.Active,
+                Address = "123 Main St", 
+                Phone = "555-1234",     
+                Email = "contact@beautysalon.com"
             }
             };
         }
