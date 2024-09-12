@@ -1,5 +1,6 @@
 ﻿using Domain.Enums;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Application.Models.Requests;
 
@@ -16,8 +17,10 @@ public class ServiceUpdateRequest
             ErrorMessage = "The time must be in the format HH:mm:ss")]
     public string? Duration { get; set; }
 
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public ServiceType? ServiceType { get; set; }
 
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public Status? Status { get; set; }
 }
 

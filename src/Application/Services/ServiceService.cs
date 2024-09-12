@@ -75,7 +75,7 @@ public class ServiceService : IServiceService
             
 
         if (request.ServiceType.HasValue)
-            service.ServiceType = request.ServiceType.Value;
+            service.Type = request.ServiceType.Value;
 
         if (request.Status.HasValue)
             service.Status = request.Status.Value;

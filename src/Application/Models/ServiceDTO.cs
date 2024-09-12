@@ -1,5 +1,6 @@
 ﻿using Domain.Entities;
 using Domain.Enums;
+using System.Text.Json.Serialization;
 
 namespace Application;
 
@@ -10,6 +11,8 @@ public class ServiceDTO
     public string Description { get; set; }
     public decimal Price { get; set; }
     public TimeSpan Duration { get; set; }
+
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public Status Status { get; set; }
 
     public static ServiceDTO Create(Service service)

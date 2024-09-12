@@ -1,5 +1,6 @@
 ﻿using Domain.Enums;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Application.Models.Requests;
 
@@ -21,6 +22,7 @@ public class ServiceCreateRequest
     public string Duration { get; set; }
 
     [Required]
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public ServiceType ServiceType { get; set; }
 }
 
