@@ -16,7 +16,6 @@ namespace Domain.Entities
         [Required]
         public ShopType Type { get; set; }
 
-        [Required]
         public Status Status { get; set; } = Status.Active;
 
         [Required]

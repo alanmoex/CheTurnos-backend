@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class firstMigration : Migration
+    public partial class InitialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -20,8 +20,8 @@ namespace Infrastructure.Migrations
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(type: "TEXT", nullable: false),
-                    Type = table.Column<int>(type: "INTEGER", nullable: false),
-                    Status = table.Column<int>(type: "INTEGER", nullable: false),
+                    Type = table.Column<string>(type: "TEXT", nullable: false),
+                    Status = table.Column<string>(type: "TEXT", nullable: false),
                     Address = table.Column<string>(type: "TEXT", nullable: false),
                     Phone = table.Column<string>(type: "TEXT", nullable: false),
                     Email = table.Column<string>(type: "TEXT", nullable: false)
@@ -40,9 +40,9 @@ namespace Infrastructure.Migrations
                     Name = table.Column<string>(type: "TEXT", nullable: false),
                     Email = table.Column<string>(type: "TEXT", nullable: false),
                     Password = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
-                    Type = table.Column<int>(type: "INTEGER", nullable: false),
+                    Type = table.Column<string>(type: "TEXT", nullable: false),
                     ShopId = table.Column<int>(type: "INTEGER", nullable: true),
-                    Status = table.Column<int>(type: "INTEGER", nullable: false)
+                    Status = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -91,8 +91,8 @@ namespace Infrastructure.Migrations
                     Description = table.Column<string>(type: "TEXT", nullable: false),
                     Price = table.Column<decimal>(type: "TEXT", nullable: false),
                     Duration = table.Column<TimeSpan>(type: "TEXT", nullable: false),
-                    Status = table.Column<int>(type: "INTEGER", nullable: false),
-                    ServiceType = table.Column<int>(type: "INTEGER", nullable: false),
+                    Status = table.Column<string>(type: "TEXT", nullable: false),
+                    Type = table.Column<string>(type: "TEXT", nullable: false),
                     UserId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
@@ -111,7 +111,7 @@ namespace Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Status = table.Column<int>(type: "INTEGER", nullable: false),
+                    Status = table.Column<string>(type: "TEXT", nullable: false),
                     ServiceId = table.Column<int>(type: "INTEGER", nullable: false),
                     EmployeeId = table.Column<int>(type: "INTEGER", nullable: false),
                     ClientId = table.Column<int>(type: "INTEGER", nullable: false),
@@ -151,16 +151,16 @@ namespace Infrastructure.Migrations
             migrationBuilder.InsertData(
                 table: "Shops",
                 columns: new[] { "Id", "Address", "Email", "Name", "Phone", "Status", "Type" },
-                values: new object[] { 1, "123 Main St", "contact@beautysalon.com", "Beauty Salon", "555-1234", 0, 3 });
+                values: new object[] { 1, "123 Main St", "contact@beautysalon.com", "Beauty Salon", "555-1234", "Active", "BeautyShop" });
 
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "Id", "Email", "Name", "Password", "ShopId", "Status", "Type" },
                 values: new object[,]
                 {
-                    { 2, "employee@example.com", "Employee User", "password123", null, 0, 1 },
-                    { 3, "client@example.com", "Client User", "password123", null, 0, 0 },
-                    { 4, "sysadmin@example.com", "SysAdmin User", "password123", null, 0, 3 }
+                    { 2, "employee@example.com", "Employee User", "password123", null, "Active", "Employee" },
+                    { 3, "client@example.com", "Client User", "password123", null, "Active", "Client" },
+                    { 4, "sysadmin@example.com", "SysAdmin User", "password123", null, "Active", "SysAdmin" }
                 });
 
             migrationBuilder.InsertData(
@@ -182,22 +182,22 @@ namespace Infrastructure.Migrations
 
             migrationBuilder.InsertData(
                 table: "Services",
-                columns: new[] { "Id", "Description", "Duration", "Name", "Price", "ServiceType", "Status", "UserId" },
+                columns: new[] { "Id", "Description", "Duration", "Name", "Price", "Status", "Type", "UserId" },
                 values: new object[,]
                 {
-                    { 1, "A standard haircut service.", new TimeSpan(0, 0, 30, 0, 0), "Haircut", 20.00m, 0, 0, 2 },
-                    { 2, "Full hair coloring service.", new TimeSpan(0, 1, 0, 0, 0), "Hair Color", 60.00m, 4, 0, 2 }
+                    { 1, "A standard haircut service.", new TimeSpan(0, 0, 30, 0, 0), "Haircut", 20.00m, "Active", "Haircut", 2 },
+                    { 2, "Full hair coloring service.", new TimeSpan(0, 1, 0, 0, 0), "Hair Color", 60.00m, "Active", "Others", 2 }
                 });
 
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "Id", "Email", "Name", "Password", "ShopId", "Status", "Type" },
-                values: new object[] { 1, "john@example.com", "John Doe", "password123", 1, 0, 2 });
+                values: new object[] { 1, "john@example.com", "John Doe", "password123", 1, "Active", "Owner" });
 
             migrationBuilder.InsertData(
                 table: "Appointments",
                 columns: new[] { "Id", "ClientId", "DateAndHour", "Duration", "EmployeeId", "ServiceId", "ShopId", "Status" },
-                values: new object[] { 1, 3, new DateTime(2024, 9, 13, 16, 8, 51, 918, DateTimeKind.Local).AddTicks(6926), new TimeSpan(0, 0, 30, 0, 0), 2, 1, 1, 0 });
+                values: new object[] { 1, 3, new DateTime(2024, 9, 13, 21, 34, 19, 661, DateTimeKind.Local).AddTicks(406), new TimeSpan(0, 0, 30, 0, 0), 2, 1, 1, "Active" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Appointments_ClientId",

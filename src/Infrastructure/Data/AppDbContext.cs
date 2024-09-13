@@ -1,6 +1,8 @@
 ﻿using Domain.Entities;
 using Domain.Enums;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Infrastructure.Data
 {
@@ -27,6 +29,34 @@ namespace Infrastructure.Data
             modelBuilder.Entity<Appointment>().HasData(CreateAppointmentDataSeed());
 
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Appointment>()
+                .Property(u => u.Status)
+                .HasConversion(new EnumToStringConverter<Status>());
+
+            modelBuilder.Entity<Service>()
+                .Property(s => s.Type)
+                .HasConversion(new EnumToStringConverter<ServiceType>());
+
+            modelBuilder.Entity<Service>()
+                .Property(s => s.Status)
+                .HasConversion(new EnumToStringConverter<Status>());
+
+            modelBuilder.Entity<Shop>()
+                .Property(s => s.Type)
+                .HasConversion(new EnumToStringConverter<ShopType>());
+
+            modelBuilder.Entity<Shop>()
+                .Property(s => s.Status)
+                .HasConversion(new EnumToStringConverter<Status>());
+
+            modelBuilder.Entity<User>()
+                .Property(u => u.Type)
+                .HasConversion(new EnumToStringConverter<UserType>());
+
+            modelBuilder.Entity<User>()
+                .Property(s => s.Status)
+                .HasConversion(new EnumToStringConverter<Status>());
         }
 
         private object[] CreateOwnerDataSeed()
@@ -38,81 +68,6 @@ namespace Infrastructure.Data
                 
             return result;
         }
-        /*
-        private object[] CreateEmployeeDataSeed()
-        {
-            object[] result = new[]
-            {
-                new { Id = 3, Name = "Jane Smith", Email = "jane@example.com", Password = "password123", Type = UserType.Employee, Status = Status.Active },
-                new { Id = 4, Name = "Jake Smith", Email = "jake@example.com", Password = "password123", Type = UserType.Employee, Status = Status.Active }
-            };
-
-            return result;
-        }
-
-        private object[] CreateClientDataSeed()
-        {
-            object[] result = new[]
-            {
-                new { Id = 5, Name = "Bob Brown", Email = "bob@example.com", Password = "password123", Type = UserType.Client, Status = Status.Active },
-            };
-
-            return result;
-        }
-
-        private object[] CreateSysAdminDataSeed()
-        {
-            object[] result = new[]
-            {
-                new { Id = 6, Name = "Charlie Davis", Email = "charlie@example.com", Password = "password123", Type = UserType.SysAdmin, Status = Status.Active }
-            };
-
-            return result;
-        }
-
-        private Shop[] CreateShopDataSeed()
-        {
-            Shop[] result = new Shop[]
-            {
-                new Shop {Name = "HairSalon 1", Id = 1, Type = ShopType.HairSalon },
-                new Shop {Name = "NailSalon 1", Id = 2, Type = ShopType.NailSalon }
-            };
-            return result;
-        }
-
-        private Service[] CreateServiceDataSeed()
-        {
-            Service[] result = new Service[]
-            {
-                new Service { Id = 1, Name = "Haircut", Description = "A basic haircut", Price = 20.00m, Duration = TimeSpan.FromMinutes(30), ServiceType = ServiceType.Haircut },
-                new Service { Id = 2, Name = "Nail Polish", Description = "Nail polishing service", Price = 15.00m, Duration = TimeSpan.FromMinutes(45), ServiceType = ServiceType.Others }
-            };
-            return result;
-        }
-
-        private Schedule[] CreateScheduleDataSeed()
-        {
-            Schedule[] result = new Schedule[]
-            {
-                new Schedule { Id = 1, Day = DayOfWeek.Monday, StartTime = new TimeSpan(9, 0, 0), EndTime = new TimeSpan(17, 0, 0) },
-                new Schedule { Id = 2, Day = DayOfWeek.Tuesday, StartTime = new TimeSpan(9, 0, 0), EndTime = new TimeSpan(17, 0, 0) },
-                new Schedule { Id = 3, Day = DayOfWeek.Wednesday, StartTime = new TimeSpan(9, 0, 0), EndTime = new TimeSpan(17, 0, 0) },
-                new Schedule { Id = 4, Day = DayOfWeek.Thursday, StartTime = new TimeSpan(9, 0, 0), EndTime = new TimeSpan(17, 0, 0) },
-                new Schedule { Id = 5, Day = DayOfWeek.Friday, StartTime = new TimeSpan(9, 0, 0), EndTime = new TimeSpan(17, 0, 0) }
-            };
-            return result;
-        }
-
-        private object[] CreateAppointmentDataSeed()
-        {
-            object[] result = new[]
-            {
-                new { Id = 1, Status = Status.Active, ServiceId = 1, EmployeeId = 1, ClientId = 1, ShopId = 1, DateAndHour = new DateTime(2024, 9, 21, 10, 0, 0), Duration = new TimeSpan(1, 0, 0) },
-                new { Id = 2, Status = Status.Active, ServiceId = 2, EmployeeId = 2, ClientId = 1, ShopId = 2, DateAndHour = new DateTime(2024, 9, 21, 10, 0, 0), Duration = new TimeSpan(1, 0, 0) },
-                new { Id = 3, Status = Status.Active, ServiceId = 3, EmployeeId = 3, ClientId = 1, ShopId = 1, DateAndHour = new DateTime(2024, 9, 21, 10, 0, 0), Duration = new TimeSpan(1, 0, 0) }
-            };
-            return result;
-        }*/
 
         private static User[] CreateUserDataSeed()
         {
@@ -176,7 +131,7 @@ namespace Infrastructure.Data
                 Description = "A standard haircut service.",
                 Price = 20.00m,
                 Duration = new TimeSpan(0, 30, 0),
-                ServiceType = ServiceType.Haircut,
+                Type = ServiceType.Haircut,
                 Status = Status.Active,
                 UserId = 2
             },
@@ -187,7 +142,7 @@ namespace Infrastructure.Data
                 Description = "Full hair coloring service.",
                 Price = 60.00m,
                 Duration = new TimeSpan(1, 0, 0),
-                ServiceType = ServiceType.Others,
+                Type = ServiceType.Others,
                 Status = Status.Active,
                 UserId = 2
             }

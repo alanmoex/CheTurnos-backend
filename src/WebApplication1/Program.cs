@@ -1,13 +1,9 @@
-<<<<<<< HEAD
 using Application;
-=======
 using Application.Interfaces;
 using Application.Services;
 using Domain.Entities;
->>>>>>> def82008e784dfca2f44250bd3f4ff995ccc3882
 using Domain.Interfaces;
 using Infrastructure.Data;
-using Microsoft.AspNetCore.Authentication;
 using Infrastructure.Services;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
@@ -15,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
-//using static Infrastructure.Services.AuthenticationService;
+using static Infrastructure.Services.AuthenticationService;
 //API-CheTurnosBearerAuth
 
 var builder = WebApplication.CreateBuilder(args);
@@ -78,14 +74,6 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.AmbientTransactionWarning));
 });
 
-<<<<<<< HEAD
-#region Services
-builder.Services.AddScoped<IShopService, ShopService>();
-#endregion
-
-#region Repositories
-builder.Services.AddScoped<IShopRepository, ShopRepository>();
-=======
 //Bearer es el tipo de autenticacion en el postman para pasarle el token
 builder.Services.AddAuthentication("Bearer")
     .AddJwtBearer(options =>
@@ -102,16 +90,20 @@ builder.Services.AddAuthentication("Bearer")
     });
 
 #region Repositories
+builder.Services.AddScoped<IShopRepository, ShopRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IRepositoryUser, RepositoryUser>();
+builder.Services.AddScoped<IServiceRepository, ServiceRepository>();
 #endregion
 
 #region Services
+builder.Services.AddScoped<IShopService, ShopService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.Configure<AuthenticationServiceOptions>(
     builder.Configuration.GetSection(AuthenticationServiceOptions.AuthenticationService));
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
->>>>>>> def82008e784dfca2f44250bd3f4ff995ccc3882
+builder.Services.AddScoped<IServiceService, ServiceService>();
+
 #endregion
 
 var app = builder.Build();
