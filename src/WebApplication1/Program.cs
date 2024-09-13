@@ -90,17 +90,20 @@ builder.Services.AddAuthentication("Bearer")
     });
 
 #region Repositories
+builder.Services.AddScoped<IShopRepository, ShopRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IRepositoryUser, RepositoryUser>();
 builder.Services.AddScoped<IServiceRepository, ServiceRepository>();
 #endregion
 
 #region Services
+builder.Services.AddScoped<IShopService, ShopService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.Configure<AuthenticationServiceOptions>(
     builder.Configuration.GetSection(AuthenticationServiceOptions.AuthenticationService));
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddScoped<IServiceService, ServiceService>();
+
 #endregion
 
 var app = builder.Build();

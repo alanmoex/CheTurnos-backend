@@ -62,7 +62,7 @@ namespace Infrastructure.Migrations
                         {
                             Id = 1,
                             ClientId = 3,
-                            DateAndHour = new DateTime(2024, 9, 12, 21, 10, 22, 831, DateTimeKind.Local).AddTicks(5240),
+                            DateAndHour = new DateTime(2024, 9, 13, 21, 34, 19, 661, DateTimeKind.Local).AddTicks(406),
                             Duration = new TimeSpan(0, 0, 30, 0, 0),
                             EmployeeId = 2,
                             ServiceId = 1,
@@ -251,7 +251,19 @@ namespace Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Phone")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -271,7 +283,10 @@ namespace Infrastructure.Migrations
                         new
                         {
                             Id = 1,
+                            Address = "123 Main St",
+                            Email = "contact@beautysalon.com",
                             Name = "Beauty Salon",
+                            Phone = "555-1234",
                             Status = "Active",
                             Type = "BeautyShop"
                         });

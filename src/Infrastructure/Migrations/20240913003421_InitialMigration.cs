@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class initial : Migration
+    public partial class InitialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -21,7 +21,10 @@ namespace Infrastructure.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(type: "TEXT", nullable: false),
                     Type = table.Column<string>(type: "TEXT", nullable: false),
-                    Status = table.Column<string>(type: "TEXT", nullable: false)
+                    Status = table.Column<string>(type: "TEXT", nullable: false),
+                    Address = table.Column<string>(type: "TEXT", nullable: false),
+                    Phone = table.Column<string>(type: "TEXT", nullable: false),
+                    Email = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -147,8 +150,8 @@ namespace Infrastructure.Migrations
 
             migrationBuilder.InsertData(
                 table: "Shops",
-                columns: new[] { "Id", "Name", "Status", "Type" },
-                values: new object[] { 1, "Beauty Salon", "Active", "BeautyShop" });
+                columns: new[] { "Id", "Address", "Email", "Name", "Phone", "Status", "Type" },
+                values: new object[] { 1, "123 Main St", "contact@beautysalon.com", "Beauty Salon", "555-1234", "Active", "BeautyShop" });
 
             migrationBuilder.InsertData(
                 table: "Users",
@@ -194,7 +197,7 @@ namespace Infrastructure.Migrations
             migrationBuilder.InsertData(
                 table: "Appointments",
                 columns: new[] { "Id", "ClientId", "DateAndHour", "Duration", "EmployeeId", "ServiceId", "ShopId", "Status" },
-                values: new object[] { 1, 3, new DateTime(2024, 9, 12, 21, 10, 22, 831, DateTimeKind.Local).AddTicks(5240), new TimeSpan(0, 0, 30, 0, 0), 2, 1, 1, "Active" });
+                values: new object[] { 1, 3, new DateTime(2024, 9, 13, 21, 34, 19, 661, DateTimeKind.Local).AddTicks(406), new TimeSpan(0, 0, 30, 0, 0), 2, 1, 1, "Active" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Appointments_ClientId",
