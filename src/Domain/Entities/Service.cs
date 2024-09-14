@@ -29,6 +29,8 @@ namespace Domain.Entities
         [Required]
         public ServiceType Type { get; set; }
 
+        public List<User> ProvideBy { get; set; }
+
         public Service() { }
 
         public Service(string name, string description, decimal price, TimeSpan duration, ServiceType type)
@@ -38,6 +40,7 @@ namespace Domain.Entities
             Price = price;
             Duration = duration;
             Type = type;
+            ProvideBy = new List<User>();
         }
         
     }
