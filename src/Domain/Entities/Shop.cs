@@ -27,6 +27,7 @@ namespace Domain.Entities
         [EmailAddress]
         public string Email { get; set; }
 
+        public bool IsPremium { get; set; }
         public ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
         public ICollection<Schedule> Schedules { get; set; } = new List<Schedule>();
         public ICollection<User> Employees { get; set; } = new List<User>();

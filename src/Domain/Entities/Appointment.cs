@@ -14,10 +14,10 @@ namespace Domain.Entities
         public Status Status { get; set; } = Status.Active;
 
         public Service Service { get; set; }
-        public User Employee { get; set; }
-        public User Client { get; set; }
-        public Shop Shop { get; set; }
-
+        public int EmployeeId { get; set; }
+        public int ClientId { get; set; }
+        public int ShopId { get; set; }
+         
         [Required]
         public DateTime DateAndHour { get; set; }
 
@@ -26,12 +26,12 @@ namespace Domain.Entities
 
         public Appointment() { }
 
-        public Appointment(Service service, User employee, User client, Shop shop, DateTime dateAndHour) 
+        public Appointment(Service service, int employee, int client, int shop, DateTime dateAndHour) 
         {
-            Service = service;
-            Employee = employee;
-            Client = client;
-            Shop = shop;
+            Service = service;                                                          
+            EmployeeId = employee;
+            ClientId = client;
+            ShopId = shop;
             DateAndHour = dateAndHour;
         }
 
