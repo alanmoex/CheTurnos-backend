@@ -14,7 +14,7 @@ namespace Domain.Entities
         public string Name { get; set; }
 
         [Required]
-        public ShopType Type { get; set; }
+        public ShopType? Type { get; set; }
 
         public Status Status { get; set; } = Status.Active;
 
@@ -28,19 +28,19 @@ namespace Domain.Entities
         public string Email { get; set; }
 
         public bool IsPremium { get; set; }
-        public ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
-        public ICollection<Schedule> Schedules { get; set; } = new List<Schedule>();
-        public ICollection<User> Employees { get; set; } = new List<User>();
+
+        public int AppoimentFrecuence { get; set; } //en minutos
 
         public Shop() { }
 
-        public Shop(string name, ShopType type, string address = null, string phone = null, string email = null)
+        public Shop(string name, string address, string phone, string email, ShopType? type = null)
         {
             Name = name;
             Type = type;
             Address = address;
             Phone = phone;
             Email = email;
+            IsPremium = false;
         }
     }
 }

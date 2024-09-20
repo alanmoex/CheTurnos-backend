@@ -8,9 +8,6 @@ namespace Domain.Entities
 {
     public class Employee : User
     {
-        public ICollection<Schedule>? WorkSchedules { get; set; }
-
-        public ICollection<Appointment>? Appointments { get; set; }
-        public ICollection<Service>? Services { get; set; }
+        public int ShopId { get; set; } //FK
     }
 }
