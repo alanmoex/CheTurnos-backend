@@ -21,10 +21,11 @@ namespace Infrastructure.Data
         {
 
             modelBuilder.Entity<User>().HasDiscriminator<UserType>("Type")
-                    .HasValue<Client>(UserType.Client)
-                    .HasValue<Employee>(UserType.Employee)
-                    .HasValue<Owner>(UserType.Owner)
-                    .HasValue<SysAdmin>(UserType.SysAdmin);
+                .HasValue<User>(UserType.None)
+                .HasValue<Client>(UserType.Client)
+                .HasValue<Employee>(UserType.Employee)
+                .HasValue<Owner>(UserType.Owner)
+                .HasValue<SysAdmin>(UserType.SysAdmin);
 
             { //RELACIONES DEL APPOIMENT
                 modelBuilder.Entity<Appointment>()
