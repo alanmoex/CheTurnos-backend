@@ -14,7 +14,7 @@ namespace Domain.Entities
         public string Name { get; set; }
 
         [Required]
-        public ShopType? Type { get; set; }
+        public ShopType Type { get; set; }
 
         public Status Status { get; set; } = Status.Active;
 
@@ -33,7 +33,7 @@ namespace Domain.Entities
 
         public Shop() { }
 
-        public Shop(string name, string address, string phone, string email, ShopType? type = null)
+        public Shop(string name, string address, string phone, string email, ShopType type)
         {
             Name = name;
             Type = type;

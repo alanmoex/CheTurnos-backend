@@ -23,14 +23,14 @@ namespace Domain.Entities
         public decimal Price { get; set; }
 
         [Required]
-        public int Duration { get; set; } //en minutos
+        public TimeSpan Duration { get; set; } //en minutos
 
         [Required]
         public Status Status { get; set; } = Status.Active;
 
         public Service() { }
 
-        public Service(string name, string description, decimal price, int duration, int shopId)
+        public Service(string name, string description, decimal price, TimeSpan duration, int shopId)
         {
             Name = name;
             Description = description;

@@ -1,4 +1,5 @@
-﻿using Domain.Enums;
+﻿using Domain.Entities;
+using Domain.Enums;
 
 namespace Application.Models
 {
@@ -10,6 +11,6 @@ namespace Application.Models
         public Status Status { get; set; }
         public string Address { get; set; } 
         public string Phone { get; set; }    
-        public string Email { get; set; }    
+        public string Email { get; set; }
     }
 }

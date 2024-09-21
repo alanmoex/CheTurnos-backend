@@ -18,9 +18,6 @@ public class ServiceUpdateRequest
     public string? Duration { get; set; }
 
     [JsonConverter(typeof(JsonStringEnumConverter))]
-    public ServiceType? ServiceType { get; set; }
-
-    [JsonConverter(typeof(JsonStringEnumConverter))]
     public Status? Status { get; set; }
 }
 
