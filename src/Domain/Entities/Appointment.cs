@@ -13,10 +13,10 @@ namespace Domain.Entities
         [Required]
         public Status Status { get; set; } = Status.Active;
 
-        public Service Service { get; set; }
-        public User Employee { get; set; }
-        public User Client { get; set; }
-        public Shop Shop { get; set; }
+        public int? ServiceId { get; set; } //FK
+        public int ProviderId { get; set; } //FK
+        public int? ClientId { get; set; } //FK
+        public int ShopId { get; set; } //FK
 
         [Required]
         public DateTime DateAndHour { get; set; }
@@ -26,15 +26,20 @@ namespace Domain.Entities
 
         public Appointment() { }
 
-        public Appointment(Service service, User employee, User client, Shop shop, DateTime dateAndHour) 
+        public Appointment(int providerId, int shop, DateTime dateAndHour, TimeSpan duration) 
         {
-            Service = service;
-            Employee = employee;
-            Client = client;
-            Shop = shop;
+            // se obtendran del front, del dueño/empleado que este iniciado sesion (JWT)                                                       
+            ProviderId = providerId;  
+            ShopId = shop;
+            // se inician en null y se llenan cuando el cliente reserva
+            ServiceId = null;
+            ClientId = null;
+            // dato que viene del front o se autogenera
             DateAndHour = dateAndHour;
+            // duration --> en RepositoryAppoiment en la funcion CreateAppoiment (buscar en la tabla Shops 
+            // por el id del shop del turno y asignar a la prop Duration la duracion de turnos del negocio (AppoimentFrecuence)
+            Duration = duration;
+            
         }
-
-        
     }
 }

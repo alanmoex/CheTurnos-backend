@@ -27,19 +27,20 @@ namespace Domain.Entities
         [EmailAddress]
         public string Email { get; set; }
 
-        public ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
-        public ICollection<Schedule> Schedules { get; set; } = new List<Schedule>();
-        public ICollection<User> Employees { get; set; } = new List<User>();
+        public bool IsPremium { get; set; }
+
+        public int AppoimentFrecuence { get; set; } //en minutos
 
         public Shop() { }
 
-        public Shop(string name, ShopType type, string address = null, string phone = null, string email = null)
+        public Shop(string name, string address, string phone, string email, ShopType type)
         {
             Name = name;
             Type = type;
             Address = address;
             Phone = phone;
             Email = email;
+            IsPremium = false;
         }
     }
 }

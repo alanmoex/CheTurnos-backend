@@ -10,6 +10,8 @@ namespace Domain.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
+        public int ShopId { get; set; } //clave foranea para saber de que negocio es
+
         [Required]
         public string Name { get; set; }
 
@@ -17,27 +19,24 @@ namespace Domain.Entities
         public string Description { get; set; }
 
         [Required]
-        [Range(0, int.MaxValue, ErrorMessage = "must be a positive value.")]
+        [Range(0, int.MaxValue, ErrorMessage = "deberia ser un valor positivo")]
         public decimal Price { get; set; }
 
         [Required]
-        public TimeSpan Duration { get; set; }
+        public TimeSpan Duration { get; set; } //en minutos
 
         [Required]
         public Status Status { get; set; } = Status.Active;
 
-        [Required]
-        public ServiceType Type { get; set; }
-
         public Service() { }
 
-        public Service(string name, string description, decimal price, TimeSpan duration, ServiceType type)
+        public Service(string name, string description, decimal price, TimeSpan duration, int shopId)
         {
             Name = name;
             Description = description;
             Price = price;
             Duration = duration;
-            Type = type;
+            ShopId = shopId;
         }
         
     }

@@ -21,8 +21,9 @@ public class ServiceService : IServiceService
             request.Name, 
             request.Description, 
             request.Price, 
-            duration, 
-            request.ServiceType);
+            duration,
+            request.ShopId
+        );
 
         var obj = _serviceRepository.Add(newService);
         return ServiceDTO.Create(obj);
@@ -72,10 +73,6 @@ public class ServiceService : IServiceService
             var duration = TimeSpan.Parse(request.Duration);
             service.Duration = duration;
         }
-            
-
-        if (request.ServiceType.HasValue)
-            service.Type = request.ServiceType.Value;
 
         if (request.Status.HasValue)
             service.Status = request.Status.Value;
