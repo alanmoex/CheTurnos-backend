@@ -44,6 +44,15 @@ public class ServiceService : IServiceService
         return ServiceDTO.CreateList(list);
     }
 
+
+
+    public List<ServiceDTO> GetAllByShopId(int shopId)
+    {
+        var list = _serviceRepository.GetAllByShopId(shopId);
+
+        return ServiceDTO.CreateList(list);
+    }
+
     public ServiceDTO GetById(int id)
     {
         var obj = _serviceRepository.GetById(id)
