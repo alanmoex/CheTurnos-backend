@@ -10,27 +10,27 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserController : ControllerBase
+    public class ClientController : ControllerBase
     {
-        private readonly IUserService _userService;
+        private readonly IClientService _clientService;
 
-        public UserController(IUserService userService)
+        public ClientController(IClientService clientService)
         {
-            _userService = userService;
+            _clientService = clientService;
         }
 
         [HttpGet("[action]")]
-        public ActionResult<List<UserDto?>> GetAllUsers()
+        public ActionResult<List<ClientDto?>> GetAllClients()
         {
-            return _userService.GetAllUsers();
+            return _clientService.GetAllClients();
         }
 
         [HttpGet("[action]/{id}")]
-        public ActionResult<UserDto?> GetUserById([FromRoute] int id)
+        public ActionResult<ClientDto?> GetClientById([FromRoute] int id)
         {
             try
             {
-                return _userService.GetUserById(id);
+                return _clientService.GetClientById(id);
             }
             catch (NotFoundException ex)
             {
@@ -39,17 +39,17 @@ namespace API.Controllers
         }
 
         [HttpPost("[action]")]
-        public ActionResult<UserDto> CreateNewUser([FromBody] UserCreateRequest userCreateRequest)
+        public ActionResult<ClientDto> CreateNewClient([FromBody] ClientCreateRequest clientCreateRequest)
         {
-            return _userService.CreateNewUser(userCreateRequest);
+            return _clientService.CreateNewClient(clientCreateRequest);
         }
 
         [HttpPut("[action]/{id}")]
-        public ActionResult ModifyUserData([FromRoute] int id, [FromBody] UserUpdateRequest userUpdateRequest)
+        public ActionResult ModifyClientData([FromRoute] int id, [FromBody] ClientUpdateRequest clientUpdateRequest)
         {
             try
             {
-                _userService.ModifyUserData(id, userUpdateRequest);
+                _clientService.ModifyClientData(id, clientUpdateRequest);
             }
             catch (NotFoundException ex)
             {
@@ -59,11 +59,11 @@ namespace API.Controllers
         }
 
         [HttpDelete("[action]/{id}")]
-        public ActionResult DeleteUser([FromRoute] int id)
+        public ActionResult DeleteClient([FromRoute] int id)
         {
             try
             {
-                _userService.DeleteUser(id);
+                _clientService.DeleteClient(id);
                 return Ok();
             }
             catch (NotFoundException ex)

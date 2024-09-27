@@ -91,7 +91,7 @@ builder.Services.AddAuthentication("Bearer")
 
 #region Repositories
 builder.Services.AddScoped<IShopRepository, ShopRepository>();
-builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserRepository, ClientRepository>();
 builder.Services.AddScoped<IRepositoryUser, RepositoryUser>();
 builder.Services.AddScoped<IServiceRepository, ServiceRepository>();
 #endregion
