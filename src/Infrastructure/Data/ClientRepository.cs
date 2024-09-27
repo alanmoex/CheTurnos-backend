@@ -9,9 +9,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Data
 {
-    public class UserRepository : RepositoryBase<User>, IUserRepository
+    public class ClientRepository : RepositoryBase<Client>, IClientRepository
     {
-        public UserRepository(AppDbContext context) : base(context)
+        public ClientRepository(AppDbContext context) : base(context)
         {
         }
     }
