@@ -91,14 +91,14 @@ builder.Services.AddAuthentication("Bearer")
 
 #region Repositories
 builder.Services.AddScoped<IShopRepository, ShopRepository>();
-builder.Services.AddScoped<IUserRepository, ClientRepository>();
+builder.Services.AddScoped<IClientRepository, ClientRepository>();
 builder.Services.AddScoped<IRepositoryUser, RepositoryUser>();
 builder.Services.AddScoped<IServiceRepository, ServiceRepository>();
 #endregion
 
 #region Services
 builder.Services.AddScoped<IShopService, ShopService>();
-builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IClientService, ClientService>();
 builder.Services.Configure<AuthenticationServiceOptions>(
     builder.Configuration.GetSection(AuthenticationServiceOptions.AuthenticationService));
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
