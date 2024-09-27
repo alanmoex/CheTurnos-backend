@@ -39,6 +39,24 @@ public class ServiceController : ControllerBase
         }
     }
 
+    [HttpGet("byId/{shopId}")]
+    public ActionResult<List<ServiceDTO>> GetAllByShopId(int shopId)
+    {
+        try
+        {
+            return Ok(_serviceService.GetAllByShopId(shopId));
+        }
+        catch (NotFoundException ex)
+        {
+            return NotFound(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, "An unexpected error occurred.");
+        }
+    }
+
+
     [HttpPost]
     public IActionResult Create([FromBody] ServiceCreateRequest serviceCreateRequest)
     {

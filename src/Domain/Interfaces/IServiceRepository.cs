@@ -10,5 +10,7 @@ namespace Domain.Interfaces
 {
     public interface IServiceRepository : IRepositoryBase<Service>
     {
+        public List<Service> GetAllByShopId(int shopId);
+
     }
 }
