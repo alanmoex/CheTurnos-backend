@@ -11,7 +11,10 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
+using MailKit;
 using static Infrastructure.Services.AuthenticationService;
+using static Infrastructure.Services.EmailService;
+
 //API-CheTurnosBearerAuth
 
 var builder = WebApplication.CreateBuilder(args);
@@ -104,7 +107,14 @@ builder.Services.Configure<AuthenticationServiceOptions>(
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddScoped<IServiceService, ServiceService>();
 
+builder.Services.Configure <EmailSettingsOptions>(
+    builder.Configuration.GetSection(EmailSettingsOptions.EmailService));
+builder.Services.AddScoped<IEmailService, EmailService>(); //El nombre "MailService" no puede ser utilizado porque ya existe en la libreria "mailkit"
+
 #endregion
+
+
+
 
 var app = builder.Build();
 
