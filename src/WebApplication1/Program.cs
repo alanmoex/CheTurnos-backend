@@ -97,6 +97,8 @@ builder.Services.AddScoped<IShopRepository, ShopRepository>();
 builder.Services.AddScoped<IClientRepository, ClientRepository>();
 builder.Services.AddScoped<IRepositoryUser, RepositoryUser>();
 builder.Services.AddScoped<IServiceRepository, ServiceRepository>();
+builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
+
 #endregion
 
 #region Services
@@ -110,7 +112,7 @@ builder.Services.AddScoped<IServiceService, ServiceService>();
 builder.Services.Configure <EmailSettingsOptions>(
     builder.Configuration.GetSection(EmailSettingsOptions.EmailService));
 builder.Services.AddScoped<IEmailService, EmailService>(); //El nombre "MailService" no puede ser utilizado porque ya existe en la libreria "mailkit"
-
+builder.Services.AddScoped<IAppointmentService, AppointmentService>();
 #endregion
 
 
