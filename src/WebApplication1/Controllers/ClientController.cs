@@ -2,14 +2,17 @@
 using Application.Models;
 using Application.Models.Requests;
 using Domain.Exceptions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
 namespace API.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
+    [Route("api/[controller]")]
+  
     public class ClientController : ControllerBase
     {
         private readonly IClientService _clientService;
@@ -38,10 +41,22 @@ namespace API.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpPost("[action]")]
         public ActionResult<ClientDto> CreateNewClient([FromBody] ClientCreateRequest clientCreateRequest)
         {
-            return _clientService.CreateNewClient(clientCreateRequest);
+            try
+            {
+                return _clientService.CreateNewClient(clientCreateRequest);
+            }
+            catch (ValidationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            } 
         }
 
         [HttpPut("[action]/{id}")]
