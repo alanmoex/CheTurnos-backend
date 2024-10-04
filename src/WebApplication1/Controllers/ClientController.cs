@@ -49,41 +49,60 @@ namespace API.Controllers
             {
                 return _clientService.CreateNewClient(clientCreateRequest);
             }
-            catch (ValidationException ex)
+            catch (ValidationException ex) //por si hay datos inválidos
             {
                 return BadRequest(ex.Message);
             }
-            catch (Exception ex)
+            catch (Exception ex) //por si el email suministrado ya existe
             {
                 return BadRequest(ex.Message);
             } 
         }
 
-        [HttpPut("[action]/{id}")]
-        public ActionResult ModifyClientData([FromRoute] int id, [FromBody] ClientUpdateRequest clientUpdateRequest)
+        [HttpPut("[action]")]
+        public ActionResult ModifyClientData([FromBody] ClientUpdateRequest clientUpdateRequest)
         {
+            int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "");
             try
             {
-                _clientService.ModifyClientData(id, clientUpdateRequest);
+                _clientService.ModifyClientData(userId, clientUpdateRequest);
             }
-            catch (NotFoundException ex)
+            catch (ValidationException ex)
             {
-                return NotFound(ex.Message);
+                return BadRequest(ex.Message);
             }
             return Ok();
         }
 
         [HttpDelete("[action]/{id}")]
-        public ActionResult DeleteClient([FromRoute] int id)
+        public ActionResult PermanentDeletionClient([FromRoute] int id)
         {
             try
             {
-                _clientService.DeleteClient(id);
+                _clientService.PermanentDeletionClient(id);
                 return Ok();
             }
             catch (NotFoundException ex)
             {
                 return NotFound(ex.Message);
+            }
+        }
+
+        [HttpDelete("[action]/{id}")]
+        public ActionResult LogicalDeletionClient([FromRoute] int id)
+        {
+            try
+            {
+                _clientService.LogicalDeletionClient(id);
+                return Ok();
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
             }
         }
     }

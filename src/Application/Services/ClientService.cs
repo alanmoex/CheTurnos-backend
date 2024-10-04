@@ -13,6 +13,7 @@ using Domain.Interfaces;
 using System.Text.RegularExpressions;
 using System.Net.Mail;
 using System.Data;
+using System.Xml.Linq;
 
 namespace Application.Services
 {
@@ -86,17 +87,24 @@ namespace Application.Services
         {
             var client = _clientRepository.GetById(id);
 
-            if (client == null)
-                throw new NotFoundException(nameof(Client), id);
+            if (!string.IsNullOrEmpty(clientUpdateRequest.Name.Trim())) client.Name = clientUpdateRequest.Name;
 
-            if (clientUpdateRequest.Name != string.Empty) client.Name = clientUpdateRequest.Name;
-
-            if (clientUpdateRequest.Password != string.Empty) client.Password = clientUpdateRequest.Password;
+            if (!string.IsNullOrEmpty(clientUpdateRequest.Password.Trim()))
+            {
+                if (ValidatePassword(clientUpdateRequest.Password))
+                {
+                    client.Password = clientUpdateRequest.Password;
+                }
+                else
+                {
+                    throw new ValidationException("El email que intenta aplicar no es válido");
+                }
+            } 
 
             _clientRepository.Update(client);
         }
 
-        public void DeleteClient(int id)
+        public void PermanentDeletionClient(int id)
         {
             var client = _clientRepository.GetById(id);
 
@@ -104,6 +112,22 @@ namespace Application.Services
                 throw new NotFoundException(nameof(Client), id);
 
             _clientRepository.Delete(client);
+        }
+
+        public void LogicalDeletionClient(int id)
+        {
+            var client = _clientRepository.GetById(id);
+
+            if (client == null)
+                throw new NotFoundException(nameof(Client), id);
+
+            if (client.Status == Status.Inactive)
+            {
+                throw new Exception("El cliente especificado ya se encuentra inactivo");
+            }
+
+            client.Status = Status.Inactive;
+            _clientRepository.Update(client);
         }
 
         private bool ValidatePassword(string password)
