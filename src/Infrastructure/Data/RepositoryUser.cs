@@ -18,10 +18,10 @@ namespace Infrastructure.Data
             _context = context;
         }   
         
-        public User GetByEmail(string email)
+        public User? GetByEmail(string email)
         {
-            var user = _context.Users.FirstOrDefault(u => u.Email == email)
-                ?? throw new NotFoundException("User not found");
+            var user = _context.Users.FirstOrDefault(u => u.Email == email);
+
             return user;
         }
 
