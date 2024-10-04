@@ -97,7 +97,7 @@ namespace Application.Services
                 }
                 else
                 {
-                    throw new ValidationException("El email que intenta aplicar no es válido");
+                    throw new ValidationException("Los datos ingresados no son válidos");
                 }
             } 
 
