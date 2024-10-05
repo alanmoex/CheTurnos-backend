@@ -17,7 +17,7 @@ namespace API.Controllers
             _shopService = shopService;
         }
 
-        [HttpGet]
+        [HttpGet("[action]")]
         public ActionResult<List<ShopDTO>> GetAll()
         {
             try
@@ -31,7 +31,7 @@ namespace API.Controllers
             }
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("[action]/{id}")]
         public ActionResult<ShopDTO> GetById(int id)
         {
             try
@@ -49,7 +49,7 @@ namespace API.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPost("[action]")]
         public IActionResult Create([FromBody] ShopCreateRequest shopCreateRequest)
         {
             if (!ModelState.IsValid)
@@ -68,8 +68,8 @@ namespace API.Controllers
             }
         }
 
-        [HttpPut("{id}")]
-        public IActionResult Update(int id, [FromBody] ShopUpdateRequest shopUpdateRequest)
+        [HttpPut("[action]/{id}")]
+        public IActionResult Update([FromRoute] int id, [FromBody] ShopUpdateRequest shopUpdateRequest)
         {
             if (!ModelState.IsValid)
             {
