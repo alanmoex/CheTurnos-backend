@@ -61,16 +61,21 @@ namespace Application
             if (shop == null)
                 throw new NotFoundException("Shop", id);
 
-            shop.Name = shopUpdateRequest.Name;
-            shop.Type = shopUpdateRequest.Type;
-            shop.Address = shopUpdateRequest.Address; 
-            shop.Phone = shopUpdateRequest.Phone;
-            shop.Email = shopUpdateRequest.Email;
-            shop.IsPremium = shopUpdateRequest.IsPremium;
-            shop.AppoimentFrecuence = shopUpdateRequest.AppoimentFrecuence;
-            shop.TimeEnd = shopUpdateRequest.TimeEnd;
-            shop.WorkDays = shopUpdateRequest.WorkDays;
-            shop.TimeStart = shopUpdateRequest.TimeStart;
+            if (!string.IsNullOrEmpty(shopUpdateRequest.Name.Trim())) shop.Name = shopUpdateRequest.Name;
+
+            if (!string.IsNullOrEmpty(shopUpdateRequest.Address.Trim())) shop.Address = shopUpdateRequest.Address;
+
+            if (!string.IsNullOrEmpty(shopUpdateRequest.Phone.Trim())) shop.Phone = shopUpdateRequest.Phone;
+
+            if (!string.IsNullOrEmpty(shopUpdateRequest.Email.Trim())) shop.Email = shopUpdateRequest.Email;
+
+            if (shopUpdateRequest.AppoimentFrecuence > 0) shop.AppoimentFrecuence = shopUpdateRequest.AppoimentFrecuence;
+
+            if (!string.IsNullOrEmpty(shopUpdateRequest.TimeEnd.ToString().Trim())) shop.TimeEnd = shopUpdateRequest.TimeEnd;
+
+            if (!string.IsNullOrEmpty(shopUpdateRequest.TimeStart.ToString().Trim())) shop.TimeStart = shopUpdateRequest.TimeStart;
+
+            if (shopUpdateRequest.WorkDays.Count > 0) shop.WorkDays = shopUpdateRequest.WorkDays;
 
             _shopRepository.Update(shop);
         }
