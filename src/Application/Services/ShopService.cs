@@ -17,36 +17,21 @@ namespace Application
             _shopRepository = shopRepository;
         }
 
-        public List<ShopDTO> GetAll()
+        public List<ShopDTO?> GetAll()
         {
-            return _shopRepository.GetAll().Select(shop => new ShopDTO
-            {
-                Id = shop.Id,
-                Name = shop.Name,
-                Type = shop.Type,
-                Status = shop.Status,
-                Address = shop.Address, 
-                Phone = shop.Phone,     
-                Email = shop.Email      
-            }).ToList();
+            var shopsList = _shopRepository.GetAll();
+
+            return ShopDTO.CreateList(shopsList);
         }
 
         public ShopDTO GetById(int id)
         {
             var shop = _shopRepository.GetById(id);
-            if (shop == null)
-                throw new NotFoundException("Shop", id);
 
-            return new ShopDTO
-            {
-                Id = shop.Id,
-                Name = shop.Name,
-                Type = shop.Type,
-                Status = shop.Status,
-                Address = shop.Address, 
-                Phone = shop.Phone,    
-                Email = shop.Email      
-            };
+            if (shop == null)
+                throw new NotFoundException(nameof(Shop), id);
+
+            return ShopDTO.Create(shop);
         }
 
         public ShopDTO Create(ShopCreateRequest shopCreateRequest)
@@ -57,21 +42,17 @@ namespace Application
                 Type = shopCreateRequest.Type,
                 Address = shopCreateRequest.Address, 
                 Phone = shopCreateRequest.Phone,     
-                Email = shopCreateRequest.Email      
+                Email = shopCreateRequest.Email,
+                IsPremium = shopCreateRequest.IsPremium,
+                AppoimentFrecuence = shopCreateRequest.AppoimentFrecuence,
+                TimeEnd = shopCreateRequest.TimeEnd,
+                TimeStart = shopCreateRequest.TimeStart,
+                WorkDays = shopCreateRequest.WorkDays,
             };
 
             _shopRepository.Add(shop);
 
-            return new ShopDTO
-            {
-                Id = shop.Id,
-                Name = shop.Name,
-                Type = shop.Type,
-                Status = shop.Status,
-                Address = shop.Address, 
-                Phone = shop.Phone,     
-                Email = shop.Email      
-            };
+            return ShopDTO.Create(shop);
         }
 
         public void Update(int id, ShopUpdateRequest shopUpdateRequest)
@@ -83,8 +64,13 @@ namespace Application
             shop.Name = shopUpdateRequest.Name;
             shop.Type = shopUpdateRequest.Type;
             shop.Address = shopUpdateRequest.Address; 
-            shop.Phone = shopUpdateRequest.Phone;    
-            shop.Email = shopUpdateRequest.Email;     
+            shop.Phone = shopUpdateRequest.Phone;
+            shop.Email = shopUpdateRequest.Email;
+            shop.IsPremium = shopUpdateRequest.IsPremium;
+            shop.AppoimentFrecuence = shopUpdateRequest.AppoimentFrecuence;
+            shop.TimeEnd = shopUpdateRequest.TimeEnd;
+            shop.WorkDays = shopUpdateRequest.WorkDays;
+            shop.TimeStart = shopUpdateRequest.TimeStart;
 
             _shopRepository.Update(shop);
         }
