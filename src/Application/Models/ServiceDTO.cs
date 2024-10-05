@@ -7,6 +7,7 @@ namespace Application;
 public class ServiceDTO
 {
     public int Id { get; set; }
+    public int ShopId { get; set; }
     public string Name { get; set; }
     public string Description { get; set; }
     public decimal Price { get; set; }
@@ -24,6 +25,7 @@ public class ServiceDTO
         dto.Price = service.Price;
         dto.Duration = service.Duration;
         dto.Status = service.Status;
+        dto.ShopId = service.ShopId;
         return dto;
     }
 
