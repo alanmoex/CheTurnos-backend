@@ -121,10 +121,10 @@ namespace Infrastructure.Data.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("INTEGER");
 
-                    b.Property<TimeSpan>("TimeEnd")
+                    b.Property<TimeOnly>("TimeEnd")
                         .HasColumnType("TEXT");
 
-                    b.Property<TimeSpan>("TimeStart")
+                    b.Property<TimeOnly>("TimeStart")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Type")

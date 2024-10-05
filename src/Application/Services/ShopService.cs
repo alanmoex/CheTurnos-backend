@@ -41,13 +41,13 @@ namespace Application
             {
                 Name = shopCreateRequest.Name,
                 Type = shopCreateRequest.Type,
-                Address = shopCreateRequest.Address, 
-                Phone = shopCreateRequest.Phone,     
+                Address = shopCreateRequest.Address,
+                Phone = shopCreateRequest.Phone,
                 Email = shopCreateRequest.Email,
                 IsPremium = shopCreateRequest.IsPremium,
                 AppoimentFrecuence = shopCreateRequest.AppoimentFrecuence,
-                TimeEnd = shopCreateRequest.TimeEnd,
-                TimeStart = shopCreateRequest.TimeStart,
+                TimeStart = new TimeOnly(shopCreateRequest.StartHour, shopCreateRequest.StartMin),
+                TimeEnd = new TimeOnly(shopCreateRequest.EndHour, shopCreateRequest.EndMin),
                 WorkDays = shopCreateRequest.WorkDays,
             };
 
@@ -72,9 +72,18 @@ namespace Application
 
             if (shopUpdateRequest.AppoimentFrecuence > 0) shop.AppoimentFrecuence = shopUpdateRequest.AppoimentFrecuence;
 
-            if (!string.IsNullOrEmpty(shopUpdateRequest.TimeEnd.ToString().Trim())) shop.TimeEnd = shopUpdateRequest.TimeEnd;
+            if (shopUpdateRequest.StartHour >= 0 && shopUpdateRequest.StartMin >= 0 && shopUpdateRequest.EndHour >= 0 && shopUpdateRequest.EndMin >= 0)
+            {
+                if (shopUpdateRequest.StartHour < shopUpdateRequest.EndHour)
+                {
+                    shop.TimeStart = new TimeOnly(shopUpdateRequest.StartHour, shopUpdateRequest.StartMin);
+                    shop.TimeEnd = new TimeOnly(shopUpdateRequest.EndHour, shopUpdateRequest.EndMin);
+                }
+            }
 
-            if (!string.IsNullOrEmpty(shopUpdateRequest.TimeStart.ToString().Trim())) shop.TimeStart = shopUpdateRequest.TimeStart;
+            //if (!string.IsNullOrEmpty(shopUpdateRequest.TimeEnd.ToString().Trim())) shop.TimeEnd = shopUpdateRequest.TimeEnd;
+
+            //if (!string.IsNullOrEmpty(shopUpdateRequest.TimeStart.ToString().Trim())) shop.TimeStart = shopUpdateRequest.TimeStart;
 
             if (shopUpdateRequest.WorkDays.Count > 0) shop.WorkDays = shopUpdateRequest.WorkDays;
 

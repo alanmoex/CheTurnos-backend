@@ -31,15 +31,15 @@ namespace Domain.Entities
 
         public int AppoimentFrecuence { get; set; } //en minutos
 
-        public TimeSpan TimeStart { get; set; }
+        public TimeOnly TimeStart { get; set; }
 
-        public TimeSpan TimeEnd { get; set; }
+        public TimeOnly TimeEnd { get; set; }
 
         public List<Days> WorkDays { get; set; }
 
         public Shop() { }
 
-        public Shop(string name, string address, string phone, string email, ShopType type, int appoimentFrecuence, TimeSpan timeStart, TimeSpan timeEnd, List<Days> workDays)
+        public Shop(string name, string address, string phone, string email, ShopType type, int appoimentFrecuence, int startHour, int startMin, int endHour, int endMin, List<Days> workDays)
         {
             Name = name;
             Type = type;
@@ -48,8 +48,8 @@ namespace Domain.Entities
             Email = email;
             IsPremium = false;
             AppoimentFrecuence = appoimentFrecuence;
-            TimeStart = timeStart;
-            TimeEnd = timeEnd;
+            TimeStart = new TimeOnly(startHour, startMin);
+            TimeEnd = new TimeOnly(endHour, endMin);
             WorkDays = new List<Days>(workDays);
         }
     }

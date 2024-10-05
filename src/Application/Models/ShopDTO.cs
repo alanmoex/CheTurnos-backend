@@ -14,8 +14,8 @@ namespace Application.Models
         public string Email { get; set; }
         public bool IsPremium { get; set; }
         public int AppoimentFrecuence { get; set; }
-        public TimeSpan TimeStart { get; set; }
-        public TimeSpan TimeEnd { get; set; }
+        public TimeOnly TimeStart { get; set; }
+        public TimeOnly TimeEnd { get; set; }
         public List<Days> WorkDays { get; set; }
 
         public static ShopDTO Create(Shop shop)

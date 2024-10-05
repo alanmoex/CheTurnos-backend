@@ -11,8 +11,10 @@ namespace Application.Models.Requests
         public string Email { get; set; }
         public bool IsPremium { get; set; }
         public int AppoimentFrecuence { get; set; }
-        public TimeSpan TimeStart { get; set; }
-        public TimeSpan TimeEnd { get; set; }
+        public int StartHour { get; set; }
+        public int StartMin { get; set; }
+        public int EndHour { get; set; }
+        public int EndMin { get; set; }
         public List<Days> WorkDays { get; set; }
     }
 }

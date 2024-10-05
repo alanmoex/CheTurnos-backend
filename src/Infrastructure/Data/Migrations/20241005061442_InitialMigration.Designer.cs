@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241005054249_InitialMigration")]
+    [Migration("20241005061442_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -124,10 +124,10 @@ namespace Infrastructure.Data.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("INTEGER");
 
-                    b.Property<TimeSpan>("TimeEnd")
+                    b.Property<TimeOnly>("TimeEnd")
                         .HasColumnType("TEXT");
 
-                    b.Property<TimeSpan>("TimeStart")
+                    b.Property<TimeOnly>("TimeStart")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Type")

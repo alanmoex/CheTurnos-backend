@@ -25,8 +25,8 @@ namespace Infrastructure.Data.Migrations
                     Email = table.Column<string>(type: "TEXT", nullable: false),
                     IsPremium = table.Column<bool>(type: "INTEGER", nullable: false),
                     AppoimentFrecuence = table.Column<int>(type: "INTEGER", nullable: false),
-                    TimeStart = table.Column<TimeSpan>(type: "TEXT", nullable: false),
-                    TimeEnd = table.Column<TimeSpan>(type: "TEXT", nullable: false),
+                    TimeStart = table.Column<TimeOnly>(type: "TEXT", nullable: false),
+                    TimeEnd = table.Column<TimeOnly>(type: "TEXT", nullable: false),
                     WorkDays = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
