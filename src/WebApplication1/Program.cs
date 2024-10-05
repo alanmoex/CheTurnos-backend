@@ -97,12 +97,13 @@ builder.Services.AddScoped<IShopRepository, ShopRepository>();
 builder.Services.AddScoped<IClientRepository, ClientRepository>();
 builder.Services.AddScoped<IRepositoryUser, RepositoryUser>();
 builder.Services.AddScoped<IServiceRepository, ServiceRepository>();
+builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
-
 #endregion
 
 #region Services
 builder.Services.AddScoped<IShopService, ShopService>();
+builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 builder.Services.AddScoped<IClientService, ClientService>();
 builder.Services.Configure<AuthenticationServiceOptions>(
     builder.Configuration.GetSection(AuthenticationServiceOptions.AuthenticationService));
