@@ -121,8 +121,18 @@ namespace Infrastructure.Data.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("INTEGER");
 
+                    b.Property<TimeSpan>("TimeEnd")
+                        .HasColumnType("TEXT");
+
+                    b.Property<TimeSpan>("TimeStart")
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("Type")
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("WorkDays")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
