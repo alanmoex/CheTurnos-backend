@@ -18,6 +18,8 @@ namespace Application.Interfaces
 
         void ModifyClientData(int id, ClientUpdateRequest clientUpdateRequest);
 
-        void DeleteClient(int id);
+        void PermanentDeletionClient(int id);
+
+        void LogicalDeletionClient(int id);
     }
 }

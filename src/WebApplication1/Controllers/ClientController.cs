@@ -2,14 +2,17 @@
 using Application.Models;
 using Application.Models.Requests;
 using Domain.Exceptions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
 namespace API.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
+    [Route("api/[controller]")]
+  
     public class ClientController : ControllerBase
     {
         private readonly IClientService _clientService;
@@ -38,37 +41,68 @@ namespace API.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpPost("[action]")]
         public ActionResult<ClientDto> CreateNewClient([FromBody] ClientCreateRequest clientCreateRequest)
         {
-            return _clientService.CreateNewClient(clientCreateRequest);
-        }
-
-        [HttpPut("[action]/{id}")]
-        public ActionResult ModifyClientData([FromRoute] int id, [FromBody] ClientUpdateRequest clientUpdateRequest)
-        {
             try
             {
-                _clientService.ModifyClientData(id, clientUpdateRequest);
+                return _clientService.CreateNewClient(clientCreateRequest);
             }
-            catch (NotFoundException ex)
+            catch (ValidationException ex) //por si hay datos inválidos
             {
-                return NotFound(ex.Message);
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex) //por si el email suministrado ya existe
+            {
+                return BadRequest(ex.Message);
+            } 
+        }
+
+        [HttpPut("[action]")]
+        public ActionResult ModifyClientData([FromBody] ClientUpdateRequest clientUpdateRequest)
+        {
+            int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "");
+            try
+            {
+                _clientService.ModifyClientData(userId, clientUpdateRequest);
+            }
+            catch (ValidationException ex)
+            {
+                return BadRequest(ex.Message);
             }
             return Ok();
         }
 
         [HttpDelete("[action]/{id}")]
-        public ActionResult DeleteClient([FromRoute] int id)
+        public ActionResult PermanentDeletionClient([FromRoute] int id)
         {
             try
             {
-                _clientService.DeleteClient(id);
+                _clientService.PermanentDeletionClient(id);
                 return Ok();
             }
             catch (NotFoundException ex)
             {
                 return NotFound(ex.Message);
+            }
+        }
+
+        [HttpDelete("[action]/{id}")]
+        public ActionResult LogicalDeletionClient([FromRoute] int id)
+        {
+            try
+            {
+                _clientService.LogicalDeletionClient(id);
+                return Ok();
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
             }
         }
     }
