@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Application.Models.Requests;
 using Application.Models;
+using Domain.Enums;
 
 namespace Application
 {
@@ -17,36 +18,21 @@ namespace Application
             _shopRepository = shopRepository;
         }
 
-        public List<ShopDTO> GetAll()
+        public List<ShopDTO?> GetAll()
         {
-            return _shopRepository.GetAll().Select(shop => new ShopDTO
-            {
-                Id = shop.Id,
-                Name = shop.Name,
-                Type = shop.Type,
-                Status = shop.Status,
-                Address = shop.Address, 
-                Phone = shop.Phone,     
-                Email = shop.Email      
-            }).ToList();
+            var shopsList = _shopRepository.GetAll();
+
+            return ShopDTO.CreateList(shopsList);
         }
 
         public ShopDTO GetById(int id)
         {
             var shop = _shopRepository.GetById(id);
-            if (shop == null)
-                throw new NotFoundException("Shop", id);
 
-            return new ShopDTO
-            {
-                Id = shop.Id,
-                Name = shop.Name,
-                Type = shop.Type,
-                Status = shop.Status,
-                Address = shop.Address, 
-                Phone = shop.Phone,    
-                Email = shop.Email      
-            };
+            if (shop == null)
+                throw new NotFoundException(nameof(Shop), id);
+
+            return ShopDTO.Create(shop);
         }
 
         public ShopDTO Create(ShopCreateRequest shopCreateRequest)
@@ -55,23 +41,19 @@ namespace Application
             {
                 Name = shopCreateRequest.Name,
                 Type = shopCreateRequest.Type,
-                Address = shopCreateRequest.Address, 
-                Phone = shopCreateRequest.Phone,     
-                Email = shopCreateRequest.Email      
+                Address = shopCreateRequest.Address,
+                Phone = shopCreateRequest.Phone,
+                Email = shopCreateRequest.Email,
+                IsPremium = shopCreateRequest.IsPremium,
+                AppoimentFrecuence = shopCreateRequest.AppoimentFrecuence,
+                TimeStart = new TimeOnly(shopCreateRequest.StartHour, shopCreateRequest.StartMin),
+                TimeEnd = new TimeOnly(shopCreateRequest.EndHour, shopCreateRequest.EndMin),
+                WorkDays = shopCreateRequest.WorkDays,
             };
 
             _shopRepository.Add(shop);
 
-            return new ShopDTO
-            {
-                Id = shop.Id,
-                Name = shop.Name,
-                Type = shop.Type,
-                Status = shop.Status,
-                Address = shop.Address, 
-                Phone = shop.Phone,     
-                Email = shop.Email      
-            };
+            return ShopDTO.Create(shop);
         }
 
         public void Update(int id, ShopUpdateRequest shopUpdateRequest)
@@ -80,22 +62,58 @@ namespace Application
             if (shop == null)
                 throw new NotFoundException("Shop", id);
 
-            shop.Name = shopUpdateRequest.Name;
-            shop.Type = shopUpdateRequest.Type;
-            shop.Address = shopUpdateRequest.Address; 
-            shop.Phone = shopUpdateRequest.Phone;    
-            shop.Email = shopUpdateRequest.Email;     
+            if (!string.IsNullOrEmpty(shopUpdateRequest.Name.Trim())) shop.Name = shopUpdateRequest.Name;
+
+            if (!string.IsNullOrEmpty(shopUpdateRequest.Address.Trim())) shop.Address = shopUpdateRequest.Address;
+
+            if (!string.IsNullOrEmpty(shopUpdateRequest.Phone.Trim())) shop.Phone = shopUpdateRequest.Phone;
+
+            if (!string.IsNullOrEmpty(shopUpdateRequest.Email.Trim())) shop.Email = shopUpdateRequest.Email;
+
+            if (shopUpdateRequest.AppoimentFrecuence > 0) shop.AppoimentFrecuence = shopUpdateRequest.AppoimentFrecuence;
+
+            if (shopUpdateRequest.StartHour >= 0 && shopUpdateRequest.StartMin >= 0 && shopUpdateRequest.EndHour >= 0 && shopUpdateRequest.EndMin >= 0)
+            {
+                if (shopUpdateRequest.StartHour < shopUpdateRequest.EndHour)
+                {
+                    shop.TimeStart = new TimeOnly(shopUpdateRequest.StartHour, shopUpdateRequest.StartMin);
+                    shop.TimeEnd = new TimeOnly(shopUpdateRequest.EndHour, shopUpdateRequest.EndMin);
+                }
+            }
+
+            //if (!string.IsNullOrEmpty(shopUpdateRequest.TimeEnd.ToString().Trim())) shop.TimeEnd = shopUpdateRequest.TimeEnd;
+
+            //if (!string.IsNullOrEmpty(shopUpdateRequest.TimeStart.ToString().Trim())) shop.TimeStart = shopUpdateRequest.TimeStart;
+
+            if (shopUpdateRequest.WorkDays.Count > 0) shop.WorkDays = shopUpdateRequest.WorkDays;
 
             _shopRepository.Update(shop);
         }
 
-        public void Delete(int id)
+        public void PermanentDeletionShop(int id)
         {
             var shop = _shopRepository.GetById(id);
+
             if (shop == null)
-                throw new NotFoundException("Shop", id);
+                throw new NotFoundException(nameof(Shop), id);
 
             _shopRepository.Delete(shop);
+        }
+
+        public void LogicalDeletionShop(int id)
+        {
+            var shop = _shopRepository.GetById(id);
+
+            if (shop == null)
+                throw new NotFoundException(nameof(Shop), id);
+
+            if (shop.Status == Status.Inactive)
+            {
+                throw new Exception("El negocio especificado ya se encuentra inactivo");
+            }
+
+            shop.Status = Status.Inactive;
+            _shopRepository.Update(shop);
         }
     }
 }
