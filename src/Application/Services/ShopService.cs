@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Application.Models.Requests;
 using Application.Models;
+using Domain.Enums;
 
 namespace Application
 {
@@ -80,13 +81,30 @@ namespace Application
             _shopRepository.Update(shop);
         }
 
-        public void Delete(int id)
+        public void PermanentDeletionShop(int id)
         {
             var shop = _shopRepository.GetById(id);
+
             if (shop == null)
-                throw new NotFoundException("Shop", id);
+                throw new NotFoundException(nameof(Shop), id);
 
             _shopRepository.Delete(shop);
+        }
+
+        public void LogicalDeletionShop(int id)
+        {
+            var shop = _shopRepository.GetById(id);
+
+            if (shop == null)
+                throw new NotFoundException(nameof(Shop), id);
+
+            if (shop.Status == Status.Inactive)
+            {
+                throw new Exception("El negocio especificado ya se encuentra inactivo");
+            }
+
+            shop.Status = Status.Inactive;
+            _shopRepository.Update(shop);
         }
     }
 }

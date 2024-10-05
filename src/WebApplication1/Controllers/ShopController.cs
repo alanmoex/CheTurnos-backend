@@ -91,13 +91,27 @@ namespace API.Controllers
             }
         }
 
-        [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        [HttpDelete("[action]/{id}")]
+        public ActionResult PermanentDeletionShop([FromRoute] int id)
         {
             try
             {
-                _shopService.Delete(id);
-                return NoContent();
+                _shopService.PermanentDeletionShop(id);
+                return Ok();
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
+
+        [HttpDelete("[action]/{id}")]
+        public ActionResult LogicalDeletionShop([FromRoute] int id)
+        {
+            try
+            {
+                _shopService.LogicalDeletionShop(id);
+                return Ok();
             }
             catch (NotFoundException ex)
             {
@@ -105,7 +119,7 @@ namespace API.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, "An unexpected error occurred.");
+                return BadRequest(ex.Message);
             }
         }
     }
