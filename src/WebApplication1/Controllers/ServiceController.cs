@@ -16,13 +16,13 @@ public class ServiceController : ControllerBase
         _serviceService = serviceService;
     }
 
-    [HttpGet]
+    [HttpGet("[action]")]
     public ActionResult<List<ServiceDTO>> GetAll()
     {
         return Ok(_serviceService.GetAll());
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("[action]/{id}")]
     public ActionResult<ServiceDTO> GetById(int id)
     {
         try
@@ -39,7 +39,7 @@ public class ServiceController : ControllerBase
         }
     }
 
-    [HttpGet("byId/{shopId}")]
+    [HttpGet("[action]/{shopId}")]
     public ActionResult<List<ServiceDTO>> GetAllByShopId(int shopId)
     {
         try
@@ -57,7 +57,7 @@ public class ServiceController : ControllerBase
     }
 
 
-    [HttpPost]
+    [HttpPost("[action]")]
     public IActionResult Create([FromBody] ServiceCreateRequest serviceCreateRequest)
     {
         if (!ModelState.IsValid)
@@ -80,7 +80,7 @@ public class ServiceController : ControllerBase
         }
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("[action]/{id}")]
     public IActionResult Delete(int id)
     {
         try
@@ -98,7 +98,7 @@ public class ServiceController : ControllerBase
         }
     }
 
-    [HttpPut("{id}")]
+    [HttpPut("[action]/{id}")]
     public IActionResult Update(int id, [FromBody] ServiceUpdateRequest serviceUpdateRequest)
     {
         if (!ModelState.IsValid)
