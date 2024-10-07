@@ -9,7 +9,10 @@ namespace Application.Interfaces
         bool Delete(int id);
         List<EmployeeResponseDTO?> GetAll();
         List<EmployeeResponseDTO?> GetAllByShopId(int shopId);
+        List<EmployeeResponseDTO?> GetAvailables(int shopId);
         EmployeeResponseDTO? GetById(int id);
         bool Update(int id, EmployeeUpdateRequest request);
+
+
     }
 }

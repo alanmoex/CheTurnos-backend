@@ -43,6 +43,24 @@ namespace Application.Services
             _appointmentRepository.Delete(obj);
         }
 
+        public List<AppointmentDTO> GetAvailableAppointmentsByEmployeeId(int employeeId)
+        {
+            var employeeAppointments = _appointmentRepository.GetAvailableAppointmentsByEmployeeId(employeeId)
+                ?? throw new NotFoundException("Appointment not found"); 
+            List<AppointmentDTO> appointmentList = new List<AppointmentDTO>();
+
+            if(employeeAppointments != null)
+            {
+                foreach (var appointment in employeeAppointments)
+                {
+                    var appointmentToAdd = AppointmentDTO.Create(appointment);
+                    appointmentList.Add(appointmentToAdd);
+                }
+                return appointmentList;
+            }
+            return [];
+        }
+
         public void CreateAppointment (AppointmentCreateRequest appointmentReques)
         {
             var newObj = new Appointment();

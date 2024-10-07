@@ -104,6 +104,36 @@ namespace Application.Services
 
         }
 
+        public List<EmployeeResponseDTO?> GetAvailables(int shopId)
+        {
+            try
+            {
+                var appointments = _employeeRepository.GetAvailables(shopId);
+
+                if (appointments != null)
+                {
+                    List<EmployeeResponseDTO?> employeesAvailable = new List<EmployeeResponseDTO>();
+
+                    foreach (var a in appointments)
+                    {
+                        var employee = _employeeRepository.GetById(a.ProviderId);
+                        var employeeToAdd = EmployeeResponseDTO.Create(employee);
+                        employeesAvailable.Add(employeeToAdd);
+                    };
+                    return employeesAvailable;
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+               throw new Exception(ex.ToString());
+            }
+        
+            
+            
+
+        }
+
         public bool Update(int id, EmployeeUpdateRequest request)
         {
             var employee = _employeeRepository.GetById(id);
