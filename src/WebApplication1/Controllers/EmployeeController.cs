@@ -43,6 +43,25 @@ namespace API.Controllers
         }
 
         [HttpGet("[action]/{shopId}")]
+        public ActionResult<List<EmployeeResponseDTO>> GetAvailables(int shopId)
+        {
+            try
+            {
+                return Ok(_employeeService.GetAvailables(shopId));
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An unexpected error occurred.");
+            }
+
+        }
+
+
+        [HttpGet("[action]/{shopId}")]
         public ActionResult<List<EmployeeResponseDTO>> GetAllByShopId(int shopId)
         {
             try

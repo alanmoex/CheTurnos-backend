@@ -20,5 +20,15 @@ namespace Infrastructure.Data
             var appDbContext = (AppDbContext)_dbContext;
             return appDbContext.Users.OfType<Employee>().Where(s => s.ShopId == shopId).ToList();
         }
+
+        public List<Appointment>? GetAvailables(int shopId) 
+        {
+            var appDbContext = (AppDbContext)_dbContext;
+
+            var appointments = appDbContext.Appointments
+                .Where(a => a.ProviderId != 0 && a.Status == Status.Active && a.ShopId == shopId)
+                .ToList();
+            return appointments;
+        }
     }
 }

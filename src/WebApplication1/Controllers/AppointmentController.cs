@@ -1,5 +1,6 @@
 ﻿using Application.Interfaces;
 using Application.Models.Requests;
+using Domain.Entities;
 using Domain.Exceptions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -41,6 +42,22 @@ namespace API.Controllers
                return BadRequest(ex.Message);
             }
         }
+
+        [HttpGet("[action]/{employeeId}")]
+        public ActionResult<List<Appointment>>GetAvailableAppointmentsByEmployeeId(int employeeId)
+        {
+            try
+            {
+                return Ok(_appointmentService.GetAvailableAppointmentsByEmployeeId(employeeId));
+            }
+            catch (NotFoundException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+
+        }
+
 
         [HttpPut("[action]/{id}")]
         public IActionResult UpdateAppointment([FromBody] AppointmentUpdateRequest request, [FromRoute] int id)
