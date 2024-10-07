@@ -45,7 +45,6 @@ namespace Application.Services
 
         public List<AppointmentDTO> GetAvailableAppointmentsByEmployeeId(int employeeId)
         {
-
             var employeeAppointments = _appointmentRepository.GetAvailableAppointmentsByEmployeeId(employeeId)
                 ?? throw new NotFoundException("Appointment not found"); 
             List<AppointmentDTO> appointmentList = new List<AppointmentDTO>();
