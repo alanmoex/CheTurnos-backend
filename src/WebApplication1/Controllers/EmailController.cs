@@ -43,7 +43,7 @@ namespace API.Controllers
             {
                 return NotFound(ex.Message);
             }
-        }
+        } 
     }
 
 }

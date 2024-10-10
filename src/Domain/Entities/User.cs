@@ -31,6 +31,7 @@ namespace Domain.Entities
 
         // Almacenar la fecha y hora de caducidad del código se usa para hacer validaciones.
         public DateTime? ResetCodeExpiration { get; set; }
+        public string ImgUrl { get; set; }
 
         public User() { }
 

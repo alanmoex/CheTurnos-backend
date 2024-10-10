@@ -5,6 +5,7 @@ using MailKit.Security;
 using MimeKit.Text;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
+using Domain.Entities;
 
 
 namespace Infrastructure.Services
@@ -80,7 +81,7 @@ namespace Infrastructure.Services
             }
         }
 
-        public void SendPasswordRestCode(string addressee, string resetCode) //envio de codigo para recuperar la cuenta.
+        public void SendPasswordRestCode(string addressee, string resetCode, string userName) //envio de codigo para recuperar la cuenta.
         {
             var email = new MimeMessage();
             email.From.Add(MailboxAddress.Parse(_options.UserName));
@@ -88,11 +89,33 @@ namespace Infrastructure.Services
             email.Subject = "Recuperacion de Contraseña de Che Turnos";
             email.Body = new TextPart(TextFormat.Html)
             {
-                Text = $@"<p>Hola,</p>
+                Text = $@"<p>Hola,{userName}</p>
                   <p>Hemos recibido una solicitud para restablecer su contraseña.  Utilice el siguiente código para restablecer su contraseña</p>
+<p> Tiene 15 minutos antes de que se venza su codigo para restablecer su contraseña.</p>
                   <h3>{resetCode}</h3>
                   <p>Si no has solicitado restablecer tu contraseña, ignora este correo electrónico.</p>"
             };
+            using var smtp = new MailKit.Net.Smtp.SmtpClient();
+            smtp.Connect(_options.Host, _options.Port, SecureSocketOptions.StartTls);
+            smtp.Authenticate(_options.UserName, _options.Password);
+            smtp.Send(email);
+            smtp.Disconnect(true);
+        }
+
+        public void changePassword(string addressee, string userName)
+        {
+            var email = new MimeMessage();
+            email.From.Add(MailboxAddress.Parse(_options.UserName));
+            email.To.Add(MailboxAddress.Parse(addressee));
+            email.Subject = "Recuperacion de Contraseña de Che Turnos";
+            email.Body = new TextPart(TextFormat.Html)
+            {
+                Text = $@"<p>Hola, {userName}</p>
+                  <p>Hemos restablecido su contraseña.</p>
+                  <h3></h3>
+                  <p>Ahora puedes seguir gestionando tus turnos.</p>"
+            };
+
             using var smtp = new MailKit.Net.Smtp.SmtpClient();
             smtp.Connect(_options.Host, _options.Port, SecureSocketOptions.StartTls);
             smtp.Authenticate(_options.UserName, _options.Password);
