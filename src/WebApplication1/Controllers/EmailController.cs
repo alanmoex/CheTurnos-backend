@@ -32,12 +32,12 @@ namespace API.Controllers
         }
          
         [HttpPost("sendConfirmationEmail")]
-        public IActionResult Sendconfirmation([FromBody]string email)
+        public IActionResult Sendconfirmation([FromBody]string email, [FromRoute] string nameUser)
         {
             try
             {
-            _emailService.SendAccountConfirmationEmail(email);
-            return Ok();
+            _emailService.AccountCreationConfirmationEmail(email, nameUser );
+            return Ok("");
             }
             catch (NotFoundException ex)
             {

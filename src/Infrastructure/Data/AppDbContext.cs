@@ -12,6 +12,7 @@ namespace Infrastructure.Data
         public DbSet<Shop> Shops { get; set; }
         public DbSet<Service> Services { get; set; }
         public DbSet<Appointment> Appointments { get; set; }
+        public DbSet<ImageUrl> Images { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
@@ -77,6 +78,12 @@ namespace Infrastructure.Data
                     .HasForeignKey(s => s.ShopId)
                     .OnDelete(DeleteBehavior.Cascade);
             }
+
+            modelBuilder.Entity<Shop>()
+                .HasOne<ImageUrl>()
+                .WithMany()
+                .HasForeignKey(a => a.ImgUrlId)
+                .OnDelete(DeleteBehavior.SetNull);
 
         }
 

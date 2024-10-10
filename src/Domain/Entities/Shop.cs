@@ -37,9 +37,12 @@ namespace Domain.Entities
 
         public List<Days> WorkDays { get; set; }
 
+        [ForeignKey(nameof(ImgUrlId))]
+        public int? ImgUrlId { get; set; } //FK
+
         public Shop() { }
 
-        public Shop(string name, string address, string phone, string email, ShopType type, int appoimentFrecuence, int startHour, int startMin, int endHour, int endMin, List<Days> workDays)
+        public Shop(string name, string address, string phone, string email, ShopType type, int appoimentFrecuence, int startHour, int startMin, int endHour, int endMin, List<Days> workDays, int? urlId)
         {
             Name = name;
             Type = type;
@@ -51,6 +54,7 @@ namespace Domain.Entities
             TimeStart = new TimeOnly(startHour, startMin);
             TimeEnd = new TimeOnly(endHour, endMin);
             WorkDays = new List<Days>(workDays);
+            ImgUrlId = ImgUrlId;
         }
     }
 }

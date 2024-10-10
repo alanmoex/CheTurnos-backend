@@ -11,6 +11,6 @@ namespace Application.Interfaces
     {
 
         void SendMail(EmailDTO request);
-        void SendAccountConfirmationEmail(string addressee);
+        void AccountCreationConfirmationEmail(string addressee, string nameUser);
     }
 }
