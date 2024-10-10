@@ -21,7 +21,7 @@ namespace API.Controllers
         {
             _clientService = clientService;
         }
-
+        [AllowAnonymous]
         [HttpGet("[action]")]
         public ActionResult<List<ClientDto?>> GetAllClients()
         {
@@ -74,6 +74,7 @@ namespace API.Controllers
             return Ok();
         }
 
+        [AllowAnonymous]
         [HttpDelete("[action]/{id}")]
         public ActionResult PermanentDeletionClient([FromRoute] int id)
         {
