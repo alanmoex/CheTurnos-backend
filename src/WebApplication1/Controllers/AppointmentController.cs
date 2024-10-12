@@ -20,17 +20,17 @@ namespace API.Controllers
         [HttpGet("[action]")]
         public IActionResult GetAllAppointment()
         {
-            return Ok(_appointmentService.GetAllAppointment());   
+            return Ok(_appointmentService.GetAllAppointment());
         }
 
         [HttpGet("[action]/{id}")]
-        public IActionResult GetAppointmentById([FromRoute] int id) 
+        public IActionResult GetAppointmentById([FromRoute] int id)
         {
             return Ok(_appointmentService.GetAppointmentById(id));
         }
 
         [HttpPost("[action]")]
-        public IActionResult CreateAppointment ([FromBody] AppointmentCreateRequest request)
+        public IActionResult CreateAppointment([FromBody] AppointmentCreateRequest request)
         {
             try
             {
@@ -39,12 +39,12 @@ namespace API.Controllers
             }
             catch (NotFoundException ex)
             {
-               return BadRequest(ex.Message);
+                return BadRequest(ex.Message);
             }
         }
 
         [HttpGet("[action]/{employeeId}")]
-        public ActionResult<List<Appointment>>GetAvailableAppointmentsByEmployeeId(int employeeId)
+        public ActionResult<List<Appointment>> GetAvailableAppointmentsByEmployeeId(int employeeId)
         {
             try
             {
@@ -77,6 +77,19 @@ namespace API.Controllers
             try
             {
                 _appointmentService.DeleteAppointment(id);
+                return Ok();
+            }
+            catch (NotFoundException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpPut("[action]")]
+        public IActionResult AssignClient([FromBody] AssignClientRequestDTO request)
+        {
+            try
+            {
+                _appointmentService.AssignClient(request);
                 return Ok();
             }
             catch (NotFoundException ex)
