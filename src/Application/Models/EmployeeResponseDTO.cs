@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Application.Models
@@ -16,6 +17,7 @@ namespace Application.Models
 
         public string Email { get; set; }
 
+        [JsonConverter(typeof(JsonStringEnumConverter))]
         public UserType Type { get; set; }
 
         public string Status { get; set; }

@@ -16,5 +16,6 @@ namespace Application.Interfaces
         void DeleteAppointment(int id);
         void CreateAppointment(AppointmentCreateRequest appointmentReques);
         AppointmentDTO UpdateAppointment(AppointmentUpdateRequest appointment, int id);
+        void AssignClient(AssignClientRequestDTO request);
     }
 }
