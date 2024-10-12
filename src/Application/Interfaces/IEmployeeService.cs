@@ -13,8 +13,6 @@ namespace Application.Interfaces
         EmployeeResponseDTO? GetById(int id);
         bool Update(int id, EmployeeUpdateRequest request);
 
-        void RequestPassReset(string email);
-        void ResetPassword(ResetPasswordRequest request);
 
     }
 }

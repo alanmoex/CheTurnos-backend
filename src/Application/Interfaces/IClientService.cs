@@ -22,8 +22,5 @@ namespace Application.Interfaces
 
         void LogicalDeletionClient(int id);
 
-        void RequestPassReset(string email);
-
-        void ResetPassword(ResetPasswordRequest request);
     }
 }

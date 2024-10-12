@@ -6,6 +6,11 @@ using MimeKit.Text;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Domain.Entities;
+using Application.Models.Requests;
+using Domain.Exceptions;
+using Domain.Interfaces;
+using System.Text.RegularExpressions;
+using Org.BouncyCastle.Asn1.Ocsp;
 
 
 namespace Infrastructure.Services
@@ -20,14 +25,16 @@ namespace Infrastructure.Services
         //Esta config se usa para poder leer lo escrito en el appsetting
         private readonly IConfiguration _config;
         private readonly EmailSettingsOptions _options;
-        public EmailService(IConfiguration config, IOptions<EmailSettingsOptions> options)
+        private readonly IRepositoryUser _userRepository;
+        public EmailService(IConfiguration config, IOptions<EmailSettingsOptions> options, IRepositoryUser repositoryUser)
         {
             _config = config;
             _options = options.Value;
+            _userRepository = repositoryUser;
         }
 
         //Contenido del correo
-        public void SendMail(EmailDTO request)
+        public void SendMail(EmailDTO request) //funcion basica de envio de mails
         {
             //El corre se va a enviar desde "MailSettings: UserName"...
             var email = new MimeMessage();
@@ -91,7 +98,7 @@ namespace Infrastructure.Services
             {
                 Text = $@"<p>Hola,{userName}</p>
                   <p>Hemos recibido una solicitud para restablecer su contraseña.  Utilice el siguiente código para restablecer su contraseña</p>
-<p> Tiene 15 minutos antes de que se venza su codigo para restablecer su contraseña.</p>
+                  <p> Tiene 15 minutos antes de que se venza su codigo para restablecer su contraseña.</p>
                   <h3>{resetCode}</h3>
                   <p>Si no has solicitado restablecer tu contraseña, ignora este correo electrónico.</p>"
             };
@@ -102,7 +109,7 @@ namespace Infrastructure.Services
             smtp.Disconnect(true);
         }
 
-        public void changePassword(string addressee, string userName)
+        public void changePassword(string addressee, string userName) //Confirmacion de resetablecimiento de contraseña
         {
             var email = new MimeMessage();
             email.From.Add(MailboxAddress.Parse(_options.UserName));
@@ -121,6 +128,78 @@ namespace Infrastructure.Services
             smtp.Authenticate(_options.UserName, _options.Password);
             smtp.Send(email);
             smtp.Disconnect(true);
+        }
+
+        public void RequestPassReset(string email) //Pide la clave para cambiar su contraseña
+        {
+            var user = _userRepository.GetByEmail(email)
+                ?? throw new NotFoundException($"{email} is not registered");
+
+            //genero un codigo de 6 digitos para recuperar la pass
+            //GUID: valor único de 16 bytes, substring: extrae los 6 primeros caracteres.
+            var resetCode = Guid.NewGuid().ToString().Substring(0, 6);
+
+            // el tiempo de expiración del codigo 15 minutos
+            var expirationTime = DateTime.UtcNow.AddMinutes(15);
+
+            //se guarda los datos en la bd
+            _userRepository.SavePassResetCode(email, resetCode, expirationTime);
+
+            //Se envia mail con el pass para recuperar la contraseña.
+            SendPasswordRestCode(email, resetCode, user.Name);
+        }
+
+        public void ResetPassword(ResetPasswordRequest request) //cambia la contraseña con la clave de reset
+        {
+            var user = _userRepository.GetByEmail(request.email)
+                ?? throw new NotFoundException($"{request.email} is not registered");
+
+            //Valida si expiro el codigo
+            if (DateTime.UtcNow > user.ResetCodeExpiration)
+            {
+                throw new Exception("the password recovery code has expired");
+            }
+
+            if (request.Code != user.PasswordResetCode)
+            {
+                throw new Exception("The recovery code is not correct ");
+            }
+
+            if (!ValidatePassword(request.NewPassword))
+            {
+                throw new Exception("The password does not meet requirements.");
+            }
+
+            var userUpdateDto = new UserUpdateRequestDto();
+            userUpdateDto.Password = request.NewPassword;
+            userUpdateDto.Email = user.Email;
+
+            UpdateUser(user.Id, userUpdateDto);
+            changePassword(user.Email, user.Name);
+        }
+
+        private bool ValidatePassword(string password)
+        {
+            //comprobamos si la contraseña es nula o tiene menos de 8 caracteres
+            if (string.IsNullOrEmpty(password) || password.Length < 8)
+            {
+                return false;
+            }
+
+            /*con esta expresión regular verificaremos que la contraseña contenga al menos una letra y un número*/
+            string pattern = @"^(?=.*[a-zA-Z])(?=.*\d).+$";
+            //la siguiente función devolverá true si hay match, y false en caso contrario
+            return Regex.IsMatch(password, pattern);
+        }
+
+        private void UpdateUser(int id, UserUpdateRequestDto request)
+        {
+            var user = _userRepository.GetById(id)
+                ?? throw new NotFoundException("User not Found");
+            
+            user.Password = request.Password;
+
+            _userRepository.Update(user);
         }
 
         public class EmailSettingsOptions
