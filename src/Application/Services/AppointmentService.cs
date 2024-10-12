@@ -4,6 +4,7 @@ using Application.Models.Requests;
 using Domain.Entities;
 using Domain.Exceptions;
 using Domain.Interfaces;
+using Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -88,6 +89,17 @@ namespace Application.Services
 
             _appointmentRepository.Update(obj);
             return AppointmentDTO.Create(obj);
+        }
+
+        public void AssignClient(AssignClientRequestDTO request)
+        {
+            var obj = _appointmentRepository.GetById(request.IdAppointment)
+                ?? throw new NotFoundException("Appointment not found");
+            obj.ServiceId = request.ServiceId;
+            obj.ClientId = request.ClientId;
+            obj.Status = Status.Inactive;
+            _appointmentRepository.Update(obj);
+
         }
 
         public AppointmentDTO? GetLastAppointmentByShopId(int shopId)

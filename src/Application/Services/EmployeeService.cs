@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Application.Services
@@ -17,10 +18,14 @@ namespace Application.Services
     public class EmployeeService : IEmployeeService
     {
         private readonly IEmployeeRepository _employeeRepository;
+        private readonly IRepositoryUser _userRepository;
+        private readonly IEmailService _emailService;
 
-        public EmployeeService(IEmployeeRepository employeeRepository)
+        public EmployeeService(IEmployeeRepository employeeRepository, IRepositoryUser userRepository, IEmailService emailService)
         {
             _employeeRepository = employeeRepository;
+            _userRepository = userRepository;
+            _emailService = emailService;
         }
 
         public bool Create(EmployeeCreateRequestDTO request)
@@ -40,6 +45,7 @@ namespace Application.Services
             try
             {
                 _employeeRepository.Add(newEmployee);
+                _emailService.AccountCreationConfirmationEmail(newEmployee.Email, newEmployee.Name);
                 return true;
             }
             catch (Exception ex)
@@ -128,9 +134,6 @@ namespace Application.Services
             {
                throw new Exception(ex.ToString());
             }
-        
-            
-            
 
         }
 
@@ -155,5 +158,6 @@ namespace Application.Services
             }
 
         }
+
     }
 }

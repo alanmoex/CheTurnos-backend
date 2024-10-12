@@ -1,5 +1,6 @@
 ﻿using Domain.Entities;
 using Domain.Enums;
+using System.Text.Json.Serialization;
 
 namespace Application.Models
 {
@@ -7,7 +8,9 @@ namespace Application.Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        [JsonConverter(typeof(JsonStringEnumConverter))]
         public ShopType Type { get; set; }
+        [JsonConverter(typeof(JsonStringEnumConverter))]
         public Status Status { get; set; }
         public string Address { get; set; } 
         public string Phone { get; set; }    
@@ -17,6 +20,7 @@ namespace Application.Models
         public TimeOnly TimeStart { get; set; }
         public TimeOnly TimeEnd { get; set; }
         public List<Days> WorkDays { get; set; }
+        public string ImgUrl { get; set; }
 
         public static ShopDTO Create(Shop shop)
         {
@@ -33,6 +37,7 @@ namespace Application.Models
             dto.TimeStart = shop.TimeStart;
             dto.TimeEnd = shop.TimeEnd;
             dto.WorkDays = shop.WorkDays;
+            dto.ImgUrl = shop.ImgUrl;
             
             return dto;
         }

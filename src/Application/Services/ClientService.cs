@@ -21,11 +21,13 @@ namespace Application.Services
     {
         private readonly IClientRepository _clientRepository;
         private readonly IRepositoryUser _userRepository;
+        private readonly IEmailService _emailService;
 
-        public ClientService(IClientRepository clientRepository, IRepositoryUser userRepository)
+        public ClientService(IClientRepository clientRepository, IRepositoryUser userRepository, IEmailService emailService)
         {
             _clientRepository = clientRepository;
             _userRepository = userRepository;
+            _emailService = emailService;
         }
 
         public List<ClientDto?> GetAllClients()
@@ -74,8 +76,9 @@ namespace Application.Services
                 newClient.Email = clientCreateRequest.Email;
                 newClient.Password = clientCreateRequest.Password;
                 newClient.Type = UserType.Client;
-
-                return ClientDto.Create(_clientRepository.Add(newClient));
+                _clientRepository.Add(newClient);
+                _emailService.AccountCreationConfirmationEmail(newClient.Email, newClient.Name);
+                return ClientDto.Create(newClient);
             }
             else
             {
@@ -129,6 +132,8 @@ namespace Application.Services
             client.Status = Status.Inactive;
             _clientRepository.Update(client);
         }
+
+       
 
         private bool ValidatePassword(string password)
         {

@@ -2,7 +2,9 @@
 using Application.Interfaces;
 using Application.Models;
 using Application.Models.Requests;
+using Application.Services;
 using Domain.Exceptions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -132,5 +134,6 @@ namespace API.Controllers
                 return StatusCode(500, "An unexpected error occurred.");
             }
         }
+
     }
 }

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Domain.Entities;
+using System.Text.Json.Serialization;
 
 namespace Application.Models
 {
@@ -15,6 +16,7 @@ namespace Application.Models
             public int Id { get; set; }
 
             [Required]
+            [JsonConverter(typeof(JsonStringEnumConverter))] //Para que se vea el string del enum y no un numero.
             public Status Status { get; set; } = Status.Active;
             public int? ServiceId { get; set; } //FK
             public int ProviderId { get; set; } //FK

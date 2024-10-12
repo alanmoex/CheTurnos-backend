@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Application.Models
@@ -16,9 +17,11 @@ namespace Application.Models
 
         public string Email { get; set; }
 
+        [JsonConverter(typeof(JsonStringEnumConverter))]
         public UserType Type { get; set; }
 
         public string Status { get; set; }
+        public string ImgUrl { get; set; }
 
 
         public static EmployeeResponseDTO? Create(Employee? employee)
@@ -31,6 +34,7 @@ namespace Application.Models
             dto.Email = employee.Email;
             dto.Type = employee.Type;
             dto.Status = employee.Status.ToString();
+            dto.ImgUrl = employee.ImgUrl;
 
             return dto;
         }

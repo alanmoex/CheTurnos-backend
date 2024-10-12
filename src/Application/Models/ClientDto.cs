@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Application.Models
@@ -13,8 +14,10 @@ namespace Application.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
+        [JsonConverter(typeof(JsonStringEnumConverter))]
         public UserType Type { get; set; }
         public Status Status { get; set; }
+        public string ImgUrl { get; set; }
 
         public static ClientDto Create(Client client)
         {
@@ -23,7 +26,7 @@ namespace Application.Models
             dto.Name = client.Name;
             dto.Email = client.Email;
             dto.Type = client.Type;
-
+            dto.ImgUrl = client.ImgUrl;
             return dto;
         }
 

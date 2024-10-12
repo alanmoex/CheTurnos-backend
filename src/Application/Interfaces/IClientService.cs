@@ -21,5 +21,6 @@ namespace Application.Interfaces
         void PermanentDeletionClient(int id);
 
         void LogicalDeletionClient(int id);
+
     }
 }
