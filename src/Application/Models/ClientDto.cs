@@ -17,6 +17,7 @@ namespace Application.Models
         [JsonConverter(typeof(JsonStringEnumConverter))]
         public UserType Type { get; set; }
         public Status Status { get; set; }
+        public string ImgUrl { get; set; }
 
         public static ClientDto Create(Client client)
         {
@@ -25,7 +26,7 @@ namespace Application.Models
             dto.Name = client.Name;
             dto.Email = client.Email;
             dto.Type = client.Type;
-
+            dto.ImgUrl = client.ImgUrl;
             return dto;
         }
 

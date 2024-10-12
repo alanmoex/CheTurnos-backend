@@ -21,6 +21,7 @@ namespace Application.Models
         public UserType Type { get; set; }
 
         public string Status { get; set; }
+        public string ImgUrl { get; set; }
 
 
         public static EmployeeResponseDTO? Create(Employee? employee)
@@ -33,6 +34,7 @@ namespace Application.Models
             dto.Email = employee.Email;
             dto.Type = employee.Type;
             dto.Status = employee.Status.ToString();
+            dto.ImgUrl = employee.ImgUrl;
 
             return dto;
         }
