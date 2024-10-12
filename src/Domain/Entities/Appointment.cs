@@ -39,7 +39,6 @@ namespace Domain.Entities
             // duration --> en RepositoryAppoiment en la funcion CreateAppoiment (buscar en la tabla Shops 
             // por el id del shop del turno y asignar a la prop Duration la duracion de turnos del negocio (AppoimentFrecuence)
             Duration = duration;
-            
         }
     }
 }

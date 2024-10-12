@@ -1,4 +1,5 @@
 ﻿using Application.Interfaces;
+using Application.Models;
 using Application.Models.Requests;
 using Domain.Entities;
 using Domain.Exceptions;
@@ -34,7 +35,7 @@ namespace API.Controllers
         {
             try
             {
-                _appointmentService.CreateAppointment(request);
+                _appointmentService.CreateAppointment(request.ShopId, request.ProviderId, request.DateAndHour, request.ServiceId, request.ClientId);
                 return Ok();
             }
             catch (NotFoundException ex)
@@ -84,6 +85,7 @@ namespace API.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
         [HttpPut("[action]")]
         public IActionResult AssignClient([FromBody] AssignClientRequestDTO request)
         {
@@ -91,6 +93,19 @@ namespace API.Controllers
             {
                 _appointmentService.AssignClient(request);
                 return Ok();
+            }
+            catch (NotFoundException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("[action]/{shopId}")]
+        public ActionResult<AppointmentDTO?> GetLastAppointmentByShopId([FromRoute] int shopId)
+        {
+            try
+            {
+                return _appointmentService.GetLastAppointmentByShopId(shopId);
             }
             catch (NotFoundException ex)
             {

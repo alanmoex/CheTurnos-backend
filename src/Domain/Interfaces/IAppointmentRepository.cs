@@ -11,5 +11,6 @@ namespace Domain.Interfaces
     public interface IAppointmentRepository : IRepositoryBase<Appointment>
     {
         List<Appointment> GetAvailableAppointmentsByEmployeeId(int employeeId);
+        Appointment? GetLastAppointmentByShopId(int shopId);
     }
 }

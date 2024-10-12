@@ -14,6 +14,7 @@ using System.Text;
 using MailKit;
 using static Infrastructure.Services.AuthenticationService;
 using static Infrastructure.Services.EmailService;
+using Domain.Interface;
 
 //API-CheTurnosBearerAuth
 
@@ -99,6 +100,7 @@ builder.Services.AddScoped<IRepositoryUser, RepositoryUser>();
 builder.Services.AddScoped<IServiceRepository, ServiceRepository>();
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
+builder.Services.AddScoped<IOwnerRepository, OwnerRepository>();
 #endregion
 
 #region Services
@@ -114,6 +116,7 @@ builder.Services.Configure <EmailSettingsOptions>(
     builder.Configuration.GetSection(EmailSettingsOptions.EmailService));
 builder.Services.AddScoped<IEmailService, EmailService>(); //El nombre "MailService" no puede ser utilizado porque ya existe en la libreria "mailkit"
 builder.Services.AddScoped<IAppointmentService, AppointmentService>();
+builder.Services.AddScoped<IOwnerService, OwnerService>();
 #endregion
 
 

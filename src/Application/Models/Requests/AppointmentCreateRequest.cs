@@ -20,7 +20,7 @@ namespace Application.Models.Requests
         [Required]
         public DateTime DateAndHour { get; set; }
 
-        [Required]
-        public TimeSpan Duration { get; set; }
+        //[Required]
+        //public TimeSpan? Duration { get; set; }
     }
 }

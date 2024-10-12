@@ -62,15 +62,15 @@ namespace Application.Services
             return [];
         }
 
-        public void CreateAppointment (AppointmentCreateRequest appointmentReques)
+        public void CreateAppointment (int shopId, int providerId, DateTime dateAndHour, int? serviceId = null, int? clientId = null)
         {
             var newObj = new Appointment();
-            newObj.ServiceId= appointmentReques.ServiceId;
-            newObj.ProviderId = appointmentReques.ProviderId;
-            newObj.ClientId = appointmentReques.ClientId;
-            newObj.ShopId = appointmentReques.ShopId;
-            newObj.DateAndHour = appointmentReques.DateAndHour;
-            newObj.Duration = appointmentReques.Duration;
+            newObj.ServiceId= serviceId;
+            newObj.ProviderId = providerId;
+            newObj.ClientId = clientId;
+            newObj.ShopId = shopId;
+            newObj.DateAndHour = dateAndHour;
+            newObj.Duration = new TimeSpan();
 
             _appointmentRepository.Add(newObj);
         }
@@ -85,7 +85,7 @@ namespace Application.Services
             obj.ProviderId= appointment.ProviderId;
             obj.ClientId= appointment.ClientId;
             obj.DateAndHour = appointment.DateAndHour;
-            obj.Duration = appointment.Duration;
+            //obj.Duration = appointment.Duration;
 
             _appointmentRepository.Update(obj);
             return AppointmentDTO.Create(obj);
@@ -102,5 +102,14 @@ namespace Application.Services
 
         }
 
+        public AppointmentDTO? GetLastAppointmentByShopId(int shopId)
+        {
+            var lastAppointment = _appointmentRepository.GetLastAppointmentByShopId(shopId);
+            if (lastAppointment == null)
+            {
+                throw new NotFoundException("No existen turnos almacenados");
+            }
+            return AppointmentDTO.Create(lastAppointment);
+        }
     }
 }
