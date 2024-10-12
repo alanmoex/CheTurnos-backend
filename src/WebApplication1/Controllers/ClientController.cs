@@ -107,35 +107,7 @@ namespace API.Controllers
             }
         }
 
-        [AllowAnonymous]
-        [HttpPut("[action]")]
-        public ActionResult RequestPasswordReset([FromBody] string email)
-        {
-            try
-            {
-                _clientService.RequestPassReset(email);
-                return Ok();
-            }
-            catch(NotFoundException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        [AllowAnonymous]
-        [HttpPut("[action]")]
-        public ActionResult ResetPassword(ResetPasswordRequest request)
-        {
-            try
-            {
-                _clientService.ResetPassword(request); 
-                return Ok();
-            }
-            catch(Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
+       
 
     }
 }

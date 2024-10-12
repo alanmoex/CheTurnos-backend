@@ -3,12 +3,17 @@ using Microsoft.AspNetCore.Mvc;
 using Application.Interfaces;
 using Application.Models;
 using Domain.Exceptions;
+using Application.Services;
+using Microsoft.AspNetCore.Authorization;
+using Application.Models.Requests;
+using System.Security.Claims;
 
 
 namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class EmailController : ControllerBase
     {
         private readonly IEmailService _emailService;
@@ -17,9 +22,14 @@ namespace API.Controllers
             _emailService = emailService;
         }
 
-        [HttpPost("sendEmail")]
+        [HttpPost("[action]")]
         public IActionResult SendEmail ([FromBody]EmailDTO request)
         {
+            var userRole = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+            if (userRole != "SysAdmin")
+            {
+                return Forbid();
+            }
             try
             {
             _emailService.SendMail(request);
@@ -30,20 +40,36 @@ namespace API.Controllers
                 return NotFound(ex.Message);
             }
         }
-         
-        [HttpPost("sendConfirmationEmail")]
-        public IActionResult Sendconfirmation([FromBody]string email, [FromRoute] string nameUser)
+     
+        [AllowAnonymous]
+        [HttpPut("[action]")]
+        public ActionResult RequestPasswordReset([FromBody] string email)
         {
             try
             {
-            _emailService.AccountCreationConfirmationEmail(email, nameUser );
-            return Ok("");
+                _emailService.RequestPassReset(email);
+                return Ok();
             }
             catch (NotFoundException ex)
             {
-                return NotFound(ex.Message);
+                return BadRequest(ex.Message);
             }
-        } 
+        }
+
+        [AllowAnonymous]
+        [HttpPut("[action]")]
+        public ActionResult ResetPassword(ResetPasswordRequest request)
+        {
+            try
+            {
+                _emailService.ResetPassword(request);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 
 }
