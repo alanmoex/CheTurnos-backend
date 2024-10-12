@@ -76,6 +76,10 @@ namespace Application.Services
                 newClient.Email = clientCreateRequest.Email;
                 newClient.Password = clientCreateRequest.Password;
                 newClient.Type = UserType.Client;
+
+                //Nuevos atributos de Usuario.
+                newClient.ImgUrl = "";
+                newClient.PasswordResetCode = Guid.NewGuid().ToString().Substring(0, 6);
                 _clientRepository.Add(newClient);
                 _emailService.AccountCreationConfirmationEmail(newClient.Email, newClient.Name);
                 return ClientDto.Create(newClient);
