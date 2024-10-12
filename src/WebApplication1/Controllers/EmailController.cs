@@ -43,11 +43,11 @@ namespace API.Controllers
      
         [AllowAnonymous]
         [HttpPut("[action]")]
-        public ActionResult RequestPasswordReset([FromBody] string email)
+        public ActionResult RequestPasswordReset([FromBody] PassRecoveryRequestDTO email)
         {
             try
             {
-                _emailService.RequestPassReset(email);
+                _emailService.RequestPassReset(email.Email);
                 return Ok();
             }
             catch (NotFoundException ex)
@@ -58,7 +58,7 @@ namespace API.Controllers
 
         [AllowAnonymous]
         [HttpPut("[action]")]
-        public ActionResult ResetPassword(ResetPasswordRequest request)
+        public ActionResult ResetPassword([FromBody] ResetPasswordRequest request)
         {
             try
             {

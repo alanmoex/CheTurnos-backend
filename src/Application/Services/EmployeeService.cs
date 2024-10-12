@@ -41,7 +41,9 @@ namespace Application.Services
             newEmployee.Password = request.Password;
             newEmployee.ShopId = request.ShopId;
             newEmployee.Type = Domain.Enums.UserType.Employee;
-
+            //Nuevos atributos de Usuario.
+            newEmployee.ImgUrl = "";
+            newEmployee.PasswordResetCode = Guid.NewGuid().ToString().Substring(0, 6);
             try
             {
                 _employeeRepository.Add(newEmployee);
