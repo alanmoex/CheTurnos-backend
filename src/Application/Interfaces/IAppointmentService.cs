@@ -14,7 +14,8 @@ namespace Application.Interfaces
         AppointmentDTO? GetAppointmentById(int id);
         List<AppointmentDTO?> GetAvailableAppointmentsByEmployeeId(int employeeId);
         void DeleteAppointment(int id);
-        void CreateAppointment(AppointmentCreateRequest appointmentReques);
+        void CreateAppointment(int shopId, int providerId, DateTime dateAndHour, int? serviceId = null, int? clientId = null);
         AppointmentDTO UpdateAppointment(AppointmentUpdateRequest appointment, int id);
+        AppointmentDTO? GetLastAppointmentByShopId(int shopId);
     }
 }

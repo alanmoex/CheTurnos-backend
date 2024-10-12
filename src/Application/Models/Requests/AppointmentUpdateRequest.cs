@@ -15,7 +15,7 @@ namespace Application.Models.Requests
         public int ProviderId { get; set; } //FK
         public int? ClientId { get; set; } //FK
         public DateTime DateAndHour { get; set; }
-        public TimeSpan Duration { get; set; }
+        //public TimeSpan Duration { get; set; }
 
     }
 }

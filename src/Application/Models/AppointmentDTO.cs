@@ -38,7 +38,7 @@ namespace Application.Models
             dto.ClientId = Appointment.ClientId;
             dto.ShopId = Appointment.ShopId;
             dto.DateAndHour = Appointment.DateAndHour;
-            dto.Duration = Appointment.Duration;
+            //dto.Duration = Appointment.Duration;
 
             return dto;
         }
