@@ -21,6 +21,7 @@ namespace API.Controllers
         {
             _clientService = clientService;
         }
+
         [AllowAnonymous]
         [HttpGet("[action]")]
         public ActionResult<List<ClientDto?>> GetAllClients()
