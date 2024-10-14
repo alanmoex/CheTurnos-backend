@@ -105,7 +105,7 @@ namespace API.Controllers
 
         [Authorize]
         [HttpGet("[action]")]
-        public ActionResult<AppointmentDTO?> GetMyLastShopAppointment()
+        public ActionResult<List<Appointment?>> GetMyLastShopAppointment()
         {
             int ownerId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "");
             try
@@ -114,7 +114,7 @@ namespace API.Controllers
             }
             catch (NotFoundException ex)
             {
-                return Ok(ex);
+                return NotFound(ex);
             }
         }
     }

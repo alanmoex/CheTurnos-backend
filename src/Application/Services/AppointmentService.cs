@@ -105,7 +105,7 @@ namespace Application.Services
 
         }
 
-        public AppointmentDTO? GetLastAppointmentByShopId(int ownerId)
+        public List<Appointment?> GetLastAppointmentByShopId(int ownerId)
         {
             var owner = _ownerRepository.GetById(ownerId);
             if (owner == null)
@@ -113,12 +113,11 @@ namespace Application.Services
                 throw new NotFoundException(nameof(Owner), ownerId);
             }
 
+            List<Appointment?> lastAppList = new List<Appointment?>();
             var lastAppointment = _appointmentRepository.GetLastAppointmentByShopId(owner.ShopId);
-            if (lastAppointment == null)
-            {
-                throw new NotFoundException("No existen turnos almacenados");
-            }
-            return AppointmentDTO.Create(lastAppointment);
+            lastAppList.Add(lastAppointment);
+
+            return lastAppList;
         }
     }
 }
