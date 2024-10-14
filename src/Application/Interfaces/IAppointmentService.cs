@@ -1,5 +1,6 @@
 ﻿using Application.Models;
 using Application.Models.Requests;
+using Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +17,7 @@ namespace Application.Interfaces
         void DeleteAppointment(int id);
         void CreateAppointment(int shopId, int providerId, DateTime dateAndHour, int? serviceId = null, int? clientId = null);
         AppointmentDTO UpdateAppointment(AppointmentUpdateRequest appointment, int id);
-        AppointmentDTO? GetLastAppointmentByShopId(int ownerId);
+        List<Appointment?> GetLastAppointmentByShopId(int ownerId);
         void AssignClient(AssignClientRequestDTO request);
     }
 }
