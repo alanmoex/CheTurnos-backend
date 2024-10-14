@@ -3,8 +3,11 @@ using Application.Models;
 using Application.Models.Requests;
 using Domain.Entities;
 using Domain.Exceptions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace API.Controllers
 {
@@ -100,16 +103,18 @@ namespace API.Controllers
             }
         }
 
-        [HttpGet("[action]/{shopId}")]
-        public ActionResult<AppointmentDTO?> GetLastAppointmentByShopId([FromRoute] int shopId)
+        [Authorize]
+        [HttpGet("[action]")]
+        public ActionResult<AppointmentDTO?> GetMyLastShopAppointment()
         {
+            int ownerId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "");
             try
             {
-                return _appointmentService.GetLastAppointmentByShopId(shopId);
+                return _appointmentService.GetLastAppointmentByShopId(ownerId);
             }
             catch (NotFoundException ex)
             {
-                return BadRequest(ex.Message);
+                return Ok(ex);
             }
         }
     }
