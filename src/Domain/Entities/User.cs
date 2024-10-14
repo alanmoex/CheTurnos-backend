@@ -27,7 +27,7 @@ namespace Domain.Entities
 
 
         // Almacena el código para recuperar la contraseña
-        public string PasswordResetCode { get; set; }
+        public string? PasswordResetCode { get; set; }
 
         // Almacenar la fecha y hora de caducidad del código se usa para hacer validaciones.
         public DateTime? ResetCodeExpiration { get; set; }

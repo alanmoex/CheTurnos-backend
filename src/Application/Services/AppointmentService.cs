@@ -17,9 +17,12 @@ namespace Application.Services
     public class AppointmentService: IAppointmentService
     {
         private readonly IAppointmentRepository _appointmentRepository;
-        public AppointmentService (IAppointmentRepository appointmentRepository)
+        private readonly IOwnerRepository _ownerRepository;
+
+        public AppointmentService (IAppointmentRepository appointmentRepository, IOwnerRepository ownerRepository)
         {
             _appointmentRepository = appointmentRepository;
+            _ownerRepository = ownerRepository;
         }
 
         public List<AppointmentDTO?> GetAllAppointment()
@@ -102,9 +105,15 @@ namespace Application.Services
 
         }
 
-        public AppointmentDTO? GetLastAppointmentByShopId(int shopId)
+        public AppointmentDTO? GetLastAppointmentByShopId(int ownerId)
         {
-            var lastAppointment = _appointmentRepository.GetLastAppointmentByShopId(shopId);
+            var owner = _ownerRepository.GetById(ownerId);
+            if (owner == null)
+            {
+                throw new NotFoundException(nameof(Owner), ownerId);
+            }
+
+            var lastAppointment = _appointmentRepository.GetLastAppointmentByShopId(owner.ShopId);
             if (lastAppointment == null)
             {
                 throw new NotFoundException("No existen turnos almacenados");
