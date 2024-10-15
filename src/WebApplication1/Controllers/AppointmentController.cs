@@ -1,6 +1,7 @@
 ﻿using Application.Interfaces;
 using Application.Models;
 using Application.Models.Requests;
+using Application.Services;
 using Domain.Entities;
 using Domain.Exceptions;
 using Microsoft.AspNetCore.Authorization;
@@ -30,18 +31,26 @@ namespace API.Controllers
         [HttpGet("[action]/{id}")]
         public IActionResult GetAppointmentById([FromRoute] int id)
         {
-            return Ok(_appointmentService.GetAppointmentById(id));
+            try
+            {
+                return Ok(_appointmentService.GetAppointmentById(id));
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            
         }
 
         [HttpPost("[action]")]
-        public IActionResult CreateAppointment([FromBody] AppointmentCreateRequest request)
+        public IActionResult CreateAppointment([FromBody] AppointmentCreateRequest appointmentCreateRequest)
         {
             try
             {
-                _appointmentService.CreateAppointment(request.ShopId, request.ProviderId, request.DateAndHour, request.ServiceId, request.ClientId);
+                _appointmentService.CreateAppointment(appointmentCreateRequest.ShopId, appointmentCreateRequest.ProviderId, new DateTime(DateOnly.Parse(appointmentCreateRequest.DateOnly),TimeOnly.Parse(appointmentCreateRequest.TimeOnly)));
                 return Ok();
             }
-            catch (NotFoundException ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
