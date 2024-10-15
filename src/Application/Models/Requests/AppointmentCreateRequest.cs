@@ -10,15 +10,17 @@ namespace Application.Models.Requests
 {
     public class AppointmentCreateRequest
     {
-        public int? ServiceId { get; set; } //FK
-        public int ProviderId { get; set; } //FK
-        public int? ClientId { get; set; } //FK
+        //public int? ServiceId { get; set; } //FK
+        //public int? ClientId { get; set; } //FK
 
+        [Required]
+        public int ProviderId { get; set; } //FK
         [Required]
         public int ShopId { get; set; } //FK
-
         [Required]
-        public DateTime DateAndHour { get; set; }
+        public string DateOnly { get; set; }
+        [Required]
+        public string TimeOnly { get; set; }
 
         //[Required]
         //public TimeSpan? Duration { get; set; }
