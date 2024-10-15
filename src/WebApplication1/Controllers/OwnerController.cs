@@ -22,7 +22,7 @@ namespace API.Controllers
             _ownerService = ownerService;
         }
 
-        [HttpPut("[action]")]
+        [HttpPost("[action]")]
         public ActionResult AddNewAppointments([FromBody] AddNewAppointmentsRequest addNewAppointmentsRequest)
         {
             int ownerId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "");
