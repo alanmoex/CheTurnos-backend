@@ -126,5 +126,14 @@ namespace API.Controllers
                 return NotFound(ex);
             }
         }
+
+        [Authorize]
+        [HttpGet("[action]")]
+        public ActionResult<List<AppointmentDTO?>> GetAllApointmentsOfMyShop()
+        {
+            int ownerId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "");
+
+            return _appointmentService.GetAllApointmentsOfMyShop(ownerId);
+        }
     }
 }

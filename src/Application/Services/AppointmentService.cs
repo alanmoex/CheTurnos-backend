@@ -119,5 +119,12 @@ namespace Application.Services
 
             return lastAppList;
         }
+
+        public List<AppointmentDTO?> GetAllApointmentsOfMyShop(int ownerId)
+        {
+            var owner = _ownerRepository.GetById(ownerId);
+            var myAppList = _appointmentRepository.GetAllAppointmentsByShopId(owner.ShopId);
+            return AppointmentDTO.CreateList(myAppList);
+        }
     }
 }
