@@ -31,5 +31,12 @@ namespace Infrastructure.Data
                 .OrderByDescending(a => a.Id)
                 .FirstOrDefault();
         }
+
+        public List<Appointment> GetAllAppointmentsByShopId(int shopId)
+        {
+            return _dbContext.Set<Appointment>()
+                .Where(a => a.ShopId == shopId)
+                .ToList();
+        }
     }
 }

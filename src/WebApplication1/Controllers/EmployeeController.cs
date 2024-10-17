@@ -6,6 +6,7 @@ using Application.Services;
 using Domain.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace API.Controllers
 {
@@ -133,6 +134,14 @@ namespace API.Controllers
             {
                 return StatusCode(500, "An unexpected error occurred.");
             }
+        }
+
+        [Authorize]
+        [HttpGet("[action]")]
+        public ActionResult<List<EmployeeResponseDTO?>> GetMyShopEmployees()
+        {
+            int ownerId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "");
+            return _employeeService.GetMyShopEmployees(ownerId);
         }
 
     }

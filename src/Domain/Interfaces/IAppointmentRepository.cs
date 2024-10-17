@@ -12,5 +12,6 @@ namespace Domain.Interfaces
     {
         List<Appointment> GetAvailableAppointmentsByEmployeeId(int employeeId);
         Appointment? GetLastAppointmentByShopId(int shopId);
+        List<Appointment> GetAllAppointmentsByShopId(int shopId);
     }
 }

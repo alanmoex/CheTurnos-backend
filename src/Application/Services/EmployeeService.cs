@@ -20,12 +20,14 @@ namespace Application.Services
         private readonly IEmployeeRepository _employeeRepository;
         private readonly IRepositoryUser _userRepository;
         private readonly IEmailService _emailService;
+        private readonly IOwnerRepository _ownerRepository;
 
-        public EmployeeService(IEmployeeRepository employeeRepository, IRepositoryUser userRepository, IEmailService emailService)
+        public EmployeeService(IEmployeeRepository employeeRepository, IRepositoryUser userRepository, IEmailService emailService, IOwnerRepository ownerRepository)
         {
             _employeeRepository = employeeRepository;
             _userRepository = userRepository;
             _emailService = emailService;
+            _ownerRepository = ownerRepository;
         }
 
         public bool Create(EmployeeCreateRequestDTO request)
@@ -161,5 +163,12 @@ namespace Application.Services
 
         }
 
+        public List<EmployeeResponseDTO?> GetMyShopEmployees(int ownerId)
+        {
+            var owner = _ownerRepository.GetById(ownerId);
+            var myEmployees = _employeeRepository.GetAllByShopId(owner.ShopId);
+
+            return EmployeeResponseDTO.CreateList(myEmployees);
+        }
     }
 }
