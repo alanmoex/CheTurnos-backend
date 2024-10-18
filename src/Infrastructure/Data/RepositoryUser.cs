@@ -20,7 +20,7 @@ namespace Infrastructure.Data
         
         public User? GetByEmail(string email)
         {
-            var user = _context.Users.FirstOrDefault(u => u.Email == email);
+            var user = _context.Users.FirstOrDefault(u => u.Email.ToLower() == email.ToLower());
 
             return user;
         }

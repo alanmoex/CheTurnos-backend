@@ -151,7 +151,7 @@ namespace Application.Services
                 newOwner.Email = ownerCreateRequest.Email;
                 newOwner.Password = ownerCreateRequest.Password;
                 newOwner.Type = UserType.Owner;
-
+                newOwner.ShopId = ownerCreateRequest.ShopId;
                 //Nuevos atributos de Usuario.
                 newOwner.ImgUrl = "";
                 newOwner.PasswordResetCode = Guid.NewGuid().ToString().Substring(0, 6);

@@ -22,6 +22,10 @@ namespace Infrastructure.Data
         {
             var appDbContext = (AppDbContext)_dbContext;
             return appDbContext.Appointments.Where(a => a.ProviderId == employeeId && a.Status == Status.Active).ToList();
+        }public List<Appointment> GetAvailableAppointmentsByClientId(int ClientId)
+        {
+            var appDbContext = (AppDbContext)_dbContext;
+            return appDbContext.Appointments.Where(a => a.ClientId == ClientId && a.Status == Status.Active).ToList();
         }
 
         public Appointment? GetLastAppointmentByShopId(int shopId)

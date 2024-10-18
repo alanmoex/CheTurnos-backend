@@ -69,6 +69,19 @@ namespace API.Controllers
             }
         }
 
+        [HttpGet("[action]/{clientId}")]
+        public ActionResult GetAvailableAppointmentsByClient([FromRoute] int clientId)
+        {
+            try
+            {
+                return Ok(_appointmentService.GetAvailableAppointmentsByClienId(clientId));
+            }
+            catch (NotFoundException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
 
         [HttpPut("[action]/{id}")]
         public IActionResult UpdateAppointment([FromBody] AppointmentUpdateRequest request, [FromRoute] int id)
