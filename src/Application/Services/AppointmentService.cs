@@ -64,6 +64,23 @@ namespace Application.Services
             }
             return [];
         }
+        public List<AppointmentDTO> GetAvailableAppointmentsByClienId(int clientId)
+        {
+            var clientAppointments = _appointmentRepository.GetAvailableAppointmentsByEmployeeId(clientId)
+                ?? throw new NotFoundException("Appointment not found"); 
+            List<AppointmentDTO> appointmentList = new List<AppointmentDTO>();
+
+            if(clientAppointments != null)
+            {
+                foreach (var appointment in clientAppointments)
+                {
+                    var appointmentToAdd = AppointmentDTO.Create(appointment);
+                    appointmentList.Add(appointmentToAdd);
+                }
+                return appointmentList;
+            }
+            return [];
+        }
 
         public void CreateAppointment (int shopId, int providerId, DateTime dateAndHour, int? serviceId = null, int? clientId = null)
         {
