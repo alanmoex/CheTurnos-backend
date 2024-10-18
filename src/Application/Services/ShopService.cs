@@ -49,6 +49,7 @@ namespace Application
                 TimeStart = new TimeOnly(shopCreateRequest.StartHour, shopCreateRequest.StartMin),
                 TimeEnd = new TimeOnly(shopCreateRequest.EndHour, shopCreateRequest.EndMin),
                 WorkDays = shopCreateRequest.WorkDays,
+                ImgUrl = shopCreateRequest.ImgUrl,
             };
 
             _shopRepository.Add(shop);
