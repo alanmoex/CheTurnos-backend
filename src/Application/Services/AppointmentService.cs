@@ -143,5 +143,11 @@ namespace Application.Services
             var myAppList = _appointmentRepository.GetAllAppointmentsByShopId(owner.ShopId);
             return AppointmentDTO.CreateList(myAppList);
         }
+
+        public List<AppointmentDTO?> GetAllAppointmentsByProviderId(int providerId)
+        {
+            var appointmentList = _appointmentRepository.GetAllAppointmentsByProviderId(providerId);
+            return AppointmentDTO.CreateList(appointmentList);
+        }
     }
 }

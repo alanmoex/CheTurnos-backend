@@ -148,5 +148,12 @@ namespace API.Controllers
 
             return _appointmentService.GetAllApointmentsOfMyShop(ownerId);
         }
+
+        [Authorize]
+        [HttpGet("[action]/{providerId}")]
+        public ActionResult<List<AppointmentDTO?>> GetAllApointmentsByProviderId([FromRoute] int providerId)
+        {
+            return _appointmentService.GetAllAppointmentsByProviderId(providerId);
+        }
     }
 }
