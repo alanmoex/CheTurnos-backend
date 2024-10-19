@@ -22,7 +22,9 @@ namespace Infrastructure.Data
         {
             var appDbContext = (AppDbContext)_dbContext;
             return appDbContext.Appointments.Where(a => a.ProviderId == employeeId && a.Status == Status.Active).ToList();
-        }public List<Appointment> GetAvailableAppointmentsByClientId(int ClientId)
+        }
+        
+        public List<Appointment> GetAvailableAppointmentsByClientId(int ClientId)
         {
             var appDbContext = (AppDbContext)_dbContext;
             return appDbContext.Appointments.Where(a => a.ClientId == ClientId && a.Status == Status.Active).ToList();
@@ -40,6 +42,13 @@ namespace Infrastructure.Data
         {
             return _dbContext.Set<Appointment>()
                 .Where(a => a.ShopId == shopId)
+                .ToList();
+        }
+
+        public List<Appointment> GetAllAppointmentsByProviderId(int providerId)
+        {
+            return _dbContext.Set<Appointment>()
+                .Where(a => a.ProviderId == providerId)
                 .ToList();
         }
     }

@@ -21,5 +21,6 @@ namespace Application.Interfaces
         List<Appointment?> GetLastAppointmentByShopId(int ownerId);
         List<AppointmentDTO?> GetAllApointmentsOfMyShop(int ownerId);
         void AssignClient(AssignClientRequestDTO request);
+        List<AppointmentDTO?> GetAllAppointmentsByProviderId(int providerId);
     }
 }
