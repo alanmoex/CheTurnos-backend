@@ -125,11 +125,11 @@ namespace API.Controllers
             }
         }
 
-        [Authorize]
-        [HttpGet("[action]")]
-        public ActionResult<List<Appointment?>> GetMyLastShopAppointment()
+        //[Authorize]
+        [HttpGet("[action]/{owenrId}")]
+        public ActionResult<List<Appointment?>> GetMyLastShopAppointment([FromRoute] int ownerId)
         {
-            int ownerId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "");
+           // int ownerId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "");
             try
             {
                 return _appointmentService.GetLastAppointmentByShopId(ownerId);
