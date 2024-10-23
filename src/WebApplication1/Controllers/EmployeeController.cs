@@ -136,11 +136,11 @@ namespace API.Controllers
             }
         }
 
-        [Authorize]
-        [HttpGet("[action]")]
-        public ActionResult<List<EmployeeResponseDTO?>> GetMyShopEmployees()
+        //[Authorize]
+        [HttpGet("[action]/{ownerId}")]
+        public ActionResult<List<EmployeeResponseDTO?>> GetMyShopEmployees([FromRoute] int ownerId)
         {
-            int ownerId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "");
+            //int ownerId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "");
             return _employeeService.GetMyShopEmployees(ownerId);
         }
 

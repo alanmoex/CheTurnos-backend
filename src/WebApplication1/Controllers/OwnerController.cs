@@ -2,6 +2,7 @@
 using Application.Models;
 using Application.Models.Requests;
 using Application.Services;
+using Domain.Enums;
 using Domain.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,7 +11,6 @@ using System.Security.Claims;
 namespace API.Controllers
 {
     [ApiController]
-    [Authorize]
     [Route("api/[controller]")]
 
     public class OwnerController : Controller
@@ -39,7 +39,6 @@ namespace API.Controllers
 
         }
 
-        [AllowAnonymous]
         [HttpGet("[action]")]
         public ActionResult<List<OwnerDTO?>> GetAllOwners()
         {
@@ -59,7 +58,6 @@ namespace API.Controllers
             }
         }
 
-        [AllowAnonymous]
         [HttpPost("[action]")]
         public ActionResult<OwnerDTO> CreateNewOwner([FromBody] OwnerCreateRequest ownerCreateRequest)
         {
@@ -92,7 +90,6 @@ namespace API.Controllers
             return Ok();
         }
 
-        [AllowAnonymous]
         [HttpDelete("[action]/{id}")]
         public ActionResult PermanentDeletionOwner([FromRoute] int id)
         {
