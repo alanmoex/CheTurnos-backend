@@ -125,14 +125,14 @@ namespace API.Controllers
             }
         }
 
-        //[Authorize]
-        [HttpGet("[action]/{owenrId}")]
-        public ActionResult<List<Appointment?>> GetMyLastShopAppointment([FromRoute] int ownerId)
+        
+        [HttpGet("[action]/{ownerId}")]
+        public IActionResult GetMyLastShopAppointment([FromRoute] int ownerId)
         {
-           // int ownerId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "");
+         // int ownerId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "");
             try
             {
-                return _appointmentService.GetLastAppointmentByShopId(ownerId);
+                return Ok(_appointmentService.GetLastAppointmentByShopId(ownerId));
             }
             catch (NotFoundException ex)
             {
@@ -142,7 +142,7 @@ namespace API.Controllers
 
         [Authorize]
         [HttpGet("[action]")]
-        public ActionResult<List<AppointmentDTO?>> GetAllApointmentsOfMyShop()
+        public ActionResult<List<AllApointmentsOfMyShopRequestDTO?>> GetAllApointmentsOfMyShop()
         {
             int ownerId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "");
 
@@ -151,7 +151,7 @@ namespace API.Controllers
 
         [Authorize]
         [HttpGet("[action]/{providerId}")]
-        public ActionResult<List<AppointmentDTO?>> GetAllApointmentsByProviderId([FromRoute] int providerId)
+        public ActionResult<List<AllApointmentsOfMyShopRequestDTO?>> GetAllApointmentsByProviderId([FromRoute] int providerId)
         {
             return _appointmentService.GetAllAppointmentsByProviderId(providerId);
         }
