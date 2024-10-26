@@ -18,11 +18,19 @@ namespace Application.Services
     {
         private readonly IAppointmentRepository _appointmentRepository;
         private readonly IOwnerRepository _ownerRepository;
+        private readonly IServiceRepository _serviceRepository;
+        private readonly IRepositoryUser _repositoryUser;
+        private readonly IClientRepository _clientRepository;
 
-        public AppointmentService (IAppointmentRepository appointmentRepository, IOwnerRepository ownerRepository)
+
+        public AppointmentService (IAppointmentRepository appointmentRepository, IOwnerRepository ownerRepository, IServiceRepository serviceRepository, IRepositoryUser repositoryUser, IClientRepository clientRepository)
         {
             _appointmentRepository = appointmentRepository;
             _ownerRepository = ownerRepository;
+            _serviceRepository = serviceRepository;
+            _clientRepository = clientRepository;
+            _repositoryUser = repositoryUser;
+
         }
 
         public List<AppointmentDTO?> GetAllAppointment()
@@ -122,7 +130,7 @@ namespace Application.Services
 
         }
 
-        public List<Appointment?> GetLastAppointmentByShopId(int ownerId)
+        public AppointmentDTO GetLastAppointmentByShopId(int ownerId)
         {
             var owner = _ownerRepository.GetById(ownerId);
             if (owner == null)
@@ -130,24 +138,47 @@ namespace Application.Services
                 throw new NotFoundException(nameof(Owner), ownerId);
             }
 
-            List<Appointment?> lastAppList = new List<Appointment?>();
-            var lastAppointment = _appointmentRepository.GetLastAppointmentByShopId(owner.ShopId);
-            lastAppList.Add(lastAppointment);
+            var lastAppointment = _appointmentRepository.GetLastAppointmentByShopId(owner.ShopId)
+                ?? throw new NotFoundException("Appointment not found");
+           // List<AppointmentDTO?> lastAppList = [];
+            //var lastAppList.Add();
 
-            return lastAppList;
+            var appList = AppointmentDTO.Create(lastAppointment);
+            return appList;
         }
 
-        public List<AppointmentDTO?> GetAllApointmentsOfMyShop(int ownerId)
+        public List<AllApointmentsOfMyShopRequestDTO?> GetAllApointmentsOfMyShop(int ownerId) //Camiar DTO
         {
             var owner = _ownerRepository.GetById(ownerId);
-            var myAppList = _appointmentRepository.GetAllAppointmentsByShopId(owner.ShopId);
-            return AppointmentDTO.CreateList(myAppList);
+            List<Appointment> myAppList = _appointmentRepository.GetAllAppointmentsByShopId(owner.ShopId);
+
+            List<AllApointmentsOfMyShopRequestDTO?> listDto = [];
+
+            foreach (var a in myAppList)
+            {
+                var provider = _repositoryUser.GetById(a.ProviderId)?.Name ?? string.Empty;
+                var client = _clientRepository.GetById(a.ClientId)?.Name ?? string.Empty;
+                var service = _serviceRepository.GetById(a.ServiceId)?.Name ?? string.Empty;
+
+                listDto.Add(AllApointmentsOfMyShopRequestDTO.Create(a, provider,client, service));
+            }
+            return listDto;
         }
 
-        public List<AppointmentDTO?> GetAllAppointmentsByProviderId(int providerId)
+        public List<AllApointmentsOfMyShopRequestDTO> GetAllAppointmentsByProviderId(int providerId)
         {
             var appointmentList = _appointmentRepository.GetAllAppointmentsByProviderId(providerId);
-            return AppointmentDTO.CreateList(appointmentList);
+            List<AllApointmentsOfMyShopRequestDTO> listDto = [];
+
+            foreach (var a in appointmentList)
+            {
+                var provider = _repositoryUser.GetById(a.ProviderId)?.Name ?? string.Empty;
+                var client = _clientRepository.GetById(a.ClientId)?.Name ?? string.Empty;
+                var service = _serviceRepository.GetById(a.ServiceId)?.Name ?? string.Empty;
+
+                listDto.Add(AllApointmentsOfMyShopRequestDTO.Create(a, provider, client, service));
+            }
+            return listDto;
         }
     }
 }
