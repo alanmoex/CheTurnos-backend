@@ -57,6 +57,12 @@ public class ServiceController : ControllerBase
     }
 
 
+    [HttpGet("[action]/{shopId}")]
+    public ActionResult<List<ShopsServicesByShopIdRequestDTO>> GetAllServicesByShopWithNameShop(int shopId)
+    {
+        return _serviceService.GetServicesOfShop(shopId);
+    }
+
     [HttpPost("[action]")]
     public IActionResult Create([FromBody] ServiceCreateRequest serviceCreateRequest)
     {
@@ -120,5 +126,7 @@ public class ServiceController : ControllerBase
             return StatusCode(500, "An unexpected error occurred.");
         }
     }
+
+
 }
 

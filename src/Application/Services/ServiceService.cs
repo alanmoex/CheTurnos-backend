@@ -8,9 +8,11 @@ namespace Application;
 public class ServiceService : IServiceService
 {
     private readonly IServiceRepository _serviceRepository;
-    public ServiceService(IServiceRepository serviceRepository)
+    private readonly IShopRepository _shopRepository;
+    public ServiceService(IServiceRepository serviceRepository, IShopRepository shopRepository)
     {
         _serviceRepository = serviceRepository;
+        _shopRepository = shopRepository;
     }
 
     public ServiceDTO Create(ServiceCreateRequest request)
@@ -88,4 +90,18 @@ public class ServiceService : IServiceService
 
         _serviceRepository.Update(service);
     }
+
+
+    public List<ShopsServicesByShopIdRequestDTO> GetServicesOfShop(int shopId) 
+    {
+        var shop = _shopRepository.GetById(shopId)
+            ?? throw new Exception("Shop Not Found");
+        var service = _serviceRepository.GetAllByShopId(shopId)
+            ?? throw new Exception("Service Not Found");
+
+        var newShopsService = ShopsServicesByShopIdRequestDTO.CreateList(service, shop.Name, shop.Id);
+        return newShopsService;
+    }
+
+
 }
