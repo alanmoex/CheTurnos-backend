@@ -117,6 +117,8 @@ builder.Services.Configure <EmailSettingsOptions>(
 builder.Services.AddScoped<IEmailService, EmailService>(); //El nombre "MailService" no puede ser utilizado porque ya existe en la libreria "mailkit"
 builder.Services.AddScoped<IAppointmentService, AppointmentService>();
 builder.Services.AddScoped<IOwnerService, OwnerService>();
+builder.Services.AddScoped<ISysAdminService, SysAdminService>();
+
 #endregion
 
 
