@@ -21,15 +21,17 @@ namespace Application.Services
         private readonly IServiceRepository _serviceRepository;
         private readonly IRepositoryUser _repositoryUser;
         private readonly IClientRepository _clientRepository;
+        private readonly IShopRepository _shopRepository;
 
 
-        public AppointmentService (IAppointmentRepository appointmentRepository, IOwnerRepository ownerRepository, IServiceRepository serviceRepository, IRepositoryUser repositoryUser, IClientRepository clientRepository)
+        public AppointmentService (IAppointmentRepository appointmentRepository, IOwnerRepository ownerRepository, IServiceRepository serviceRepository, IRepositoryUser repositoryUser, IClientRepository clientRepository, IShopRepository shopRepository)
         {
             _appointmentRepository = appointmentRepository;
             _ownerRepository = ownerRepository;
             _serviceRepository = serviceRepository;
             _clientRepository = clientRepository;
             _repositoryUser = repositoryUser;
+            _shopRepository = shopRepository;
 
         }
 
@@ -72,22 +74,21 @@ namespace Application.Services
             }
             return [];
         }
-        public List<AppointmentDTO> GetAvailableAppointmentsByClienId(int clientId)
+        public List<ClientsAppointmentListDTO> GetAvailableAppointmentsByClienId(int clientId)
         {
             var clientAppointments = _appointmentRepository.GetAvailableAppointmentsByClientId(clientId)
-                ?? throw new NotFoundException("Appointment not found"); 
-            List<AppointmentDTO> appointmentList = new List<AppointmentDTO>();
+                ?? throw new NotFoundException("Appointment not found");
 
-            if(clientAppointments != null)
+            List<ClientsAppointmentListDTO> appointmentList = [];
+
+            foreach (var a in clientAppointments)
             {
-                foreach (var appointment in clientAppointments)
-                {
-                    var appointmentToAdd = AppointmentDTO.Create(appointment);
-                    appointmentList.Add(appointmentToAdd);
-                }
-                return appointmentList;
+                var shopName = _shopRepository.GetById(a.ShopId)?.Name ?? string.Empty;
+                var serviceName = _serviceRepository.GetById(a.ServiceId)?.Name ?? string.Empty;
+
+                appointmentList.Add(ClientsAppointmentListDTO.Create(a, serviceName, shopName));
             }
-            return [];
+                return appointmentList;
         }
 
         public void CreateAppointment (int shopId, int providerId, DateTime dateAndHour, int? serviceId = null, int? clientId = null)
@@ -167,7 +168,8 @@ namespace Application.Services
 
         public List<AllApointmentsOfMyShopRequestDTO> GetAllAppointmentsByProviderId(int providerId)
         {
-            var appointmentList = _appointmentRepository.GetAllAppointmentsByProviderId(providerId);
+            var appointmentList = _appointmentRepository.GetAllAppointmentsByProviderId(providerId)
+                ?? throw new Exception("not found appointments");
             List<AllApointmentsOfMyShopRequestDTO> listDto = [];
 
             foreach (var a in appointmentList)
