@@ -14,22 +14,18 @@ namespace Application.Models.Requests
     {
 
         public int Id { get; set; }
-
-        [Required]
         [JsonConverter(typeof(JsonStringEnumConverter))] //Para que se vea el string del enum y no un numero.
         public Status Status { get; set; } = Status.Active;
         public int? ServiceId { get; set; } //FK
         public int ProviderId { get; set; } //FK
         public int? ClientId { get; set; } //FK
+        public string ServiceName { get; set; } = string.Empty;
+        public string ShopName { get; set; } = string.Empty;
         public int ShopId { get; set; } //FK
 
-        [Required]
         public DateTime DateAndHour { get; set; }
 
-        [Required]
         public TimeSpan Duration { get; set; }
-        string ServiceName { get; set; }
-        string ShopName { get; set; }
 
 
         public static ClientsAppointmentListDTO Create(Appointment Appointment, string serviceName, string shopName)
