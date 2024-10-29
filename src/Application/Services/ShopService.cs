@@ -6,16 +6,25 @@ using System.Linq;
 using Application.Models.Requests;
 using Application.Models;
 using Domain.Enums;
+using Infrastructure.Data;
 
 namespace Application
 {
     public class ShopService : IShopService
     {
         private readonly IShopRepository _shopRepository;
+        private readonly IOwnerRepository _ownerRepository;
+        private readonly IEmployeeRepository _employeeRepository;
+        private readonly IServiceRepository _serviceRepository;
+        private readonly IAppointmentRepository _appointmentRepository;
 
-        public ShopService(IShopRepository shopRepository)
+        public ShopService(IShopRepository shopRepository, IOwnerRepository ownerRepository, IEmployeeRepository employeeRepository, IServiceRepository serviceRepository, IAppointmentRepository appointmentRepository)
         {
+            _appointmentRepository = appointmentRepository;
             _shopRepository = shopRepository;
+            _ownerRepository = ownerRepository;
+            _employeeRepository = employeeRepository;
+            _serviceRepository = serviceRepository;
         }
 
         public List<ShopDTO?> GetAll()
@@ -93,11 +102,27 @@ namespace Application
 
         public void PermanentDeletionShop(int id)
         {
-            var shop = _shopRepository.GetById(id);
+            var shop = _shopRepository.GetById(id)
+                ?? throw new NotFoundException(nameof(Shop), id);
 
-            if (shop == null)
-                throw new NotFoundException(nameof(Shop), id);
+            var listService = _serviceRepository.GetAllByShopId(shop.Id)
+                ?? throw new NotFoundException(nameof(Service), id);
 
+            var listEmploye = _employeeRepository.GetAllByShopId(shop.Id) ?? new List<Employee>();
+
+            var ownerShop = _ownerRepository.GetAll().FirstOrDefault(owner => owner.ShopId == shop.Id)
+                ?? throw new NotFoundException("Not found Owner.");
+
+            var appointmentLsit = _appointmentRepository.GetAllAppointmentsByShopId(shop.Id) ?? new List<Appointment>();
+
+            listService.ForEach(s => _serviceRepository.Delete(s));
+            
+            listEmploye.ForEach(e => _employeeRepository.Delete(e));
+
+            appointmentLsit.ForEach(a=>_appointmentRepository.Delete(a));
+
+            _ownerRepository.Delete(ownerShop);
+            
             _shopRepository.Delete(shop);
         }
 
