@@ -134,18 +134,15 @@ namespace Application.Services
         public AppointmentDTO GetLastAppointmentByShopId(int ownerId)
         {
             var owner = _ownerRepository.GetById(ownerId);
-            if (owner == null)
+
+            var lastAppointment = _appointmentRepository.GetLastAppointmentByShopId(owner.ShopId);
+            if (lastAppointment == null)
             {
-                throw new NotFoundException(nameof(Owner), ownerId);
+                throw new NotFoundException("Appointment not found");
             }
 
-            var lastAppointment = _appointmentRepository.GetLastAppointmentByShopId(owner.ShopId)
-                ?? throw new NotFoundException("Appointment not found");
-           // List<AppointmentDTO?> lastAppList = [];
-            //var lastAppList.Add();
-
-            var appList = AppointmentDTO.Create(lastAppointment);
-            return appList;
+            var lastAppDTO = AppointmentDTO.Create(lastAppointment);
+            return lastAppDTO;
         }
 
         public List<AllApointmentsOfMyShopRequestDTO?> GetAllApointmentsOfMyShop(int ownerId) //Camiar DTO

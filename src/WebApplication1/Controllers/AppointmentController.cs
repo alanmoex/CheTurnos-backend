@@ -125,11 +125,11 @@ namespace API.Controllers
             }
         }
 
-        
-        [HttpGet("[action]/{ownerId}")]
-        public IActionResult GetMyLastShopAppointment([FromRoute] int ownerId)
+        [Authorize]
+        [HttpGet("[action]")]
+        public ActionResult<AppointmentDTO?> GetMyLastShopAppointment()
         {
-         // int ownerId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "");
+            int ownerId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "");
             try
             {
                 return Ok(_appointmentService.GetLastAppointmentByShopId(ownerId));
