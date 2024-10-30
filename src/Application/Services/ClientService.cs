@@ -33,16 +33,17 @@ namespace Application.Services
         public List<ClientDto?> GetAllClients()
         {
             var clientsList = _clientRepository.GetAll();
+            if (clientsList == null || !clientsList.Any())
+            {
+                throw new NotFoundException($"No se encontro ningun {nameof(Client)}");
+            }
 
             return ClientDto.CreateList(clientsList);
         }
 
         public ClientDto? GetClientById(int id)
         {
-            var client = _clientRepository.GetById(id);
-
-            if (client == null)
-                throw new NotFoundException(nameof(Client), id);
+            var client = GetClientByIdOrThrow(id);
 
             return ClientDto.Create(client);
         }
@@ -92,7 +93,7 @@ namespace Application.Services
 
         public void ModifyClientData(int id, ClientUpdateRequest clientUpdateRequest)
         {
-            var client = _clientRepository.GetById(id);
+            var client = GetClientByIdOrThrow(id);
 
             if (!string.IsNullOrEmpty(clientUpdateRequest.Name.Trim())) client.Name = clientUpdateRequest.Name;
 
@@ -113,20 +114,14 @@ namespace Application.Services
 
         public void PermanentDeletionClient(int id)
         {
-            var client = _clientRepository.GetById(id);
-
-            if (client == null)
-                throw new NotFoundException(nameof(Client), id);
+            var client = GetClientByIdOrThrow(id);
 
             _clientRepository.Delete(client);
         }
 
         public void LogicalDeletionClient(int id)
         {
-            var client = _clientRepository.GetById(id);
-
-            if (client == null)
-                throw new NotFoundException(nameof(Client), id);
+            var client = GetClientByIdOrThrow(id);
 
             if (client.Status == Status.Inactive)
             {
@@ -178,6 +173,16 @@ namespace Application.Services
                     return false;
                 }
             }
+        }
+
+        public Client GetClientByIdOrThrow(int id)
+        {
+            var client = _clientRepository.GetById(id);
+            if (client == null)
+            {
+                throw new NotFoundException(nameof(Client), id);
+            }
+            return client;
         }
     }
 }
