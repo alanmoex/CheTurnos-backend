@@ -30,6 +30,7 @@ namespace Application.Models
             public TimeSpan Duration { get; set; }
 
 
+
         public static AppointmentDTO Create(Appointment Appointment)
         {
             var dto = new AppointmentDTO();

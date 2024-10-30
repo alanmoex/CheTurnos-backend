@@ -38,67 +38,94 @@ namespace Application.Services
 
         public List<AppointmentDTO?> GetAllAppointment()
         {
-            var listAppointment = _appointmentRepository.GetAll()
-                ?? throw new NotFoundException("list not found");
+            var listAppointment = _appointmentRepository.GetAll();
+
+            if (listAppointment == null || !listAppointment.Any())
+            {
+                throw new NotFoundException($"No se encontro ningun {nameof(Appointment)}");
+            }
+
             return AppointmentDTO.CreateList(listAppointment);
         }
 
         public AppointmentDTO? GetAppointmentById(int id)
         {
-            var obj = _appointmentRepository.GetById(id)
-                ?? throw new NotFoundException("Appointment not found");
+            var obj = GetAppointmentByIdOrThrow(id);
             return AppointmentDTO.Create(obj);
         }
 
         public void DeleteAppointment (int id) 
         {
-            var obj = _appointmentRepository.GetById(id)
-                ?? throw new NotFoundException("Appointment not found");
-
+            var obj = GetAppointmentByIdOrThrow(id);
             _appointmentRepository.Delete(obj);
 
             if(obj.ClientId != null) 
             {
-                var client = _repositoryUser.GetById(obj.ClientId);
-                var shop = _shopRepository.GetById(obj.ShopId);
-                _emailService.NotifyClientCancellation(client.Email, client.Name, shop.Name, shop.Phone);
+                NotifyClientCancellation(obj.ClientId, obj.ShopId);
             }
         }
 
-        public List<EmployeeAppointmentListDTO> GetAvailableAppointmentsByEmployeeId(int employeeId)
+        public List<Appointment> GetAppointmentsBy(Func<int, IEnumerable<Appointment>> getAppointmentsFunc, int id)
         {
-            var EmployeeAppointments = _appointmentRepository.GetAvailableAppointmentsByEmployeeId(employeeId)
-                ?? throw new NotFoundException("Appointment not found");
+            var appointments = getAppointmentsFunc(id);
 
-            List<EmployeeAppointmentListDTO> appointmentList = [];
-
-            foreach (var a in EmployeeAppointments)
+            if (appointments == null || !appointments.Any())
             {
-                var shopName = _shopRepository.GetById(a.ShopId)?.Name ?? string.Empty;
-                var serviceName = _serviceRepository.GetById(a.ServiceId)?.Name ?? string.Empty;
-                var ClientName = _clientRepository.GetById(a.ClientId)?.Name ?? string.Empty;
-
-                appointmentList.Add(EmployeeAppointmentListDTO.Create(a, serviceName, shopName, ClientName));
+                throw new NotFoundException($"No se encontró ningun {nameof(Appointment)}");
             }
-            return appointmentList;
+
+            return appointments.ToList();
         }
-        public List<ClientsAppointmentListDTO> GetAvailableAppointmentsByClienId(int clientId)
+
+        public List<AppointmentDTO> GetAvailableAppointmentsByEmployeeId(int employeeId)
         {
-            var clientAppointments = _appointmentRepository.GetAvailableAppointmentsByClientId(clientId)
-                ?? throw new NotFoundException("Appointment not found");
-
-            List<ClientsAppointmentListDTO> appointmentList = [];
-
-            foreach (var a in clientAppointments)
-            {
-                var shopName = _shopRepository.GetById(a.ShopId)?.Name ?? string.Empty;
-                var serviceName = _serviceRepository.GetById(a.ServiceId)?.Name ?? string.Empty;
-
-                appointmentList.Add(ClientsAppointmentListDTO.Create(a, serviceName, shopName));
-            }
-                return appointmentList;
+            return AppointmentDTO.CreateList(GetAppointmentsBy(_appointmentRepository.GetAvailableAppointmentsByEmployeeId, employeeId));
         }
 
+        public List<AppointmentDTO> GetAvailableAppointmentsByClientId(int clientId)
+        {
+            return AppointmentDTO.CreateList(GetAppointmentsBy(_appointmentRepository.GetAvailableAppointmentsByClientId, clientId));
+        }
+
+        public List<AllApointmentsOfMyShopRequestDTO?> GetAllApointmentsOfMyShop(int ownerId)
+        {
+            var owner = _ownerRepository.GetById(ownerId);
+            if (owner == null)
+            {
+                throw new NotFoundException(nameof(Owner), ownerId);
+            }
+
+            List<AllApointmentsOfMyShopRequestDTO?> listDto = [];
+            List<Appointment> myAppList = GetAppointmentsBy(_appointmentRepository.GetAllAppointmentsByShopId, owner.ShopId);
+
+            foreach (var a in myAppList)
+            {
+                var provider = _repositoryUser.GetById(a.ProviderId)?.Name ?? string.Empty;
+                var client = _clientRepository.GetById(a.ClientId)?.Name ?? string.Empty;
+                var service = _serviceRepository.GetById(a.ServiceId)?.Name ?? string.Empty;
+
+                listDto.Add(AllApointmentsOfMyShopRequestDTO.Create(a, provider, client, service));
+            }
+
+            return listDto;
+        }
+
+        public List<AllApointmentsOfMyShopRequestDTO?> GetAllAppointmentsByProviderId(int providerId)
+        {
+            List<AllApointmentsOfMyShopRequestDTO?> listDto = [];
+            List<Appointment> myAppList = GetAppointmentsBy(_appointmentRepository.GetAllAppointmentsByProviderId, providerId);
+
+            foreach (var a in myAppList)
+            {
+                var provider = _repositoryUser.GetById(a.ProviderId)?.Name ?? string.Empty;
+                var client = _clientRepository.GetById(a.ClientId)?.Name ?? string.Empty;
+                var service = _serviceRepository.GetById(a.ServiceId)?.Name ?? string.Empty;
+
+                listDto.Add(AllApointmentsOfMyShopRequestDTO.Create(a, provider, client, service));
+            }
+
+            return listDto;
+        }
         public void CreateAppointment (int shopId, int providerId, DateTime dateAndHour, int? serviceId = null, int? clientId = null)
         {
             var newObj = new Appointment();
@@ -114,8 +141,7 @@ namespace Application.Services
 
         public AppointmentDTO UpdateAppointment (AppointmentUpdateRequest appointment, int id)
         {
-            var obj = _appointmentRepository.GetById(id)
-                ?? throw new NotFoundException("Appointment not found");
+            var obj = GetAppointmentByIdOrThrow(id);
 
             obj.Status = appointment.Status;
             obj.ServiceId = appointment.ServiceId;
@@ -130,8 +156,8 @@ namespace Application.Services
 
         public void AssignClient(AssignClientRequestDTO request)
         {
-            var obj = _appointmentRepository.GetById(request.IdAppointment)
-                ?? throw new NotFoundException("Appointment not found");
+            var obj = GetAppointmentByIdOrThrow(request.IdAppointment);
+
             obj.ServiceId = request.ServiceId;
             obj.ClientId = request.ClientId;
             obj.Status = Status.Inactive;
@@ -142,6 +168,10 @@ namespace Application.Services
         public AppointmentDTO GetLastAppointmentByShopId(int ownerId)
         {
             var owner = _ownerRepository.GetById(ownerId);
+            if (owner == null)
+            {
+                throw new NotFoundException(nameof(Owner), ownerId);
+            }
 
             var lastAppointment = _appointmentRepository.GetLastAppointmentByShopId(owner.ShopId);
             if (lastAppointment == null)
@@ -153,39 +183,22 @@ namespace Application.Services
             return lastAppDTO;
         }
 
-        public List<AllApointmentsOfMyShopRequestDTO?> GetAllApointmentsOfMyShop(int ownerId) //Camiar DTO
+
+        public Appointment GetAppointmentByIdOrThrow(int id)
         {
-            var owner = _ownerRepository.GetById(ownerId);
-            List<Appointment> myAppList = _appointmentRepository.GetAllAppointmentsByShopId(owner.ShopId);
-
-            List<AllApointmentsOfMyShopRequestDTO?> listDto = [];
-
-            foreach (var a in myAppList)
+            var appointment = _appointmentRepository.GetById(id);
+            if (appointment == null)
             {
-                var provider = _repositoryUser.GetById(a.ProviderId)?.Name ?? string.Empty;
-                var client = _clientRepository.GetById(a.ClientId)?.Name ?? string.Empty;
-                var service = _serviceRepository.GetById(a.ServiceId)?.Name ?? string.Empty;
-
-                listDto.Add(AllApointmentsOfMyShopRequestDTO.Create(a, provider,client, service));
+                throw new NotFoundException(nameof(Appointment), id);
             }
-            return listDto;
+            return appointment;
         }
 
-        public List<AllApointmentsOfMyShopRequestDTO> GetAllAppointmentsByProviderId(int providerId)
+        public void NotifyClientCancellation(int? clientId, int shopId)
         {
-            var appointmentList = _appointmentRepository.GetAllAppointmentsByProviderId(providerId)
-                ?? throw new Exception("not found appointments");
-            List<AllApointmentsOfMyShopRequestDTO> listDto = [];
-
-            foreach (var a in appointmentList)
-            {
-                var provider = _repositoryUser.GetById(a.ProviderId)?.Name ?? string.Empty;
-                var client = _clientRepository.GetById(a.ClientId)?.Name ?? string.Empty;
-                var service = _serviceRepository.GetById(a.ServiceId)?.Name ?? string.Empty;
-
-                listDto.Add(AllApointmentsOfMyShopRequestDTO.Create(a, provider, client, service));
-            }
-            return listDto;
+            var client = _repositoryUser.GetById(clientId);
+            var shop = _shopRepository.GetById(shopId);
+            _emailService.NotifyClientCancellation(client.Email, client.Name, shop.Name, shop.Phone);
         }
     }
 }
