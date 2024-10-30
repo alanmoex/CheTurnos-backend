@@ -77,14 +77,35 @@ namespace Application.Services
             return appointments.ToList();
         }
 
-        public List<AppointmentDTO> GetAvailableAppointmentsByEmployeeId(int employeeId)
+        public List<EmployeeAppointmentListDTO> GetAvailableAppointmentsByEmployeeId(int employeeId)
         {
-            return AppointmentDTO.CreateList(GetAppointmentsBy(_appointmentRepository.GetAvailableAppointmentsByEmployeeId, employeeId));
+            var EmployeeAppointments = GetAppointmentsBy(_appointmentRepository.GetAvailableAppointmentsByEmployeeId, employeeId);
+            List <EmployeeAppointmentListDTO> appointmentList = [];
+
+            foreach (var a in EmployeeAppointments)
+            {
+                var shopName = _shopRepository.GetById(a.ShopId)?.Name ?? string.Empty;
+                var serviceName = _serviceRepository.GetById(a.ServiceId)?.Name ?? string.Empty;
+                var ClientName = _clientRepository.GetById(a.ClientId)?.Name ?? string.Empty;
+
+                appointmentList.Add(EmployeeAppointmentListDTO.Create(a, serviceName, shopName, ClientName));
+            }
+            return appointmentList;
         }
 
-        public List<AppointmentDTO> GetAvailableAppointmentsByClientId(int clientId)
+        public List<ClientsAppointmentListDTO> GetAvailableAppointmentsByClientId(int clientId)
         {
-            return AppointmentDTO.CreateList(GetAppointmentsBy(_appointmentRepository.GetAvailableAppointmentsByClientId, clientId));
+            var clientAppointments = GetAppointmentsBy(_appointmentRepository.GetAvailableAppointmentsByClientId, clientId);
+            List<ClientsAppointmentListDTO> appointmentList = [];
+
+            foreach (var a in clientAppointments)
+            {
+                var shopName = _shopRepository.GetById(a.ShopId)?.Name ?? string.Empty;
+                var serviceName = _serviceRepository.GetById(a.ServiceId)?.Name ?? string.Empty;
+
+                appointmentList.Add(ClientsAppointmentListDTO.Create(a, serviceName, shopName));
+            }
+            return appointmentList;
         }
 
         public List<AllApointmentsOfMyShopRequestDTO?> GetAllApointmentsOfMyShop(int ownerId)

@@ -14,8 +14,8 @@ namespace Application.Interfaces
         List<AppointmentDTO?> GetAllAppointment();
         AppointmentDTO? GetAppointmentById(int id);
         List<Appointment> GetAppointmentsBy(Func<int, IEnumerable<Appointment>> getAppointmentsFunc, int id);
-        List<AppointmentDTO> GetAvailableAppointmentsByEmployeeId(int employeeId);
-        List<AppointmentDTO> GetAvailableAppointmentsByClientId(int clientId);
+        List<EmployeeAppointmentListDTO> GetAvailableAppointmentsByEmployeeId(int employeeId);
+        List<ClientsAppointmentListDTO> GetAvailableAppointmentsByClientId(int clientId);
         void DeleteAppointment(int id);
         void CreateAppointment(int shopId, int providerId, DateTime dateAndHour, int? serviceId = null, int? clientId = null);
         AppointmentDTO UpdateAppointment(AppointmentUpdateRequest appointment, int id);
