@@ -57,7 +57,7 @@ namespace API.Controllers
         }
 
         [HttpGet("[action]/{employeeId}")]
-        public ActionResult<List<Appointment>> GetAvailableAppointmentsByEmployeeId(int employeeId)
+        public IActionResult GetAvailableAppointmentsByEmployeeId(int employeeId)
         {
             try
             {

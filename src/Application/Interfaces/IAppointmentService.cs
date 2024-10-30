@@ -13,7 +13,7 @@ namespace Application.Interfaces
     {
         List<AppointmentDTO?> GetAllAppointment();
         AppointmentDTO? GetAppointmentById(int id);
-        List<AppointmentDTO?> GetAvailableAppointmentsByEmployeeId(int employeeId);
+        List<EmployeeAppointmentListDTO> GetAvailableAppointmentsByEmployeeId(int employeeId);
         List<ClientsAppointmentListDTO> GetAvailableAppointmentsByClienId(int clientId);
         void DeleteAppointment(int id);
         void CreateAppointment(int shopId, int providerId, DateTime dateAndHour, int? serviceId = null, int? clientId = null);
