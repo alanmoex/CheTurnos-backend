@@ -74,7 +74,7 @@ namespace API.Controllers
         {
             try
             {
-                return Ok(_appointmentService.GetAvailableAppointmentsByClienId(clientId));
+                return Ok(_appointmentService.GetAvailableAppointmentsByClientId(clientId));
             }
             catch (NotFoundException ex)
             {
