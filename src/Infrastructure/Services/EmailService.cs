@@ -202,6 +202,28 @@ namespace Infrastructure.Services
             _userRepository.Update(user);
         }
 
+        public void NotifyClientCancellation(string email, string nameUser, string nameShop, string tel) // Notifica al cliente sobre la cancelación del turno
+        {
+            var mail = new MimeMessage();
+            mail.From.Add(MailboxAddress.Parse(_options.UserName));
+            mail.To.Add(MailboxAddress.Parse(email));
+            mail.Subject = "Cancelación de turno en Che Turnos";
+            mail.Body = new TextPart(TextFormat.Html)
+            {
+                Text = $@"<h2 style=""color: #333; text-align: center;"">Cancelación de Turno</h2>
+                 <p style=""font-size: 16px; color: #555;"">Hola <strong>{nameUser}</strong>,</p>
+                 <p style=""font-size: 16px; color: #555;"">Lamentamos informarte que tu turno ha sido cancelado. Para más información, por favor consulta con {nameShop} ({tel}).</p>
+                 <p style=""font-size: 16px; color: #555;"">Gracias por tu comprensión.</p>"
+            };
+
+            using var smtp = new MailKit.Net.Smtp.SmtpClient();
+            smtp.Connect(_options.Host, _options.Port, SecureSocketOptions.StartTls);
+            smtp.Authenticate(_options.UserName, _options.Password);
+            smtp.Send(mail);
+            smtp.Disconnect(true);
+        }
+
+
         public class EmailSettingsOptions
         {
             public const string EmailService = "MailSettings";

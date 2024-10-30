@@ -18,7 +18,9 @@ namespace Application.Interfaces
         void changePassword(string addressee, string userName);
         void RequestPassReset(string email);
         void ResetPassword(ResetPasswordRequest request);
+        void NotifyClientCancellation(string email, string nameUser, string nameShop, string tel);
         class EmailSettingsOptions;
+
 
 
     }
