@@ -22,9 +22,9 @@ namespace Application.Services
         private readonly IRepositoryUser _repositoryUser;
         private readonly IClientRepository _clientRepository;
         private readonly IShopRepository _shopRepository;
+        private readonly IEmailService _emailService;
 
-
-        public AppointmentService (IAppointmentRepository appointmentRepository, IOwnerRepository ownerRepository, IServiceRepository serviceRepository, IRepositoryUser repositoryUser, IClientRepository clientRepository, IShopRepository shopRepository)
+        public AppointmentService (IAppointmentRepository appointmentRepository, IOwnerRepository ownerRepository, IServiceRepository serviceRepository, IRepositoryUser repositoryUser, IClientRepository clientRepository, IShopRepository shopRepository, IEmailService emailService)
         {
             _appointmentRepository = appointmentRepository;
             _ownerRepository = ownerRepository;
@@ -32,6 +32,7 @@ namespace Application.Services
             _clientRepository = clientRepository;
             _repositoryUser = repositoryUser;
             _shopRepository = shopRepository;
+            _emailService = emailService;
 
         }
 
@@ -55,6 +56,13 @@ namespace Application.Services
                 ?? throw new NotFoundException("Appointment not found");
 
             _appointmentRepository.Delete(obj);
+
+            if(obj.ClientId != null) 
+            {
+                var client = _repositoryUser.GetById(obj.ClientId);
+                var shop = _shopRepository.GetById(obj.ShopId);
+                _emailService.NotifyClientCancellation(client.Email, client.Name, shop.Name, shop.Phone);
+            }
         }
 
         public List<EmployeeAppointmentListDTO> GetAvailableAppointmentsByEmployeeId(int employeeId)
