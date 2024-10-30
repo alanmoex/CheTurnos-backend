@@ -57,22 +57,22 @@ namespace Application.Services
             _appointmentRepository.Delete(obj);
         }
 
-        public List<AppointmentDTO> GetAvailableAppointmentsByEmployeeId(int employeeId)
+        public List<EmployeeAppointmentListDTO> GetAvailableAppointmentsByEmployeeId(int employeeId)
         {
-            var employeeAppointments = _appointmentRepository.GetAvailableAppointmentsByEmployeeId(employeeId)
-                ?? throw new NotFoundException("Appointment not found"); 
-            List<AppointmentDTO> appointmentList = new List<AppointmentDTO>();
+            var EmployeeAppointments = _appointmentRepository.GetAvailableAppointmentsByEmployeeId(employeeId)
+                ?? throw new NotFoundException("Appointment not found");
 
-            if(employeeAppointments != null)
+            List<EmployeeAppointmentListDTO> appointmentList = [];
+
+            foreach (var a in EmployeeAppointments)
             {
-                foreach (var appointment in employeeAppointments)
-                {
-                    var appointmentToAdd = AppointmentDTO.Create(appointment);
-                    appointmentList.Add(appointmentToAdd);
-                }
-                return appointmentList;
+                var shopName = _shopRepository.GetById(a.ShopId)?.Name ?? string.Empty;
+                var serviceName = _serviceRepository.GetById(a.ServiceId)?.Name ?? string.Empty;
+                var ClientName = _clientRepository.GetById(a.ClientId)?.Name ?? string.Empty;
+
+                appointmentList.Add(EmployeeAppointmentListDTO.Create(a, serviceName, shopName, ClientName));
             }
-            return [];
+            return appointmentList;
         }
         public List<ClientsAppointmentListDTO> GetAvailableAppointmentsByClienId(int clientId)
         {

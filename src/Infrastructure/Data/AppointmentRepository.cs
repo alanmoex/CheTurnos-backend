@@ -21,7 +21,7 @@ namespace Infrastructure.Data
         public List<Appointment> GetAvailableAppointmentsByEmployeeId(int employeeId)
         {
             var appDbContext = (AppDbContext)_dbContext;
-            return appDbContext.Appointments.Where(a => a.ProviderId == employeeId && a.Status == Status.Active).ToList();
+            return appDbContext.Appointments.Where(a => a.ProviderId == employeeId && a.ClientId != null).ToList();
         }
         
         public List<Appointment> GetAvailableAppointmentsByClientId(int ClientId)
