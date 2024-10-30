@@ -106,7 +106,7 @@ namespace Application.UnitTests
             Assert.NotEmpty(result);
             Assert.NotNull(result);
             Assert.Equal(2, result.Count());
-            Assert.IsType<List<AppointmentDTO>>(result);
+            Assert.IsType<List<EmployeeAppointmentListDTO>>(result);
         }
 
         [Fact]
@@ -131,7 +131,7 @@ namespace Application.UnitTests
             Assert.NotEmpty(result);
             Assert.NotNull(result);
             Assert.Equal(2, result.Count());
-            Assert.IsType<List<AppointmentDTO>>(result);
+            Assert.IsType<List<ClientsAppointmentListDTO>>(result);
         }
 
         [Fact]
