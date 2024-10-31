@@ -80,16 +80,25 @@ namespace Application.Services
 
         public List<EmployeeResponseDTO?> GetAll()
         {
-            try
+            
+            var list = _employeeRepository.GetAll();
+            if (list == null || !list.Any())
             {
-                var list = _employeeRepository.GetAll();
+                throw new NotFoundException($"No se encontro ningun {nameof(Employee)}");
+            }
 
-                return EmployeeResponseDTO.CreateList(list);
-            }
-            catch (Exception ex)
+            return EmployeeResponseDTO.CreateList(list);
+            
+        }
+
+        public Employee GetEmployeeByIdOrThrow(int id)
+        {
+            var employee = _employeeRepository.GetById(id);
+            if (employee == null)
             {
-                throw new Exception(ex.ToString());
+                throw new NotFoundException(nameof(Employee), id);
             }
+            return employee;
         }
 
         public List<EmployeeResponseDTO?> GetAllByShopId(int shopId)
@@ -108,7 +117,7 @@ namespace Application.Services
 
         public EmployeeResponseDTO? GetById(int id)
         {
-            var employee = _employeeRepository.GetById(id);
+            var employee = GetEmployeeByIdOrThrow(id);
 
             return EmployeeResponseDTO.Create(employee);
 

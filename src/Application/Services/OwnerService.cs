@@ -47,7 +47,7 @@ namespace Application.Services
             }
 
             //nos traemos el owner en cuestión para saber de qué negocio es dueño mediante su atributo shopId
-            var currentOwner = _ownerRepository.GetById(ownerId);
+            var currentOwner = GetOwnerByIdOrThrow(ownerId);
 
             //ahora nos traemos el shop para poder utilizar sus datos
             var myShop = _shopService.GetById(currentOwner.ShopId);
@@ -109,16 +109,25 @@ namespace Application.Services
         public List<OwnerDTO?> GetAllOwners()
         {
             var ownersList = _ownerRepository.GetAll();
-
+            if (ownersList == null || !ownersList.Any())
+            {
+                throw new NotFoundException($"No se encontro ningun {nameof(Owner)}");
+            }
             return OwnerDTO.CreateList(ownersList);
         }
 
-        public OwnerDTO? GetOwnerById(int id)
+        public Owner GetOwnerByIdOrThrow(int id)
         {
             var owner = _ownerRepository.GetById(id);
-
             if (owner == null)
+            {
                 throw new NotFoundException(nameof(Owner), id);
+            }
+            return owner;
+        }
+        public OwnerDTO? GetOwnerById(int id)
+        {
+            var owner = GetOwnerByIdOrThrow(id);
 
             return OwnerDTO.Create(owner);
         }
@@ -170,6 +179,7 @@ namespace Application.Services
         {
             var owner = _ownerRepository.GetById(id) ?? throw new NotFoundException("User not Found");
 
+
             if (owner.Password != request.ConfirmationPassword) throw new Exception("Passwords do not match");
 
             if (!string.IsNullOrEmpty(request.Name.Trim())) owner.Name = request.Name;
@@ -183,20 +193,14 @@ namespace Application.Services
 
         public void PermanentDeletionOwner(int id)
         {
-            var owner = _ownerRepository.GetById(id);
-
-            if (owner == null)
-                throw new NotFoundException(nameof(Owner), id);
+            var owner = GetOwnerByIdOrThrow(id);
 
             _ownerRepository.Delete(owner);
         }
 
         public void LogicalDeletionOwner(int id)
         {
-            var owner = _ownerRepository.GetById(id);
-
-            if (owner == null)
-                throw new NotFoundException(nameof(Owner), id);
+            var owner = GetOwnerByIdOrThrow(id);
 
             if (owner.Status == Status.Inactive)
             {
