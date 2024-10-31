@@ -175,23 +175,18 @@ namespace Application.Services
             }
         }
 
-        public void ModifyOwnerData(int id, OwnerUpdateRequest ownerUpdateRequest)
+        public void ModifyOwnerData(int id, OwnerUpdateRequest request)
         {
-            var owner = GetOwnerByIdOrThrow(id);
+            var owner = _ownerRepository.GetById(id) ?? throw new NotFoundException("User not Found");
 
-            if (!string.IsNullOrEmpty(ownerUpdateRequest.Name.Trim())) owner.Name = ownerUpdateRequest.Name;
 
-            if (!string.IsNullOrEmpty(ownerUpdateRequest.Password.Trim()))
-            {
-                if (ValidatePassword(ownerUpdateRequest.Password))
-                {
-                    owner.Password = ownerUpdateRequest.Password;
-                }
-                else
-                {
-                    throw new ValidationException("Los datos ingresados no son válidos");
-                }
-            }
+            if (owner.Password != request.ConfirmationPassword) throw new Exception("Passwords do not match");
+
+            if (!string.IsNullOrEmpty(request.Name.Trim())) owner.Name = request.Name;
+
+            if (string.IsNullOrEmpty(request.NewPassword.Trim())) throw new Exception("Empty NewPassword.");
+            if (!ValidatePassword(request.NewPassword)) throw new Exception("NewPassword is not validate");
+            owner.Password = request.NewPassword;
 
             _ownerRepository.Update(owner);
         }

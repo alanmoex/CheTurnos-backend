@@ -9,8 +9,7 @@ namespace Application.Models.Requests
     public class OwnerUpdateRequest
     {
         public string Name { get; set; }
-        public int ShopId { get; set; }
-        public string Password { get; set; }
-        public string ImgUrl { get; set; }
+        public string NewPassword { get; set; }
+        public string ConfirmationPassword { get; set; }
     }
 }

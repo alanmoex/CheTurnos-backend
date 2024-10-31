@@ -9,9 +9,7 @@ namespace Application.Models.Requests
     public class EmployeeUpdateRequest
     {
         public string Name { get; set; }
-
-        public string Email { get; set; }
-
-        public string Password { get; set; }
+        public string NewPassword { get; set; }
+        public string ConfirmationPassword { get; set; }
     }
 }

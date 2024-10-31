@@ -150,19 +150,19 @@ namespace Application.Services
 
         }
 
-        public bool Update(int id, EmployeeUpdateRequest request)
+        public void Update(int id, EmployeeUpdateRequest request)
         {
-            var employee = GetEmployeeByIdOrThrow(id);
+            var employee = _employeeRepository.GetById(id) ?? throw new NotFoundException("User not Found");
 
-            if (employee == null) return false;
-
-            employee.Email = request.Email;
-            employee.Name = request.Name;
-            employee.Password = request.Password;
+            if (employee.Password != request.ConfirmationPassword) throw new Exception("Passwords do not match");
+    
+            if (!string.IsNullOrEmpty(request.Name.Trim())) employee.Name = request.Name;
+            
+            if (string.IsNullOrEmpty(request.NewPassword.Trim())) throw new Exception("Empty NewPassword.");
+            if (!ValidatePassword(request.NewPassword)) throw new Exception("NewPassword is not validate");
+            employee.Password = request.NewPassword;
 
             _employeeRepository.Update(employee);
-            return true;            
-
         }
 
         public List<EmployeeResponseDTO?> GetMyShopEmployees(int ownerId)
@@ -171,6 +171,17 @@ namespace Application.Services
             var myEmployees = _employeeRepository.GetAllByShopId(owner.ShopId);
 
             return EmployeeResponseDTO.CreateList(myEmployees);
+        }
+
+        private bool ValidatePassword(string password)
+        {
+            if (string.IsNullOrEmpty(password) || password.Length < 8)
+            {
+                return false;
+            }
+
+            string pattern = @"^(?=.*[a-zA-Z])(?=.*\d).+$";
+            return Regex.IsMatch(password, pattern);
         }
     }
 }

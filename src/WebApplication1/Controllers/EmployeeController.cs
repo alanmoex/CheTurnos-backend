@@ -12,6 +12,8 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
+
     public class EmployeeController : ControllerBase
     {
         private readonly IEmployeeService _employeeService;
@@ -118,12 +120,14 @@ namespace API.Controllers
             }
         }
 
-        [HttpPut("[action]/{id}")]
-        public IActionResult Update(int id, [FromBody] EmployeeUpdateRequest request)
+        [HttpPut("[action]")]
+        public IActionResult Update([FromBody] EmployeeUpdateRequest request)
         {
+
+            int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "");
             try
             {
-                _employeeService.Update(id, request);
+                _employeeService.Update(userId, request);
                 return Ok("Se actualizo con exito");
             }
             catch (NotFoundException ex)
