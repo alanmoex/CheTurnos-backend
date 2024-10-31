@@ -21,13 +21,15 @@ namespace Application.Services
         private readonly IRepositoryUser _userRepository;
         private readonly IEmailService _emailService;
         private readonly IOwnerRepository _ownerRepository;
+        private readonly IAppointmentRepository _appointmentRepository;
 
-        public EmployeeService(IEmployeeRepository employeeRepository, IRepositoryUser userRepository, IEmailService emailService, IOwnerRepository ownerRepository)
+        public EmployeeService(IEmployeeRepository employeeRepository, IRepositoryUser userRepository, IEmailService emailService, IOwnerRepository ownerRepository, IAppointmentRepository appointmentRepository)
         {
             _employeeRepository = employeeRepository;
             _userRepository = userRepository;
             _emailService = emailService;
             _ownerRepository = ownerRepository;
+            _appointmentRepository = appointmentRepository;
         }
 
         public bool Create(EmployeeCreateRequestDTO request)
@@ -61,6 +63,7 @@ namespace Application.Services
         public bool Delete(int id)
         {
             var employee = _employeeRepository.GetById(id);
+            var employeeAppointmentList = _appointmentRepository.GetAllAppointmentsByProviderId(employee.Id);
 
             if (employee == null)
             {
@@ -69,6 +72,11 @@ namespace Application.Services
 
             try
             {
+                foreach (var appointment in employeeAppointmentList)
+                {
+                    _appointmentRepository.Delete(appointment);
+                }
+
                 _employeeRepository.Delete(employee);
                 return true;
             }
