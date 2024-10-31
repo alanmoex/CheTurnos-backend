@@ -59,7 +59,7 @@ namespace Application.Services
             var obj = GetAppointmentByIdOrThrow(id);
             _appointmentRepository.Delete(obj);
 
-            if(obj.ClientId != null) 
+            if(obj.ClientId != null && obj.DateAndHour > DateTime.Now) 
             {
                 NotifyClientCancellation(obj.ClientId, obj.ShopId);
             }
