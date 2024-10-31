@@ -11,7 +11,7 @@ namespace Application.Interfaces
         List<EmployeeResponseDTO?> GetAllByShopId(int shopId);
         List<EmployeeResponseDTO?> GetAvailables(int shopId);
         EmployeeResponseDTO? GetById(int id);
-        bool Update(int id, EmployeeUpdateRequest request);
+        void Update(int id, EmployeeUpdateRequest request);
         List<EmployeeResponseDTO?> GetMyShopEmployees(int ownerId);
     }
 }
