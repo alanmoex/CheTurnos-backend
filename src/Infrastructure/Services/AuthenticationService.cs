@@ -23,13 +23,15 @@ namespace Infrastructure.Services
     {
         private readonly IRepositoryUser _repositoryUser;
         private readonly IOwnerRepository _repositoryOwner;
+        private readonly IEmployeeRepository _repositoryEmployee;
         private readonly AuthenticationServiceOptions _options;
 
-        public AuthenticationService(IRepositoryUser repositoryUser, IOwnerRepository repositoryOwner, IOptions<AuthenticationServiceOptions> options)
+        public AuthenticationService(IRepositoryUser repositoryUser, IOwnerRepository repositoryOwner,IEmployeeRepository repositoryEmployee, IOptions<AuthenticationServiceOptions> options)
         {
             _repositoryUser = repositoryUser;
             _options = options.Value;
             _repositoryOwner = repositoryOwner;
+            _repositoryEmployee = repositoryEmployee;
         }
 
 
@@ -78,11 +80,15 @@ namespace Infrastructure.Services
             claimsForToken.Add(new Claim("given_name", user.Name));
             claimsForToken.Add(new Claim("email", user.Email));
             claimsForToken.Add(new Claim("imageUrl",user.ImgUrl.ToString()));
-            if (user.Type == UserType.Owner)
+            if (user.Type == UserType.Owner)  
             {
                 var userOwner = _repositoryOwner.GetById(user.Id);
                 claimsForToken.Add(new Claim("shopId", userOwner.ShopId.ToString()));
-            }    
+            } else if (user.Type == UserType.Employee)
+            {
+                var userEmployee = _repositoryEmployee.GetById(user.Id);
+                claimsForToken.Add(new Claim("shopId", userEmployee.ShopId.ToString()));
+            }
             
             
 
