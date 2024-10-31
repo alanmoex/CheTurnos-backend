@@ -92,19 +92,21 @@ namespace Application.Services
 
         public void ModifyClientData(int id, ClientUpdateRequest clientUpdateRequest)
         {
-            var client = _clientRepository.GetById(id);
+            var client = _clientRepository.GetById(id) ?? throw new NotFoundException("User not found");
+
+            if (client.Password != clientUpdateRequest.ConfirmationPassword) throw new Exception("Passwords do not match");
 
             if (!string.IsNullOrEmpty(clientUpdateRequest.Name.Trim())) client.Name = clientUpdateRequest.Name;
 
-            if (!string.IsNullOrEmpty(clientUpdateRequest.Password.Trim()))
+            if (!string.IsNullOrEmpty(clientUpdateRequest.NewPassword.Trim()))
             {
-                if (ValidatePassword(clientUpdateRequest.Password))
+                if (ValidatePassword(clientUpdateRequest.NewPassword))
                 {
-                    client.Password = clientUpdateRequest.Password;
+                    client.Password = clientUpdateRequest.NewPassword;
                 }
                 else
                 {
-                    throw new ValidationException("Los datos ingresados no son válidos");
+                    throw new ValidationException("Invalid data entered");
                 }
             } 
 
