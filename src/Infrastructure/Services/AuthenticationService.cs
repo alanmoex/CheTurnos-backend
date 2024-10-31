@@ -14,19 +14,26 @@ using System.Text;
 using System.Threading.Tasks;
 using static Domain.Entities.User;
 using Domain.Exceptions;
+using Domain.Interface;
+using Infrastructure.Data;
 
 namespace Infrastructure.Services
 {
     public class AuthenticationService:IAuthenticationService
     {
         private readonly IRepositoryUser _repositoryUser;
+        private readonly IOwnerRepository _repositoryOwner;
         private readonly AuthenticationServiceOptions _options;
 
-        public AuthenticationService(IRepositoryUser repositoryUser, IOptions<AuthenticationServiceOptions> options)
+        public AuthenticationService(IRepositoryUser repositoryUser, IOwnerRepository repositoryOwner, IOptions<AuthenticationServiceOptions> options)
         {
             _repositoryUser = repositoryUser;
             _options = options.Value;
+            _repositoryOwner = repositoryOwner;
         }
+
+
+
         
         
         //Retorna un usuario valido
@@ -50,6 +57,8 @@ namespace Infrastructure.Services
             return null;
         }
 
+           
+
         //retonra el jwt
         public string Authenticate (AuthenticationRequest authenticationRequest)
         {
@@ -67,6 +76,19 @@ namespace Infrastructure.Services
             claimsForToken.Add(new Claim("sub", user.Id.ToString()));
             claimsForToken.Add(new Claim("role", user.Type.ToString()));
             claimsForToken.Add(new Claim("given_name", user.Name));
+            claimsForToken.Add(new Claim("email", user.Email));
+            claimsForToken.Add(new Claim("imageUrl",user.ImgUrl.ToString()));
+            if (user.Type == UserType.Owner)
+            {
+                var userOwner = _repositoryOwner.GetById(user.Id);
+                claimsForToken.Add(new Claim("shopId", userOwner.ShopId.ToString()));
+            }    
+            
+            
+
+
+            
+            
 
             //Se crea el jwt
             var jwtSecurityToken = new JwtSecurityToken(
