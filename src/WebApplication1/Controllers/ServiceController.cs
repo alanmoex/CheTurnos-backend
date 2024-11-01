@@ -2,6 +2,7 @@
 using Application.Models.Requests;
 using Domain.Exceptions;
 using Application;
+using Microsoft.AspNetCore.Authorization;
 
 namespace API.Controllers;
 
@@ -64,7 +65,8 @@ public class ServiceController : ControllerBase
     }
 
     [HttpPost("[action]")]
-    public IActionResult Create([FromBody] ServiceCreateRequest serviceCreateRequest)
+    //[Authorize]
+    public IActionResult Create([FromBody] ServiceCreateRequest serviceCreateRequest) //CREA SOLO EL PRIMER SERVICIO
     {
         if (!ModelState.IsValid)
         {
@@ -85,6 +87,20 @@ public class ServiceController : ControllerBase
             return StatusCode(500, "An unexpected error occurred.");
         }
     }
+
+    [HttpPost("[action]")]
+    public IActionResult CreateOwnerService([FromBody] ServiceCreateRequest request) //CREA SERVICIOS, PARA LOS DUEÑOS.
+    {
+        try
+        {
+        return Ok(_serviceService.CreateOwnerService(request));
+        }
+        catch (NotFoundException ex)
+        {
+            return BadRequest();
+        }
+    }
+
 
     [HttpDelete("[action]/{id}")]
     public IActionResult Delete(int id)

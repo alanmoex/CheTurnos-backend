@@ -155,13 +155,14 @@ namespace Application.Services
 
             if (validationFlag)
             {
+                var idShop = _shopService.getShopWithoutOwner().Id; //haca hay un bug en el futuro, busca el ulitmo shop y lo hagrega al nuevo owner. 
                 var newOwner = new Owner();
 
                 newOwner.Name = ownerCreateRequest.Name;
                 newOwner.Email = ownerCreateRequest.Email;
                 newOwner.Password = ownerCreateRequest.Password;
                 newOwner.Type = UserType.Owner;
-                newOwner.ShopId = ownerCreateRequest.ShopId;
+                newOwner.ShopId = idShop;
                 //Nuevos atributos de Usuario.
                 newOwner.ImgUrl = "";
                 newOwner.PasswordResetCode = Guid.NewGuid().ToString().Substring(0, 6);

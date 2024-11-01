@@ -41,6 +41,7 @@ namespace API.Controllers
         }
 
         [HttpGet("[action]")]
+        [Authorize]
         public ActionResult<List<OwnerDTO?>> GetAllOwners()
         {
             return _ownerService.GetAllOwners();
@@ -60,7 +61,7 @@ namespace API.Controllers
         }
 
         [HttpGet("[action]/{shopId}")]
-        public IActionResult GetOwnerByShopId([FromRoute]int shopId)
+        public IActionResult GetOwnerByShopId([FromRoute] int shopId)
         {
             try
             {
@@ -73,6 +74,7 @@ namespace API.Controllers
         }
 
         [HttpPost("[action]")]
+        [AllowAnonymous]
         public ActionResult<OwnerDTO> CreateNewOwner([FromBody] OwnerCreateRequest ownerCreateRequest)
         {
             try
