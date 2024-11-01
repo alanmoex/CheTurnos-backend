@@ -59,6 +59,19 @@ namespace API.Controllers
             }
         }
 
+        [HttpGet("[action]/{shopId}")]
+        public IActionResult GetOwnerByShopId([FromRoute]int shopId)
+        {
+            try
+            {
+                return Ok(_ownerService.GetByShopId(shopId));
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
+
         [HttpPost("[action]")]
         public ActionResult<OwnerDTO> CreateNewOwner([FromBody] OwnerCreateRequest ownerCreateRequest)
         {
