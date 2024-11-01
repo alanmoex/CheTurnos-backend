@@ -9,24 +9,40 @@ public class ServiceService : IServiceService
 {
     private readonly IServiceRepository _serviceRepository;
     private readonly IShopRepository _shopRepository;
-    public ServiceService(IServiceRepository serviceRepository, IShopRepository shopRepository)
+    private readonly IShopService _shopService;
+    public ServiceService(IServiceRepository serviceRepository, IShopRepository shopRepository, IShopService shopService)
     {
         _serviceRepository = serviceRepository;
         _shopRepository = shopRepository;
+        _shopService= shopService;
     }
 
-    public ServiceDTO Create(ServiceCreateRequest request)
+    public ServiceDTO Create(ServiceCreateRequest request) //CREA SOLO EL PRIMER SHOP EN EL REGISTRO
     {
         var duration = TimeSpan.Parse(request.Duration);
-
+        var idShop = _shopService.getShopWithoutOwner().Id; //haca hay un bug en el futuro, busca el ulitmo shop y lo hagrega al nuevo owner. 
+        
         var newService = new Service(
             request.Name, 
             request.Description, 
             request.Price, 
             duration,
+            idShop
+        );
+        var obj = _serviceRepository.Add(newService);
+        return ServiceDTO.Create(obj);
+    }
+
+    public ServiceDTO CreateOwnerService(ServiceCreateRequest request) //EL DUEÑO CREA UN SHOP
+    {
+        var duration = TimeSpan.Parse(request.Duration);
+        var newService = new Service(
+            request.Name,
+            request.Description,
+            request.Price,
+            duration,
             request.ShopId
         );
-
         var obj = _serviceRepository.Add(newService);
         return ServiceDTO.Create(obj);
     }

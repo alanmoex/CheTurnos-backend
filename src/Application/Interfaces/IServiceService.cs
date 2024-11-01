@@ -12,4 +12,5 @@ public interface IServiceService
     void Update(int id, ServiceUpdateRequest serviceUpdateRequest);
     void Delete(int id);
     List<ShopsServicesByShopIdRequestDTO> GetServicesOfShop(int shopId);
+    ServiceDTO CreateOwnerService(ServiceCreateRequest request);
 }
