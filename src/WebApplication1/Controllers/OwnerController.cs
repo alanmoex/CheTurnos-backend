@@ -41,7 +41,6 @@ namespace API.Controllers
         }
 
         [HttpGet("[action]")]
-        [Authorize]
         public ActionResult<List<OwnerDTO?>> GetAllOwners()
         {
             return _ownerService.GetAllOwners();
