@@ -141,5 +141,16 @@ namespace Application
             shop.Status = Status.Inactive;
             _shopRepository.Update(shop);
         }
+
+        public ShopDTO? getShopWithoutOwner() 
+        {
+            var listShop = _shopRepository.GetAll();
+
+            var newShop = listShop.OrderByDescending(s => s.Id).FirstOrDefault(); 
+
+            if (newShop == null) return null;
+
+            return ShopDTO.Create(newShop);
+        }
     }
 }
