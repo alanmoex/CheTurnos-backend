@@ -18,5 +18,8 @@ namespace Application.Interfaces
         void ModifyOwnerData(int id, OwnerUpdateRequest ownerUpdateRequest);
         void PermanentDeletionOwner(int id);
         void LogicalDeletionOwner(int id);
+
+        OwnerDTO? GetByShopId(int shopId);
+
     }
 }

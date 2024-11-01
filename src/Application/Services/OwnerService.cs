@@ -324,6 +324,18 @@ namespace Application.Services
                 }
             }
         }
+
+        //---------
+
+        public OwnerDTO? GetByShopId(int shopId)
+        {
+            var listOwner = _ownerRepository.GetAll()?? throw new Exception("not found Owners");
+            
+            var owner = listOwner.Where(o => o.ShopId == shopId).FirstOrDefault()?? throw new Exception("not exist owner in this shop");
+
+            return OwnerDTO.Create(owner);
+           
+        }
     }
 }
 
