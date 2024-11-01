@@ -13,5 +13,6 @@ namespace Application
         void Update(int id, ShopUpdateRequest shopUpdateRequest);
         void PermanentDeletionShop(int id);
         void LogicalDeletionShop(int id);
+        ShopDTO? getShopWithoutOwner();
     }
 }

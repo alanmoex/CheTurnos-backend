@@ -122,6 +122,22 @@ namespace API.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+
+        [HttpGet("[action]")]
+        public IActionResult getShopWithoutOwner()
+        {
+            try
+            {
+                return Ok(_shopService.getShopWithoutOwner());
+            }
+            catch
+            {
+                return NotFound();
+            }
+        }
+
+
     }
 }
 
