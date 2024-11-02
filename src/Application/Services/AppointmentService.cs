@@ -227,8 +227,9 @@ namespace Application.Services
             var client = _repositoryUser.GetById(clientId);
             var employee = _repositoryUser.GetById(employeeId);
             var shop = _shopRepository.GetById(shopId);
+            string formattedDateAndHour = appointment.DateAndHour.ToString("d/M/yyyy HH:mm:ss");
 
-            _emailService.NotifyEmployeeCancellation(employee.Email, employee.Name, client.Name, shop.Name, appointment.DateAndHour);
+            _emailService.NotifyEmployeeCancellation(employee.Email, employee.Name, client.Name, shop.Name, formattedDateAndHour);
         }
     
 }
