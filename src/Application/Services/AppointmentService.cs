@@ -57,12 +57,14 @@ namespace Application.Services
         public void DeleteAppointment (int id) 
         {
             var obj = GetAppointmentByIdOrThrow(id);
-            _appointmentRepository.Delete(obj);
 
             if(obj.ClientId != null && obj.DateAndHour > DateTime.Now) 
             {
                 NotifyClientCancellation(obj.ClientId, obj.ShopId);
+
+                NotifyEmpeloyeeCancelatio(obj.ProviderId, obj.ShopId, obj.ClientId, obj.Id);
             }
+            _appointmentRepository.Delete(obj);
         }
 
         public List<Appointment> GetAppointmentsBy(Func<int, IEnumerable<Appointment>> getAppointmentsFunc, int id)
