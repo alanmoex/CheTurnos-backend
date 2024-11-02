@@ -221,5 +221,14 @@ namespace Application.Services
             var shop = _shopRepository.GetById(shopId);
             _emailService.NotifyClientCancellation(client.Email, client.Name, shop.Name, shop.Phone);
         }
-    }
+        public void NotifyEmpeloyeeCancelatio(int employeeId, int shopId, int clientId, int appointmentId)
+        {
+            var appointment = _appointmentRepository.GetById(appointmentId);
+            var client = _repositoryUser.GetById(clientId);
+            var employee = _repositoryUser.GetById(employeeId);
+            var shop = _shopRepository.GetById(shopId);
+
+            _emailService.NotifyEmployeeCancellation(employee.Email, employee.Name, client.Name, shop.Name, appointment.DateAndHour);
+        }
+    
 }
