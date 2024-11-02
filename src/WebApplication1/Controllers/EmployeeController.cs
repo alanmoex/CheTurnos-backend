@@ -31,7 +31,7 @@ namespace API.Controllers
         }
 
         [HttpGet("[action]/{id}")]
-        public ActionResult<EmployeeResponseDTO> GetById(int id)
+        public IActionResult GetById(int id)
         {
             try
             {
@@ -140,7 +140,6 @@ namespace API.Controllers
             }
         }
 
-        //[Authorize]
         [HttpGet("[action]/{ownerId}")]
         public ActionResult<List<EmployeeResponseDTO?>> GetMyShopEmployees([FromRoute] int ownerId)
         {
