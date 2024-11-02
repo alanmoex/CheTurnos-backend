@@ -223,6 +223,29 @@ namespace Infrastructure.Services
             smtp.Disconnect(true);
         }
 
+        public void NotifyEmployeeCancellation(string employeeEmail, string employeeName, string clientName, string shopName, string appointmentDate)
+        {
+            var mail = new MimeMessage();
+            mail.From.Add(MailboxAddress.Parse(_options.UserName));
+            mail.To.Add(MailboxAddress.Parse(employeeEmail));
+            mail.Subject = "Notificación de cancelación de turno";
+            mail.Body = new TextPart(TextFormat.Html)
+            {
+                Text = $@"
+            <h2 style=""color: #333; text-align: center;"">Cancelación de Turno</h2>
+            <p style=""font-size: 16px; color: #555;"">Hola <strong>{employeeName}</strong>,</p>
+            <p style=""font-size: 16px; color: #555;"">Te informamos que el cliente <strong>{clientName}</strong> ha cancelado su turno programado en <strong>{shopName}</strong>.</p>
+            <p style=""font-size: 16px; color: #555;"">Fecha y hora del turno cancelado: {appointmentDate}</p>
+            <p style=""font-size: 16px; color: #555;"">Gracias por tu comprensión.</p>"
+            };
+
+            using var smtp = new MailKit.Net.Smtp.SmtpClient();
+            smtp.Connect(_options.Host, _options.Port, SecureSocketOptions.StartTls);
+            smtp.Authenticate(_options.UserName, _options.Password);
+            smtp.Send(mail);
+            smtp.Disconnect(true);
+        }
+
 
         public class EmailSettingsOptions
         {

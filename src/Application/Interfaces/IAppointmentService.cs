@@ -23,5 +23,6 @@ namespace Application.Interfaces
         List<AllApointmentsOfMyShopRequestDTO?> GetAllApointmentsOfMyShop(int ownerId);
         void AssignClient(AssignClientRequestDTO request);
         List<AllApointmentsOfMyShopRequestDTO?> GetAllAppointmentsByProviderId(int providerId);
+        void NotifyEmpeloyeeCancelation(int employeeId, int shopId, int clientId, int appointmentId);
     }
 }

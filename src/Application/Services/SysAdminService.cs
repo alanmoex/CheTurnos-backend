@@ -19,11 +19,15 @@ namespace Application.Services
     {
         private readonly IRepositoryUser _repositoryUser;
         private readonly IEmailService _emailService;
+        private readonly IShopService _shopService;
+        private readonly IEmployeeService _employeeService;
 
-        public SysAdminService(IRepositoryUser repositoryUser, IEmailService emailService)
+        public SysAdminService(IRepositoryUser repositoryUser, IEmailService emailService, IShopService shopService, IEmployeeService employeeService)
         {
             _repositoryUser = repositoryUser;
             _emailService = emailService;
+            _shopService = shopService;
+            _employeeService = employeeService;
         }
 
         public List<SysAdminDTO?> GetAll()
@@ -111,10 +115,33 @@ namespace Application.Services
 
         public void Delete(int id)
         {
-            var admin = _repositoryUser.GetById(id)
-                ?? throw new Exception("not Found");
+            var user = _repositoryUser.GetById(id) ?? throw new Exception("User not found");
 
-            _repositoryUser.Delete(admin);
+            switch (user.Type)
+            {
+                case UserType.Employee:
+                    _employeeService.Delete(user.Id);
+                    break;
+
+                case UserType.Owner:
+                    if (user is Owner owner && owner.ShopId != -1)
+                    {
+                        _shopService.PermanentDeletionShop(owner.ShopId);
+                    }
+                    else
+                    {
+                        throw new Exception("Owner must have a valid ShopId to delete.");
+                    }
+                    break;
+
+                case UserType.Client:
+                case UserType.SysAdmin:
+                    _repositoryUser.Delete(user);
+                    break;
+
+                default:
+                    throw new Exception("Unsupported user type.");
+            }
         }
 
         public void LogicalDelete(int id)

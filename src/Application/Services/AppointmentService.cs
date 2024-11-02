@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace Application.Services
 {
-    public class AppointmentService: IAppointmentService
+    public class AppointmentService : IAppointmentService
     {
         private readonly IAppointmentRepository _appointmentRepository;
         private readonly IOwnerRepository _ownerRepository;
@@ -24,7 +24,7 @@ namespace Application.Services
         private readonly IShopRepository _shopRepository;
         private readonly IEmailService _emailService;
 
-        public AppointmentService (IAppointmentRepository appointmentRepository, IOwnerRepository ownerRepository, IServiceRepository serviceRepository, IRepositoryUser repositoryUser, IClientRepository clientRepository, IShopRepository shopRepository, IEmailService emailService)
+        public AppointmentService(IAppointmentRepository appointmentRepository, IOwnerRepository ownerRepository, IServiceRepository serviceRepository, IRepositoryUser repositoryUser, IClientRepository clientRepository, IShopRepository shopRepository, IEmailService emailService)
         {
             _appointmentRepository = appointmentRepository;
             _ownerRepository = ownerRepository;
@@ -54,15 +54,17 @@ namespace Application.Services
             return AppointmentDTO.Create(obj);
         }
 
-        public void DeleteAppointment (int id) 
+        public void DeleteAppointment(int id)
         {
             var obj = GetAppointmentByIdOrThrow(id);
-            _appointmentRepository.Delete(obj);
 
-            if(obj.ClientId != null && obj.DateAndHour > DateTime.Now) 
+            if (obj.ClientId != null && obj.DateAndHour > DateTime.Now)
             {
                 NotifyClientCancellation(obj.ClientId, obj.ShopId);
+
+                NotifyEmpeloyeeCancelation(obj.ProviderId, obj.ShopId, obj.ClientId.Value, obj.Id);
             }
+            _appointmentRepository.Delete(obj);
         }
 
         public List<Appointment> GetAppointmentsBy(Func<int, IEnumerable<Appointment>> getAppointmentsFunc, int id)
@@ -80,7 +82,7 @@ namespace Application.Services
         public List<EmployeeAppointmentListDTO> GetAvailableAppointmentsByEmployeeId(int employeeId)
         {
             var EmployeeAppointments = GetAppointmentsBy(_appointmentRepository.GetAvailableAppointmentsByEmployeeId, employeeId);
-            List <EmployeeAppointmentListDTO> appointmentList = [];
+            List<EmployeeAppointmentListDTO> appointmentList = [];
 
             foreach (var a in EmployeeAppointments)
             {
@@ -147,10 +149,10 @@ namespace Application.Services
 
             return listDto;
         }
-        public void CreateAppointment (int shopId, int providerId, DateTime dateAndHour, int? serviceId = null, int? clientId = null)
+        public void CreateAppointment(int shopId, int providerId, DateTime dateAndHour, int? serviceId = null, int? clientId = null)
         {
             var newObj = new Appointment();
-            newObj.ServiceId= serviceId;
+            newObj.ServiceId = serviceId;
             newObj.ProviderId = providerId;
             newObj.ClientId = clientId;
             newObj.ShopId = shopId;
@@ -160,14 +162,14 @@ namespace Application.Services
             _appointmentRepository.Add(newObj);
         }
 
-        public AppointmentDTO UpdateAppointment (AppointmentUpdateRequest appointment, int id)
+        public AppointmentDTO UpdateAppointment(AppointmentUpdateRequest appointment, int id)
         {
             var obj = GetAppointmentByIdOrThrow(id);
 
             obj.Status = appointment.Status;
             obj.ServiceId = appointment.ServiceId;
-            obj.ProviderId= appointment.ProviderId;
-            obj.ClientId= appointment.ClientId;
+            obj.ProviderId = appointment.ProviderId;
+            obj.ClientId = appointment.ClientId;
             obj.DateAndHour = appointment.DateAndHour;
             //obj.Duration = appointment.Duration;
 
@@ -220,6 +222,16 @@ namespace Application.Services
             var client = _repositoryUser.GetById(clientId);
             var shop = _shopRepository.GetById(shopId);
             _emailService.NotifyClientCancellation(client.Email, client.Name, shop.Name, shop.Phone);
+        }
+        public void NotifyEmpeloyeeCancelation(int employeeId, int shopId, int clientId, int appointmentId)
+        {
+            var appointment = _appointmentRepository.GetById(appointmentId);
+            var client = _repositoryUser.GetById(clientId);
+            var employee = _repositoryUser.GetById(employeeId);
+            var shop = _shopRepository.GetById(shopId);
+            string formattedDateAndHour = appointment.DateAndHour.ToString("d/M/yyyy HH:mm:ss");
+
+            _emailService.NotifyEmployeeCancellation(employee.Email, employee.Name, client.Name, shop.Name, formattedDateAndHour);
         }
     }
 }

@@ -19,6 +19,9 @@ namespace Application.Interfaces
         void RequestPassReset(string email);
         void ResetPassword(ResetPasswordRequest request);
         void NotifyClientCancellation(string email, string nameUser, string nameShop, string tel);
+        void NotifyEmployeeCancellation(string employeeEmail, string employeeName, string clientName, string shopName, string appointmentDate);
+
+
         class EmailSettingsOptions;
 
 
