@@ -34,7 +34,7 @@ namespace Application.Services
 
         public bool Create(EmployeeCreateRequestDTO request)
         {
-            if (request.Name == null || request.Email == null || request.Password == null || request.Password == null)
+            if (request.Name == null || request.Email == null || request.Password == null || request.ShopId == null)
             {
                 return false; //no se puede crear
             }
@@ -51,7 +51,7 @@ namespace Application.Services
             try
             {
                 _employeeRepository.Add(newEmployee);
-                _emailService.AccountCreationConfirmationEmail(newEmployee.Email, newEmployee.Name);
+                //_emailService.AccountCreationConfirmationEmail(newEmployee.Email, newEmployee.Name);
                 return true;
             }
             catch (Exception ex)
