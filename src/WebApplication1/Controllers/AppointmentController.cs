@@ -153,7 +153,15 @@ namespace API.Controllers
         [HttpGet("[action]/{providerId}")]
         public ActionResult<List<AllApointmentsOfMyShopRequestDTO?>> GetAllApointmentsByProviderId([FromRoute] int providerId)
         {
-            return _appointmentService.GetAllAppointmentsByProviderId(providerId);
+            try
+            {
+                return _appointmentService.GetAllAppointmentsByProviderId(providerId);
+            }
+            catch (Exception ex)
+            {
+                return NotFound(ex);
+            }
+            
         }
     }
 }
