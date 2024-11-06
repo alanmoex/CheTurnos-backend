@@ -15,7 +15,7 @@ namespace Application.Models.Requests
         public int StartMin { get; set; }
         public int EndHour { get; set; }
         public int EndMin { get; set; }
-        public string ImgUrl { get; set; }
+        public string ImgUrl { get; set; } = "";
         public List<Days> WorkDays { get; set; }
     }
 }
