@@ -92,10 +92,10 @@ namespace API.Controllers
                 var service = _employeeService.Create(request);
                 return Ok("Se creo correctamente");
             }
-            catch (NotFoundException ex)
+            /*catch (NotFoundException ex)
             {
                 return NotFound(ex.Message);
-            }
+            }*/
             catch (Exception ex)
             {
                 return StatusCode(500, "An unexpected error occurred.");
