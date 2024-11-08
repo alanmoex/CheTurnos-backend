@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace Application.Models.Requests
 {
-    internal class Class1
+    public class ClientCreateRequest
     {
+        public string Name { get; set; }
+        public string Email { get; set; }
+        public string Password { get; set; }
     }
 }

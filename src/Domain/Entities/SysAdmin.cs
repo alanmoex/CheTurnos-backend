@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Services
+namespace Domain.Entities
 {
-    internal class Class1
+    public class SysAdmin : User
     {
     }
 }

@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Infrastructure.Services
+namespace Application.Models.Requests
 {
-    internal class Class1
+    public class PassRecoveryRequestDTO
     {
+
+        public string Email { get; set; }
     }
 }

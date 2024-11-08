@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
-    internal class Class1
+    public class Employee : User
     {
+        public int ShopId { get; set; } //FK
     }
 }

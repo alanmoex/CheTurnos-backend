@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Interfaces
+namespace Domain.Entities
 {
-    internal class Class1
+    public class Owner : User
     {
+        public int ShopId { get; set; } //FK
     }
 }
